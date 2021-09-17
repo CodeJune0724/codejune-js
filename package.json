@@ -1,19 +1,24 @@
 {
   "name": "zj0724-common",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "zj0724-common",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZJ0724/zj0724-common-js.git"
+    "url": "https://github.com/ZJ0724/zj0724-common-js.git"
   },
   "author": "zhoujun",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ZJ0724/zj0724-common-js/issues"
   },
-  "homepage": "https://github.com/ZJ0724/zj0724-common-js#readme"
+  "homepage": "https://github.com/ZJ0724/zj0724-common-js#readme",
+  "devDependencies": {
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
+  }
 }
