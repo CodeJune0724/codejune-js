@@ -45,11 +45,7 @@ export default {
                     }
                 }
             }
-            if (!variable.isNull(httpOption.data)) {
-                http.send(httpOption.data);
-            } else {
-                http.send();
-            }
+            http.send();
             http.onload = function () {
                 console.log(http);
                 if (http.status === 200) {
