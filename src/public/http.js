@@ -33,6 +33,14 @@ export default {
     },
 
     download(data) {
+        return new Promise((success) => {
+            let httpOption = new HttpOption(data);
+            window.open(httpOption.url);
+            success();
+        });
+    },
+
+    asynchronousDownload(data) {
         return new Promise((success, error) => {
             let httpOption = new HttpOption(data);
             let http = new XMLHttpRequest();
