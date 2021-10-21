@@ -1,4 +1,4 @@
-import variable from "../public/variable.js";
+import variable from "../module/variable.js";
 import InfoException from "../exception/InfoException.js";
 
 let types = [String, Number, Object, Array, Boolean];

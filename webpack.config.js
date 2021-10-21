@@ -1,4 +1,6 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
     entry: {
@@ -12,5 +14,22 @@ module.exports = {
         libraryTarget: "umd"
     },
 
-    mode: "production"
+    mode: "production",
+
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [MiniCssExtractPlugin.loader, "css-loader"]
+            }
+        ]
+    },
+
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "./[name].css"
+        }),
+
+        new CssMinimizerWebpackPlugin()
+    ]
 };
