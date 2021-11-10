@@ -1,11 +1,20 @@
 #!/bin/sh
 
-branch1=$1
-branch2=$2
+# 被合并的分支
+branch=$1
+# 主分支
+mainBranch=$2
+# 是否合并主分支
+isMain=$3
 
-git checkout "${branch2}"
-git reset --hard origin/"${branch1}"
-git reset --soft origin/"${branch2}"
+git add .
+git reset --hard HEAD
 
-rm -rf dist
-npm run build
+git checkout "${mainBranch}"
+
+if [ "${isMain}" = "--main" ]; then
+  git reset --hard origin/"${branch}"
+  git reset --soft origin/"${mainBranch}"
+else
+  git merge --squash "${branch}"
+fi
