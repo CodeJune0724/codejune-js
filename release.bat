@@ -1,8 +1,8 @@
 @echo off
 
-echo username: zj0724
+echo username: zj0724≤‚ ‘
 echo password: June3259123
 echo email:    1476253236@qq.com
 
-npm login
-npm publish
+call npm login
+call npm publish
