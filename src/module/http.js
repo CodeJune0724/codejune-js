@@ -16,14 +16,10 @@ export default {
                 }
             }
 
-            try {
-                if (!variable.isNull(httpOption.data)) {
-                    http.send(httpOption.data);
-                } else {
-                    http.send();
-                }
-            } catch (e) {
-                error(e);
+            if (!variable.isNull(httpOption.data)) {
+                http.send(httpOption.data);
+            } else {
+                http.send();
             }
 
             http.onreadystatechange = function () {
@@ -64,14 +60,9 @@ export default {
                 }
             }
 
-            try {
-                http.send();
-            } catch (e) {
-                error(e);
-            }
+            http.send();
 
             http.onload = function () {
-                console.log(http);
                 if (http.status === 200) {
                     let fileReader = new FileReader();
                     fileReader.onload = function (e) {

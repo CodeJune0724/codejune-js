@@ -1,6 +1,6 @@
 {
   "name": "zj0724-common",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "zj0724-common",
   "main": "dist/index.js",
   "scripts": {
