@@ -15,11 +15,17 @@ export default {
                     }
                 }
             }
-            if (!variable.isNull(httpOption.data)) {
-                http.send(httpOption.data);
-            } else {
-                http.send();
+
+            try {
+                if (!variable.isNull(httpOption.data)) {
+                    http.send(httpOption.data);
+                } else {
+                    http.send();
+                }
+            } catch (e) {
+                error(e);
             }
+
             http.onreadystatechange = function () {
                 if (http.readyState === 4) {
                     if (http.status === 200) {
@@ -33,10 +39,14 @@ export default {
     },
 
     download(data) {
-        return new Promise((success) => {
-            let httpOption = new HttpOption(data);
-            window.open(httpOption.url);
-            success();
+        return new Promise((success, error) => {
+            try {
+                let httpOption = new HttpOption(data);
+                window.open(httpOption.url);
+                success();
+            } catch (e) {
+                error(e);
+            }
         });
     },
 
@@ -53,7 +63,13 @@ export default {
                     }
                 }
             }
-            http.send();
+
+            try {
+                http.send();
+            } catch (e) {
+                error(e);
+            }
+
             http.onload = function () {
                 console.log(http);
                 if (http.status === 200) {
