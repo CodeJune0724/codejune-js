@@ -4,17 +4,19 @@
 branch=$1
 # 主分支
 mainBranch=$2
-# 是否合并主分支
-isMain=$3
 
 git add .
 git reset --hard HEAD
 
 git checkout "${mainBranch}"
 
-if [ "${isMain}" = "--main" ]; then
-  git reset --hard origin/"${branch}"
-  git reset --soft origin/"${mainBranch}"
-else
+if [ "${mainBranch}" = "master" ]; then
   git merge --squash "${branch}"
+  read -p "手动提交：" isCommit
+  if [ "${isCommit}" = "1" ]; then
+      git checkout "${branch}"
+      git merge "${mainBranch}"
+  fi
+else
+  git merge "${branch}"
 fi
