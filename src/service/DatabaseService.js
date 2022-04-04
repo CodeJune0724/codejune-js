@@ -93,9 +93,9 @@ export default class DatabaseService {
             url: this.url,
             type: "POST",
             data: this.data[type].request
-        }).then((responseData) => {
+        }, http.send).then((responseData) => {
             this.data[type].response = responseData.data;
-        }, http.send);
+        });
     }
 
 };
