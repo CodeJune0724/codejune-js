@@ -3,15 +3,16 @@ set branch=%1
 set mainBranch=%2
 
 call npm install
+rd /s /q "dist"
 call npm run build
 
-set /p isOk="鎵嬪姩淇敼杩涜鎻愪氦:"
+set /p isOk="手动修改进行提交:"
 if "%isOk%"=="1" (
 	git checkout %branch%
 	git merge --no-edit %mainBranch%
 )
 
-set /p isOk="瑙ｅ喅鍐茬獊:"
+set /p isOk="解决冲突:"
 if "%isOk%"=="1" (
 	git checkout %mainBranch%
 	echo username: zj0724
