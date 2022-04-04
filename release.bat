@@ -2,8 +2,8 @@
 set branch=%1
 set mainBranch=%2
 
-npm install
-npm run build
+call npm install
+call npm run build
 
 set /p isOk="手动修改进行提交:"
 if "%isOk%"=="1" (
