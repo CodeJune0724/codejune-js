@@ -4,9 +4,9 @@ import http from "../http.js";
 
 export default class DatabaseService {
 
-    server = null;
+    url = null;
 
-    moduleName = null;
+    baseSend = http.send;
 
     sendFunction = null;
 
@@ -53,12 +53,8 @@ export default class DatabaseService {
         }
     };
 
-    constructor(server, moduleName, sendFunction) {
-        this.server = server;
-        this.moduleName = moduleName;
-        if (variable.isEmpty(sendFunction)) {
-            sendFunction = http.send;
-        }
+    constructor(url, sendFunction) {
+        this.url = url;
         this.sendFunction = sendFunction;
     }
 
@@ -74,19 +70,12 @@ export default class DatabaseService {
         return this.$send("saveList", request);
     }
 
-    delete(request) {
+    doDelete(request) {
         return this.$send("delete", request);
     }
 
     deleteList(request) {
         return this.$send("deleteList", request);
-    }
-
-    getUrl(type) {
-        if (variable.isEmpty(this.server) || variable.isEmpty(this.moduleName) || variable.isEmpty(type)) {
-            throw new InfoException("服务地址或者模块名为配置");
-        }
-        return this.server + "/" + this.moduleName + "/" + type;
     }
 
     $send(type, request) {
@@ -96,8 +85,14 @@ export default class DatabaseService {
         if (!variable.isEmpty(request)) {
             this.data[type].request = request;
         }
-        return this.sendFunction({
-            url: this.getUrl(type),
+        let send;
+        if (!variable.isEmpty(this.sendFunction) && variable.getType(this.sendFunction) === Function) {
+            send = this.sendFunction;
+        } else {
+            send = this.baseSend;
+        }
+        return send({
+            url: this.url,
             type: "POST",
             data: this.data[type].request
         }).then((responseData) => {
