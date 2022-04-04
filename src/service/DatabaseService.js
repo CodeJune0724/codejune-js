@@ -6,8 +6,6 @@ export default class DatabaseService {
 
     url = null;
 
-    baseSend = http.send;
-
     sendFunction = null;
 
     data = {
@@ -89,7 +87,7 @@ export default class DatabaseService {
         if (!variable.isEmpty(this.sendFunction) && variable.getType(this.sendFunction) === Function) {
             send = this.sendFunction;
         } else {
-            send = this.baseSend;
+            send = http.send;
         }
         return send({
             url: this.url,
@@ -97,7 +95,7 @@ export default class DatabaseService {
             data: this.data[type].request
         }).then((responseData) => {
             this.data[type].response = responseData.data;
-        });
+        }, http.send);
     }
 
 };
