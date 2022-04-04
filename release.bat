@@ -6,7 +6,14 @@ call npm install
 rd /s /q "dist"
 call npm run build
 
-set /p isOk="手动修改进行提交:"
+git add .
+git reset --hard HEAD
+call npm install
+rd /s /q "dist"
+call npm run build
+git checkout %mainBranch%
+git merge --squash %branch%
+set /p isOk="手动修改版本进行提交:"
 if "%isOk%"=="1" (
 	git checkout %branch%
 	git merge --no-edit %mainBranch%
