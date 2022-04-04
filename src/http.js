@@ -1,4 +1,4 @@
-import HttpOption from "../entity/HttpOption.js";
+import HttpOption from "./model/HttpOption.js";
 import variable from "./variable.js";
 import base64 from "./base64.js";
 
