@@ -90,7 +90,7 @@ export default class DatabaseService {
             send = http.send;
         }
         return send({
-            url: this.url,
+            url: this.url + "/" + type,
             type: "POST",
             data: this.data[type].request
         }, http.send).then((responseData) => {
