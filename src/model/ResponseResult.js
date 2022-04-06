@@ -6,13 +6,13 @@ export default class responseResult {
 
     message = null;
 
-    data = null;
+    result = null;
 
     setData(json) {
         this.flag = json.flag;
         this.code = json.code;
         this.message = json.message;
-        this.data = json.data;
+        this.result = json.result;
     }
 
 };
