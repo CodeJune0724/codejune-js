@@ -99,8 +99,7 @@ export default class DatabaseService {
                 this.data[methodName].response.setData(responseDataJson);
                 s(this.data[methodName].response);
             }).catch((responseData) => {
-                this.data[methodName].response = JSON.parse(responseData);
-                e(this.data[methodName].response);
+                e(e(responseData));
             });
         });
     }
