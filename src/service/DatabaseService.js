@@ -97,7 +97,11 @@ export default class DatabaseService {
             http.send(requestData).then((responseData) => {
                 let responseDataJson = JSON.parse(responseData);
                 this.data[methodName].response.setData(responseDataJson);
-                s(this.data[methodName].response);
+                if (this.data[methodName].response.flag) {
+                    s(this.data[methodName].response);
+                } else {
+                    e(this.data[methodName].response);
+                }
             }).catch((responseData) => {
                 e(e(responseData));
             });

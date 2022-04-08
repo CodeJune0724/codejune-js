@@ -11,14 +11,12 @@ export default class responseResult {
     result = null;
 
     constructor(data) {
-        variable.assignment(this, data);
+        this.setData(data);
+
     }
 
-    setData(json) {
-        this.flag = json.flag;
-        this.code = json.code;
-        this.message = json.message;
-        this.result = json.result;
+    setData(data) {
+        variable.assignment(this, data);
     }
 
 };
