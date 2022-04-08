@@ -1,3 +1,5 @@
+import variable from "../variable.js";
+
 export default class responseResult {
 
     flag = null;
@@ -7,6 +9,10 @@ export default class responseResult {
     message = null;
 
     result = null;
+
+    constructor(data) {
+        variable.assignment(this, data);
+    }
 
     setData(json) {
         this.flag = json.flag;

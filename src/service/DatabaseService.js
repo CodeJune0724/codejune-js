@@ -19,7 +19,7 @@ export default class DatabaseService {
                 }
             },
 
-            response: new ResponseResult()
+            response: new ResponseResult({result: {count: null, data: null}})
         },
 
         save: {
