@@ -103,7 +103,7 @@ export default class DatabaseService {
                     e(this.data[methodName].response);
                 }
             }).catch((responseData) => {
-                e(e(responseData));
+                e(responseData);
             });
         });
     }
