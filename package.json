@@ -1,8 +1,8 @@
 {
   "name": "zj0724-common",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "zj0724-common",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"

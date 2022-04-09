@@ -5,4 +5,4 @@ import file from "./file.js";
 import DatabaseService from "./service/DatabaseService.js";
 import "./index.css";
 
-export default {variable, http, base64, file, DatabaseService};
+export {variable, http, base64, file, DatabaseService};
