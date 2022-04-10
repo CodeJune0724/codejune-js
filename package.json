@@ -3,7 +3,8 @@
   "version": "1.0.23",
   "description": "zj0724-common",
   "main": "dist/index.js",
-  "types": "dis/index.d.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack"
   },
