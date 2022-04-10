@@ -1,6 +1,6 @@
 {
   "name": "zj0724-common",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "zj0724-common",
   "main": "dist/index.js",
   "types": "dist/zj0724-common.d.ts",
