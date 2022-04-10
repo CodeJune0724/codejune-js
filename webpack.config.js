@@ -1,6 +1,7 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: {
@@ -10,7 +11,6 @@ module.exports = {
     output: {
         path: path.resolve("dist"),
         filename: "[name].js",
-        library: "index",
         libraryTarget: "umd"
     },
 
@@ -30,6 +30,15 @@ module.exports = {
             filename: "./[name].css"
         }),
 
-        new CssMinimizerWebpackPlugin()
+        new CssMinimizerWebpackPlugin(),
+
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: "./src/index.d.ts",
+                    to: "index.d.ts"
+                }
+            ]
+        })
     ]
 };
