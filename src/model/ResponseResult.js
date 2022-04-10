@@ -12,7 +12,6 @@ export default class responseResult {
 
     constructor(data) {
         this.setData(data);
-
     }
 
     setData(data) {
