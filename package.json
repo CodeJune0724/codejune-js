@@ -2,11 +2,16 @@
   "name": "zj0724-common",
   "version": "1.0.22",
   "description": "zj0724-common",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dis/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
+  "files": [
+    "dist/*",
+    "package.json",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ZJ0724/zj0724-common-js.git"
@@ -18,6 +23,7 @@
   },
   "homepage": "https://github.com/ZJ0724/zj0724-common-js#readme",
   "devDependencies": {
+    "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.4.0",
     "css-minimizer-webpack-plugin": "^3.1.1",
     "mini-css-extract-plugin": "^2.4.2",
