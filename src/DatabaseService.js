@@ -1,7 +1,7 @@
-import variable from "../variable.js";
-import InfoException from "../exception/InfoException.js";
-import http from "../http.js";
-import ResponseResult from "../model/ResponseResult.js";
+import variable from "./variable.js";
+import InfoException from "./exception/InfoException.js";
+import http from "./http.js";
+import ResponseResult from "./model/ResponseResult.js";
 
 export default class DatabaseService {
 
