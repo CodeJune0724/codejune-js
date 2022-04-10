@@ -30,15 +30,15 @@ module.exports = {
             filename: "./[name].css"
         }),
 
-        new CssMinimizerWebpackPlugin()
+        new CssMinimizerWebpackPlugin(),
 
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: "./src/index.d.ts",
-        //             to: "index.d.ts"
-        //         }
-        //     ]
-        // })
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: "./src/zj0724-common.d.ts",
+                    to: "zj0724-common.d.ts"
+                }
+            ]
+        })
     ]
 };

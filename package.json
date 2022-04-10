@@ -3,14 +3,12 @@
   "version": "1.0.25",
   "description": "zj0724-common",
   "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/zj0724-common.d.ts",
   "scripts": {
     "build": "webpack"
   },
   "files": [
     "dist/*",
-    "src",
     "package.json",
     "README.md"
   ],
