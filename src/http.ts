@@ -8,7 +8,7 @@ export default {
         return new Promise((success, error) => {
             let http = new XMLHttpRequest();
             let url: string = this._getUrl(data);
-            let header: object = data.header;
+            let header: object = data.header ? data.header : {};
             let sendData: any | null = data.data;
 
             // 判断是否有文件

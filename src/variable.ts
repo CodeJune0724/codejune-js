@@ -218,7 +218,7 @@ export default {
     },
 
     setValue(data: any, key: string, value: any): void {
-        if (this.isEmpty(data) || this.isEmpty(key)) {
+        if (this.isNull(data) || this.isEmpty(key)) {
             return;
         }
         data[key] = value;
