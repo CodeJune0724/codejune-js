@@ -41,7 +41,12 @@ export default class DatabaseService<T extends BasePO> {
         this.data = {
             query: {
                 request: new Query(),
-                response: new ResponseResult()
+                response: new ResponseResult({
+                    result: {
+                        count: null,
+                        data: null
+                    }
+                })
             },
             save: {
                 request: t,
