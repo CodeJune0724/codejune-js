@@ -1,6 +1,6 @@
 let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-let _utf8_encode = function (string) {
+let _utf8_encode = function (string: string): string {
     let utftext = "";
     string = string.replace(/\r\n/g, "\n");
     for (let n = 0; n < string.length; n++) {
@@ -19,7 +19,7 @@ let _utf8_encode = function (string) {
     return utftext;
 }
 
-let _utf8_decode = function (utftext) {
+let _utf8_decode = function (utftext: string): string {
     let string = "";
     let i = 0;
     let c, c2, c3 = 0;
@@ -43,7 +43,7 @@ let _utf8_decode = function (utftext) {
 }
 
 export default {
-    encode(input) {
+    encode(input: string): string {
         let output = "";
         let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
         let i = 0;
@@ -67,7 +67,7 @@ export default {
         return output;
     },
 
-    decode (input) {
+    decode (input: string): string {
         let output = "";
         let chr1, chr2, chr3;
         let enc1, enc2, enc3, enc4;
