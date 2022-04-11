@@ -1,14 +1,20 @@
 import InfoException from "./exception/InfoException";
+
 import HttpOption from "./model/HttpOption";
 import httpType from "./model/httpType";
 import Query from "./model/Query";
+import responseResult from "./model/ResponseResult";
+
+import BasePO from "./service/BasePO";
+import DatabaseService from "./service/DatabaseService";
+
 import variable from "./variable";
 import http from "./http";
 import base64 from "./base64";
 import file from "./file";
-import DatabaseService from "./service/DatabaseService";
+
 import "./index.css";
-import BasePO from "./service/BasePO";
+
 
 export {
     InfoException,
@@ -20,5 +26,6 @@ export {
     file,
     DatabaseService,
     Query,
-    BasePO
+    BasePO,
+    responseResult
 };

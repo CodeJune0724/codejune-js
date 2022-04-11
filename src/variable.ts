@@ -88,7 +88,7 @@ export default {
                 }
                 return newData;
             } else {
-                let newData: any;
+                let newData: any = {};
                 for (let key in data) {
                     if (data.hasOwnProperty(key)) {
                         let value = data[key];
