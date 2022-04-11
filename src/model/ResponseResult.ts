@@ -15,7 +15,7 @@ export default class responseResult {
     }
 
     setData(data?: object) {
-        variable.assignment(this, data);
+        variable.assignment(this, data, true);
     }
 
 };
