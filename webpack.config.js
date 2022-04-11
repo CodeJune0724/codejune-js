@@ -1,7 +1,6 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: {
@@ -21,6 +20,12 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader"]
+            },
+            {
+                test: /\.ts$/,
+                use: {
+                    loader: "ts-loader"
+                }
             }
         ]
     },
@@ -30,15 +35,10 @@ module.exports = {
             filename: "./[name].css"
         }),
 
-        new CssMinimizerWebpackPlugin(),
+        new CssMinimizerWebpackPlugin()
+    ],
 
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: "./src/zj0724-common.d.ts",
-                    to: "zj0724-common.d.ts"
-                }
-            ]
-        })
-    ]
+    resolve: {
+        extensions: [".ts", ".js"]
+    },
 };
