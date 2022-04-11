@@ -15,7 +15,7 @@ export default class DatabaseService<T extends BasePO> {
             response: ResponseResult | null;
         },
         save: {
-            request: T | null,
+            request: T | null | undefined,
             response: ResponseResult | null
         },
         saveList: {
@@ -23,7 +23,7 @@ export default class DatabaseService<T extends BasePO> {
             response: ResponseResult | null
         },
         delete: {
-            request: T | null,
+            request: T | null | undefined,
             response: ResponseResult | null
         },
         deleteList: {
@@ -36,7 +36,7 @@ export default class DatabaseService<T extends BasePO> {
         }
     };
 
-    constructor(url: string) {
+    constructor(url: string, t?: T) {
         this.url = url;
         this.data = {
             query: {
@@ -44,7 +44,7 @@ export default class DatabaseService<T extends BasePO> {
                 response: null
             },
             save: {
-                request: null,
+                request: t,
                 response: null
             },
             saveList: {
@@ -53,7 +53,7 @@ export default class DatabaseService<T extends BasePO> {
             },
 
             delete: {
-                request: null,
+                request: t,
                 response: null
             },
             deleteList: {
