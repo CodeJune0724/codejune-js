@@ -5,7 +5,6 @@
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
-    "allowJs": true,
-    "noEmitOnError": true
+    "allowJs": true
   }
 }
