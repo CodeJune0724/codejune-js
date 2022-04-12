@@ -102,9 +102,10 @@ export default class DatabaseService<T extends BasePO> {
                     response: new ResponseResult()
                 };
             }
-            if (!variable.isEmpty(request)) {
+            if (request !== undefined) {
                 this.data[methodName].request = request;
             }
+
             let requestData: any = {
                 url: this.url + "/" + methodName,
                 type: type,
