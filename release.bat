@@ -25,7 +25,7 @@ if "%isOk%"=="1" (
 	echo username: zj0724
     echo password: June3259123
     echo email:    1476253236@qq.com
-    call npm login
+@REM     call npm login
     call npm publish
 	git checkout %branch%
 )
