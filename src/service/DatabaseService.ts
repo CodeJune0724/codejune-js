@@ -135,7 +135,9 @@ export default class DatabaseService<T extends BasePO> {
         }
         this.data[methodName] = {
             request: request,
-            response: new ResponseResult(result)
+            response: new ResponseResult({
+                result
+            })
         };
     }
 
