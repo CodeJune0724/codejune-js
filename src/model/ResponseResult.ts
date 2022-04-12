@@ -1,6 +1,6 @@
 import variable from "../variable";
 
-export default class responseResult {
+export default class ResponseResult {
 
     flag: any;
 
@@ -15,7 +15,7 @@ export default class responseResult {
     }
 
     setData(data?: object) {
-        variable.assignment(this, data, true);
+        variable.assignment(this, data);
     }
 
 };

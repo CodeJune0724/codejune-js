@@ -61,6 +61,9 @@ export default {
             if (type == null) {
                 return false;
             }
+            if (JSON.stringify(data) !== undefined) {
+                return true;
+            }
             if (type.toString().indexOf("class") === 0) {
                 return true;
             }
