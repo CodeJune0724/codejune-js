@@ -34,7 +34,7 @@ export default class DatabaseService<T extends BasePO> {
     }
 
     $send(methodName: string, type: string, request?: any): Promise<any> {
-        return new Promise((s: Function, e:Function) => {
+        return new Promise((s, e) => {
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
@@ -51,9 +51,9 @@ export default class DatabaseService<T extends BasePO> {
                 let responseDataJson = JSON.parse(responseData);
                 let responseResult = new ResponseResult(responseDataJson);
                 if (responseResult.flag) {
-                    s(responseResult.result, responseResult);
+                    s(responseResult);
                 } else {
-                    e(responseResult.message, responseResult);
+                    e(responseResult);
                 }
             }).catch((responseData) => {
                 e(responseData);
