@@ -129,4 +129,14 @@ export default class DatabaseService<T extends BasePO> {
         return requestData;
     }
 
+    $addData(methodName: string, request?: any, result?: any): void {
+        if (request === undefined) {
+            request = {};
+        }
+        this.data[methodName] = {
+            request: request,
+            response: new ResponseResult(result)
+        };
+    }
+
 };
