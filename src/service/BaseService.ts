@@ -45,11 +45,12 @@ export default class BaseService {
             requestData = this.$requestHandler(requestData);
             http.send(requestData).then((responseData) => {
                 let responseDataJson = JSON.parse(responseData);
-                this.data[methodName].response!.setData(responseDataJson);
-                if (this.data[methodName].response!.flag) {
-                    s(this.data[methodName].response);
+                let responseResult = new ResponseResult(responseDataJson);
+                this.data[methodName].response = responseResult;
+                if (responseResult.flag) {
+                    s(responseResult);
                 } else {
-                    e(this.data[methodName].response);
+                    e(responseResult);
                 }
             }).catch((responseData) => {
                 e(responseData);
