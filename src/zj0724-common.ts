@@ -3,7 +3,7 @@ import InfoException from "./exception/InfoException";
 import HttpOption from "./model/HttpOption";
 import httpType from "./model/httpType";
 import Query from "./model/Query";
-import responseResult from "./model/ResponseResult";
+import ResponseResult from "./model/ResponseResult";
 
 import BasePO from "./service/BasePO";
 import BaseService from "./service/BaseService";
@@ -27,6 +27,6 @@ export {
     DatabaseService,
     Query,
     BasePO,
-    responseResult,
+    ResponseResult,
     BaseService
 };
