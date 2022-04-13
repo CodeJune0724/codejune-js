@@ -4,6 +4,7 @@ import http from "../http";
 import ResponseResult from "../model/ResponseResult";
 import BasePO from "./BasePO";
 import Query from "../model/Query";
+import httpType from "../model/httpType";
 
 export default class DatabaseService<T extends BasePO> {
 
@@ -69,26 +70,26 @@ export default class DatabaseService<T extends BasePO> {
     }
 
     query(request?: Query) {
-        return this.$send("query", "POST", request);
+        return this.$send("query", httpType.POST, request);
     }
 
     save(request?: T) {
-        return this.$send("save", "POST", request);
+        return this.$send("save", httpType.POST, request);
     }
 
     saveList(request?: T[]) {
-        return this.$send("saveList", "POST", request);
+        return this.$send("saveList", httpType.POST, request);
     }
 
     doDelete(request?: T) {
-        return this.$send("delete", "POST", request);
+        return this.$send("delete", httpType.POST, request);
     }
 
     deleteList(request?: T[]) {
-        return this.$send("deleteList", "POST", request);
+        return this.$send("deleteList", httpType.POST, request);
     }
 
-    $send(methodName: string, type: string, request?: any): Promise<any> {
+    $send(methodName: string, type: httpType, request?: any): Promise<any> {
         return new Promise((s, e) => {
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
