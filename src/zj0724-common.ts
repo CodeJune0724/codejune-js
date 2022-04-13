@@ -6,6 +6,7 @@ import Query from "./model/Query";
 import responseResult from "./model/ResponseResult";
 
 import BasePO from "./service/BasePO";
+import BaseService from "./service/BaseService";
 import DatabaseService from "./service/DatabaseService";
 
 import variable from "./variable";
@@ -14,7 +15,6 @@ import base64 from "./base64";
 import file from "./file";
 
 import "./index.css";
-
 
 export {
     InfoException,
@@ -27,5 +27,6 @@ export {
     DatabaseService,
     Query,
     BasePO,
-    responseResult
+    responseResult,
+    BaseService
 };
