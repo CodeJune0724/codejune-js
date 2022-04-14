@@ -11,10 +11,6 @@ export default class ResponseResult {
     result: any;
 
     constructor(data?: object) {
-        this.setData(data);
-    }
-
-    setData(data?: object) {
         variable.assignment(this, data);
     }
 
