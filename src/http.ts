@@ -62,10 +62,10 @@ export default {
     },
 
     download(data: HttpOption): Promise<any> {
-        return new Promise((success, error) => {
+        return new Promise((success: Function, error) => {
             try {
                 window.open(this._getUrl(data));
-                success(undefined);
+                success();
             } catch (e) {
                 error(e);
             }
