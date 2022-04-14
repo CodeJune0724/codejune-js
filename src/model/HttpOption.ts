@@ -2,11 +2,11 @@ import httpType from "./httpType";
 
 class HttpOption {
 
-    readonly url: string;
-    readonly type: httpType;
-    readonly header?: object;
-    readonly urlData?: object;
-    readonly data?: object;
+    url: string;
+    type: httpType;
+    header?: object;
+    urlData?: object;
+    data?: object;
 
     constructor(data: HttpOption) {
         this.url = data.url;
