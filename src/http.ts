@@ -12,8 +12,8 @@ export default {
             let sendData: any | null = data.data;
 
             // 判断是否有文件
+            let isExistFile = false;
             if (!variable.isEmpty(data.data)) {
-                let isExistFile = false;
                 for (let key in data.data) {
                     if (variable.getType(variable.getValue(data.data, key)) === File) {
                         isExistFile = true;
@@ -30,7 +30,7 @@ export default {
             }
 
             // 添加application/json
-            if (data.type !== httpType.GET) {
+            if (data.type !== httpType.GET && !isExistFile) {
                 variable.setValue(header, "content-type", "application/json");
             }
 
