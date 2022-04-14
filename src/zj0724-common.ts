@@ -14,6 +14,7 @@ import http from "./http";
 import base64 from "./base64";
 import file from "./file";
 import promise from "./promise";
+import "./index.css";
 
 export {
     InfoException,
