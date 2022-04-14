@@ -13,6 +13,7 @@ import variable from "./variable";
 import http from "./http";
 import base64 from "./base64";
 import file from "./file";
+import promise from "./promise";
 
 import "./index.css";
 
@@ -28,5 +29,6 @@ export {
     Query,
     BasePO,
     ResponseResult,
-    BaseService
+    BaseService,
+    promise
 };
