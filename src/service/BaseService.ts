@@ -19,7 +19,7 @@ export default class BaseService {
         this.url = url;
     }
 
-    $send(methodName: string, type: httpType, request?: any): Promise<any> {
+    $send(methodName: string, type: httpType, request?: any, requestHandler?: (requestData: object) => object): Promise<any> {
         return new Promise((s, e) => {
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
@@ -36,12 +36,18 @@ export default class BaseService {
             if (request !== undefined) {
                 this.data[methodName].request = request;
             }
+            if (requestHandler === undefined || variable.isEmpty(requestHandler)) {
+                requestHandler = (requestData) => {
+                    return requestData;
+                }
+            }
 
             let requestData: any = {
                 url: this.url + "/" + methodName,
                 type: type,
                 data: this.data[methodName].request
             };
+            requestData = requestHandler(requestData);
             requestData = this.$requestHandler(requestData);
             http.send(requestData).then((responseData) => {
                 let responseDataJson = JSON.parse(responseData);
