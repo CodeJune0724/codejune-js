@@ -3,6 +3,7 @@ import InfoException from "../exception/InfoException";
 import http from "../http";
 import ResponseResult from "../model/ResponseResult";
 import httpType from "../model/httpType";
+import HttpOption from "../model/HttpOption";
 
 export default class BaseService {
 
@@ -19,7 +20,7 @@ export default class BaseService {
         this.url = url;
     }
 
-    $send(methodName: string, type: httpType, request?: any, requestHandler?: (requestData: object) => object): Promise<any> {
+    $send(methodName: string, type: httpType, request?: any, requestHandler?: (requestData: HttpOption) => HttpOption): Promise<any> {
         return new Promise((s, e) => {
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
@@ -42,7 +43,7 @@ export default class BaseService {
                 }
             }
 
-            let requestData: any = {
+            let requestData: HttpOption = {
                 url: this.url + "/" + methodName,
                 type: type,
                 data: this.data[methodName].request
@@ -64,7 +65,7 @@ export default class BaseService {
         });
     }
 
-    $requestHandler(requestData: object): object {
+    $requestHandler(requestData: HttpOption): HttpOption {
         return requestData;
     }
 
