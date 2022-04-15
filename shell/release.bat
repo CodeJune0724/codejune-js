@@ -3,6 +3,7 @@
 set branch=%1
 set mainBranch=%2
 
+cd %~dp0
 cd ..
 git checkout %mainBranch%
 git merge --squash %branch%
