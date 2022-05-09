@@ -203,27 +203,5 @@ export default {
                 }
             }
         }
-    },
-
-    /**
-     * 获取值
-     *
-     * @param data data
-     * @param key key
-     *
-     * @return any
-     * */
-    getValue(data: any, key: string): any {
-        if (this.isNull(data) || this.isEmpty(key)) {
-            return null;
-        }
-        return data[key];
-    },
-
-    setValue(data: any, key: string, value: any): void {
-        if (this.isNull(data) || this.isEmpty(key)) {
-            return;
-        }
-        data[key] = value;
     }
 };

@@ -66,23 +66,43 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
     }
 
     query(request?: Query) {
-        return this.$send("query", httpType.POST, request);
+        return this.$send({
+            url: "query",
+            type: httpType.POST,
+            data: request
+        });
     }
 
     save(request?: T) {
-        return this.$send("save", httpType.POST, request);
+        return this.$send({
+            url: "save",
+            type: httpType.POST,
+            data: request
+        });
     }
 
     saveList(request?: T[]) {
-        return this.$send("saveList", httpType.POST, request);
+        return this.$send({
+            url: "saveList",
+            type: httpType.POST,
+            data: request
+        });
     }
 
     doDelete(request?: T) {
-        return this.$send("delete", httpType.POST, request);
+        return this.$send({
+            url: "delete",
+            type: httpType.POST,
+            data: request
+        });
     }
 
     deleteList(request?: T[]) {
-        return this.$send("deleteList", httpType.POST, request);
+        return this.$send({
+            url: "deleteList",
+            type: httpType.POST,
+            data: request
+        });
     }
 
 };
