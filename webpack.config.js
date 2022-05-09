@@ -10,7 +10,10 @@ module.exports = {
     output: {
         path: path.resolve("dist"),
         filename: "[name].js",
-        libraryTarget: "umd"
+        library: {
+            name: "zj0724common",
+            type: "umd"
+        }
     },
 
     mode: "production",
