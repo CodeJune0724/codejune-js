@@ -1,63 +1,62 @@
 import HttpOption from "./model/HttpOption";
 import variable from "./variable";
-import base64 from "./base64";
 import httpType from "./model/httpType";
 
 export default {
     send(data: HttpOption): Promise<any> {
         return new Promise((success, error) => {
-            let http = new XMLHttpRequest();
             let url: string = this._getUrl(data);
-            let header: object = data.header ? data.header : {};
-            let sendData: any | null = data.data;
+            let type: httpType = data.type;
+            let header: { [key: string]: string } = data.header ? data.header : {};
+            let sendData: any = data.data;
 
             // 判断是否有文件
-            let isExistFile = false;
-            if (!variable.isEmpty(data.data)) {
-                for (let key in data.data) {
-                    if (variable.getType(variable.getValue(data.data, key)) === File) {
+            let isExistFile: boolean = false;
+            if (variable.isObject(sendData)) {
+                for (let key in sendData) {
+                    if (variable.getType(sendData[key]) === File) {
                         isExistFile = true;
                         break;
                     }
                 }
                 if (isExistFile) {
                     let formData = new FormData();
-                    for (let key in data.data) {
-                        formData.append(key, variable.getValue(data.data, key));
+                    for (let key in sendData) {
+                        formData.append(key, sendData[key]);
                     }
                     sendData = formData;
                 }
             }
 
+            // 转换请求数据
+            if (variable.isObject(sendData)) {
+                if (variable.getType(sendData) !== FormData) {
+                    sendData = JSON.stringify(sendData);
+                }
+            }
+
             // 添加application/json
-            if (data.type !== httpType.GET && !isExistFile) {
-                variable.setValue(header, "content-type", "application/json");
+            if (type !== httpType.GET && !isExistFile) {
+                header["content-type"] = "application/json";
             }
 
-            http.open(data.type, url);
-            for (let key in header) {
-                http.setRequestHeader(key, variable.getValue(header, key));
-            }
-
-            if (variable.isEmpty(sendData)) {
-                http.send();
-            } else {
-                if (variable.getType(sendData) === FormData) {
-                    http.send(sendData);
+            fetch(url, {
+                cache: "no-cache",
+                credentials: "same-origin",
+                mode: "cors",
+                redirect: "follow",
+                referrer: "no-referrer",
+                method: type,
+                headers: header,
+                body: sendData
+            }).then((response) => {
+                let responseText = response.text();
+                if (response.ok) {
+                    success(responseText);
                 } else {
-                    http.send(variable.toStr(sendData));
+                    error(responseText);
                 }
-            }
-
-            http.onreadystatechange = function () {
-                if (http.readyState === 4) {
-                    if (http.status === 200) {
-                        success(http.response);
-                    } else {
-                        error(http.response);
-                    }
-                }
-            }
+            });
         });
     },
 
@@ -72,55 +71,41 @@ export default {
         });
     },
 
-    asynchronousDownload(data: HttpOption): Promise<any> {
-        return new Promise((success, error) => {
-            let http = new XMLHttpRequest();
-            http.open(data.type, this._getUrl(data));
-            http.responseType = "blob";
-            if (!variable.isEmpty(data.header)) {
-                for (let key in data.header) {
-                    http.setRequestHeader(key, variable.getValue(data.header, key));
-                }
-            }
-            http.send();
-            http.onload = function () {
-                if (http.status === 200) {
-                    let fileReader = new FileReader();
-                    fileReader.onload = function (e) {
-                        // 下载失败
-                        let type: any = e.target!.result;
-                        if (type.substring(0, 29) === "data:application/json;base64,") {
-                            let r = base64.decode(type.substring(29, type.length));
-                            error(r);
-                            return;
-                        }
-
-                        let a: any = document.createElement("a");
-                        a.download = decodeURIComponent(http.getResponseHeader("Content-disposition")!).substring(20);
-                        a.href = e.target!.result;
-                        a.click();
-                        success(undefined);
-                    };
-                    fileReader.readAsDataURL(http.response);
-                } else {
+    asyncDownload(data: HttpOption): Promise<any> {
+        return new Promise((success: any, error) => {
+            fetch(this._getUrl(data)).then((response) => {
+                response.blob().then((blob) => {
                     try {
-                        http.responseText;
+                        let a = document.createElement("a");
+                        let url = window.URL.createObjectURL(blob);
+                        let filename = response.headers.get("Content-Disposition");
+                        filename = filename ? filename : "";
+                        let test = /filename=(.*?)$/g;
+                        let fileNameList = test.exec(filename);
+                        if (fileNameList !== null) {
+                            filename = fileNameList[1];
+                        }
+                        a.href = url;
+                        a.download = filename;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        success();
                     } catch (e) {
                         error(e);
                     }
-                }
-            };
+                });
+            });
         });
     },
 
     _getUrl(data: HttpOption): string {
         let url = data.url;
-        if (data.type === httpType.GET && !variable.isEmpty(data.urlData)) {
+        let urlData: { [key: string]: string } = data.urlData ? data.urlData : {};
+        if (!variable.isEmpty(urlData)) {
             let u = "?";
-            for (let key in data.urlData) {
-                let value = variable.getValue(data.urlData, key);
+            for (let key in urlData) {
+                let value = urlData[key];
                 if (!variable.isEmpty(value)) {
-                    value = variable.toStr(value);
                     u = u + key + "=" + value + "&";
                 }
             }

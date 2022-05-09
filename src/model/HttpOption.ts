@@ -4,9 +4,9 @@ class HttpOption {
 
     url: string;
     type: httpType;
-    header?: object | null;
-    urlData?: object | null;
-    data?: object | null;
+    header?: { [key: string]: string };
+    urlData?: { [key: string]: string };
+    data?: any;
 
     constructor(data: HttpOption) {
         this.url = data.url;
