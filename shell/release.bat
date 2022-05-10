@@ -9,9 +9,8 @@ git checkout %mainBranch%
 git merge --squash %branch%
 
 :: 前置步骤
-call npm install
+rd /s/q dist
 call npm run build
-call tsc
 
 set /p isOk="手动修改版本进行提交:"
 if "%isOk%"=="1" (
