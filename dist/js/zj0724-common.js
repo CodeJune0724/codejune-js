@@ -12,5 +12,4 @@ import base64 from "./base64";
 import file from "./file";
 import promise from "./promise";
 import Service from "./Service";
-import "./index.css";
 export { InfoException, HttpOption, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service };
