@@ -51,6 +51,8 @@ export default {
                 else {
                     error(responseText);
                 }
+            }).catch((m) => {
+                error(m);
             });
         });
     },
