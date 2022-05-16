@@ -120,10 +120,11 @@ export default {
      * */
     assignment(object1, object2, isStrict) {
         let type1 = this.getType(object1);
+        let isStrictBoolean = isStrict === true;
         if (this.isObject(object1) && this.isObject(object2)) {
             if (type1 === Array) {
                 let ok = true;
-                if (isStrict === true && this.getType(object2) !== Array) {
+                if (isStrictBoolean && this.getType(object2) !== Array) {
                     ok = false;
                 }
                 if (type1 !== this.getType(object2)) {
@@ -137,32 +138,37 @@ export default {
                 }
             }
             else {
-                for (let key in object1) {
-                    if (object1.hasOwnProperty(key)) {
-                        let value1 = object1[key];
-                        let value2 = object2[key];
-                        if (value2 === undefined) {
-                            continue;
+                if (!isStrictBoolean) {
+                    for (let key in object2) {
+                        if (object1[key] === undefined) {
+                            object1[key] = null;
                         }
-                        if (this.isObject(value1)) {
-                            if (this.getType(value1) === this.getType(value2)) {
-                                this.assignment(value1, value2);
+                    }
+                }
+                for (let key in object1) {
+                    let value1 = object1[key];
+                    let value2 = object2[key];
+                    if (value2 === undefined) {
+                        continue;
+                    }
+                    if (this.isObject(value1)) {
+                        if (this.getType(value1) === this.getType(value2)) {
+                            this.assignment(value1, value2);
+                        }
+                        else {
+                            if (!isStrictBoolean) {
+                                object1[key] = this.clone(value2);
                             }
-                            else {
-                                if (!(!this.isNull(isStrict) && this.getType(isStrict) === Boolean && isStrict)) {
-                                    object1[key] = this.clone(value2);
-                                }
+                        }
+                    }
+                    else {
+                        if (isStrictBoolean) {
+                            if (this.isNull(value1) || this.getType(value1) === this.getType(value2)) {
+                                object1[key] = this.clone(value2);
                             }
                         }
                         else {
-                            if (!this.isNull(isStrict) && this.getType(isStrict) === Boolean && isStrict) {
-                                if (this.isNull(value1) || this.getType(value1) === this.getType(value2)) {
-                                    object1[key] = this.clone(value2);
-                                }
-                            }
-                            else {
-                                object1[key] = this.clone(value2);
-                            }
+                            object1[key] = this.clone(value2);
                         }
                     }
                 }
