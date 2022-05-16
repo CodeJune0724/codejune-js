@@ -69,7 +69,7 @@ export default class Service {
                 } else {
                     this.data[methodName].response = responseDataJson;
                 }
-                s(responseDataJson);
+                s(this.data[methodName].response);
             }).catch((responseData) => {
                 e(responseData);
             });
