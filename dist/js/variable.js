@@ -204,5 +204,30 @@ export default {
                 }
             }
         }
+    },
+    /**
+     * 追加节点
+     * */
+    addKey(object1, object2) {
+        if (!this.isObject(object1) || !this.isObject(object2)) {
+            return;
+        }
+        for (let key in object2) {
+            let o2 = object2[key];
+            if (this.isNull(object1[key])) {
+                if (this.isObject(o2)) {
+                    if (this.getType(o2) === Array) {
+                        object1[key] = [];
+                    }
+                    else {
+                        object1[key] = {};
+                    }
+                }
+                else {
+                    object1[key] = null;
+                }
+            }
+            this.addKey(object1[key], o2);
+        }
     }
 };
