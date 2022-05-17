@@ -116,13 +116,13 @@ export default {
     /**
      * 给对象赋值
      *
-     * @param object1 被赋值的对象
-     * @param object2 要赋值的对象
+     * @param object1 赋值的对象
+     * @param object2 取值的对象
      * @param isStrict 是否是严谨模式
      * */
     assignment(object1: any, object2: any, isStrict?: boolean): void {
         let type1 = this.getType(object1);
-        let isStrictBoolean: boolean = isStrict === true;
+        let isStrictBoolean: boolean = this.isEmpty(isStrict) ? true : isStrict === true;
         if (this.isObject(object1) && this.isObject(object2)) {
             if (type1 === Array) {
                 let ok = true;
@@ -139,13 +139,6 @@ export default {
                     }
                 }
             } else {
-                if (!isStrictBoolean) {
-                    for (let key in object2) {
-                        if (object1[key] === undefined) {
-                            object1[key] = null;
-                        }
-                    }
-                }
                 for (let key in object1) {
                     let value1: any = object1[key];
                     let value2: any = object2[key];

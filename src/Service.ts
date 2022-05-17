@@ -65,7 +65,14 @@ export default class Service {
                     responseDataJson = responseData;
                 }
                 if (variable.isObject(this.data[methodName].response)) {
-                    variable.assignment(this.data[methodName].response, responseDataJson, false);
+                    if (variable.isObject(responseDataJson)) {
+                        for (let key in responseDataJson) {
+                            if (this.data[methodName].response[key] === undefined) {
+                                this.data[methodName].response[key] = null;
+                            }
+                        }
+                    }
+                    variable.assignment(this.data[methodName].response, responseDataJson);
                 } else {
                     this.data[methodName].response = responseDataJson;
                 }
