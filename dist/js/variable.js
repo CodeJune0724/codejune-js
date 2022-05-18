@@ -144,25 +144,20 @@ export default {
                     if (value2 === undefined) {
                         continue;
                     }
-                    if (this.isObject(value1)) {
-                        if (this.getType(value1) === this.getType(value2)) {
-                            this.assignment(value1, value2);
+                    if (value1 == null) {
+                        object1[key] = this.clone(value2);
+                        continue;
+                    }
+                    if (isStrictBoolean) {
+                        if (value2 === null && !this.isObject(value1)) {
+                            object1[key] = this.clone(value2);
                         }
-                        else {
-                            if (!isStrictBoolean) {
-                                object1[key] = this.clone(value2);
-                            }
+                        else if (this.getType(value1) === this.getType(value2)) {
+                            object1[key] = this.clone(value2);
                         }
                     }
                     else {
-                        if (isStrictBoolean) {
-                            if (this.isNull(value1) || this.getType(value1) === this.getType(value2)) {
-                                object1[key] = this.clone(value2);
-                            }
-                        }
-                        else {
-                            object1[key] = this.clone(value2);
-                        }
+                        object1[key] = this.clone(value2);
                     }
                 }
             }
