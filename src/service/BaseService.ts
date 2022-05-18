@@ -15,7 +15,7 @@ export default class BaseService extends Service {
         super(url);
     }
 
-    $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => HttpOption): Promise<any> {
+    $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
         return new Promise<any>((success, error) => {
             super.$send(httpOption, requestHandler).then((responseData) => {
                 if (responseData.flag) {

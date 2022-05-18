@@ -31,9 +31,7 @@ export default class Service {
                 this.data[methodName].request = data;
             }
             if (variable.isEmpty(requestHandler) || requestHandler === undefined) {
-                requestHandler = (requestData) => {
-                    return requestData;
-                };
+                requestHandler = () => { };
             }
             let requestData = {
                 url: this.url + "/" + methodName,
@@ -42,8 +40,8 @@ export default class Service {
                 data: this.data[methodName].request,
                 urlData: urlData
             };
-            requestData = requestHandler(requestData);
-            requestData = this.$requestHandler(requestData);
+            requestHandler(requestData);
+            this.$requestHandler(requestData);
             http.send(requestData).then((responseData) => {
                 variable.clean(this.data[methodName].response);
                 let responseDataJson;
@@ -83,17 +81,15 @@ export default class Service {
                 this.data[methodName].request = urlData;
             }
             if (requestHandler === undefined || variable.isEmpty(requestHandler)) {
-                requestHandler = (requestData) => {
-                    return requestData;
-                };
+                requestHandler = () => { };
             }
             let requestData = {
                 url: this.url + "/" + methodName,
                 type: httpType.GET,
                 urlData: this.data[methodName].request
             };
-            requestData = requestHandler(requestData);
-            requestData = this.$requestHandler(requestData);
+            requestHandler(requestData);
+            this.$requestHandler(requestData);
             http.download(requestData).then(() => {
                 s();
             }).catch((responseData) => {
@@ -101,9 +97,7 @@ export default class Service {
             });
         });
     }
-    $requestHandler(requestData) {
-        return requestData;
-    }
+    $requestHandler(requestData) { }
     $addData(methodName, request, result) {
         if (request === undefined) {
             request = null;

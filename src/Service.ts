@@ -19,7 +19,7 @@ export default class Service {
         this.url = url;
     }
 
-    $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => HttpOption): Promise<any> {
+    $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
         return new Promise((s, e) => {
             let methodName = httpOption.url;
             let type = httpOption.type;
@@ -42,9 +42,7 @@ export default class Service {
                 this.data[methodName].request = data;
             }
             if (variable.isEmpty(requestHandler) || requestHandler === undefined) {
-                requestHandler = (requestData) => {
-                    return requestData;
-                }
+                requestHandler = () => {}
             }
 
             let requestData: HttpOption = {
@@ -54,8 +52,8 @@ export default class Service {
                 data: this.data[methodName].request,
                 urlData: urlData
             };
-            requestData = requestHandler(requestData);
-            requestData = this.$requestHandler(requestData);
+            requestHandler(requestData);
+            this.$requestHandler(requestData);
             http.send(requestData).then((responseData) => {
                 variable.clean(this.data[methodName].response);
                 let responseDataJson;
@@ -77,7 +75,7 @@ export default class Service {
         });
     }
 
-    $download(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => HttpOption): Promise<any> {
+    $download(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
         return new Promise((s: Function, e) => {
             let methodName = httpOption.url;
             let urlData = httpOption.urlData;
@@ -94,17 +92,15 @@ export default class Service {
                 this.data[methodName].request = urlData;
             }
             if (requestHandler === undefined || variable.isEmpty(requestHandler)) {
-                requestHandler = (requestData) => {
-                    return requestData;
-                }
+                requestHandler = () => {}
             }
             let requestData: HttpOption = {
                 url: this.url + "/" + methodName,
                 type: httpType.GET,
                 urlData: this.data[methodName].request
             };
-            requestData = requestHandler(requestData);
-            requestData = this.$requestHandler(requestData);
+            requestHandler(requestData);
+            this.$requestHandler(requestData);
             http.download(requestData).then(() => {
                 s();
             }).catch((responseData) => {
@@ -113,9 +109,7 @@ export default class Service {
         });
     }
 
-    $requestHandler(requestData: HttpOption): HttpOption {
-        return requestData;
-    }
+    $requestHandler(requestData: HttpOption): void {}
 
     $addData(methodName: string, request?: any, result?: any): void {
         if (request === undefined) {
