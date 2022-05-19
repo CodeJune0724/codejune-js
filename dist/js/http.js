@@ -11,7 +11,8 @@ export default {
             let isExistFile = false;
             if (variable.isObject(sendData)) {
                 for (let key in sendData) {
-                    if (variable.getType(sendData[key]) === File) {
+                    let valueType = variable.getType(sendData[key]);
+                    if (valueType === File || valueType === FileList) {
                         isExistFile = true;
                         break;
                     }
@@ -19,7 +20,15 @@ export default {
                 if (isExistFile) {
                     let formData = new FormData();
                     for (let key in sendData) {
-                        formData.append(key, sendData[key]);
+                        let value = sendData[key];
+                        if (variable.getType(value) === FileList) {
+                            for (let item of value) {
+                                formData.append(key, item);
+                            }
+                        }
+                        else {
+                            formData.append(key, value);
+                        }
                     }
                     sendData = formData;
                 }
