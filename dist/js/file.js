@@ -6,7 +6,7 @@ export default {
             fileE.addEventListener("change", function () {
                 let files = fileE.files;
                 if (files === null) {
-                    s(null);
+                    s();
                 }
                 else {
                     s(files[0]);
