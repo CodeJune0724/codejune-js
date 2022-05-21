@@ -1,12 +1,12 @@
 export default {
-    select(): Promise<File | null> {
-        return new Promise((s) => {
+    select(): Promise<File> {
+        return new Promise<File>((s: Function) => {
             let fileE = document.createElement("input");
             fileE.type = "file";
             fileE.addEventListener("change", function () {
                 let files = fileE.files;
                 if (files === null) {
-                    s(null);
+                    s();
                 } else {
                     s(files[0]);
                 }
@@ -15,8 +15,8 @@ export default {
         });
     },
 
-    selectMore(): Promise<FileList | null> {
-        return new Promise((s) => {
+    selectMore(): Promise<FileList> {
+        return new Promise((s: Function) => {
             let fileE = document.createElement("input");
             fileE.type = "file";
             fileE.multiple = true;
