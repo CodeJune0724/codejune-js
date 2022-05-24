@@ -10,8 +10,9 @@ export default class Service {
 
     data: {
         [key: string]: {
-            request: any,
-            response: any
+            request?: any,
+            response: any,
+            [ key: string ]: any
         }
     } = {};
 

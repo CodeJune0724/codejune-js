@@ -6,8 +6,9 @@ export default class BaseService extends Service {
 
     data: {
         [key: string]: {
-            request: any,
-            response: ResponseResult
+            request?: any,
+            response: ResponseResult,
+            [ key: string ]: any
         }
     } = {};
 
