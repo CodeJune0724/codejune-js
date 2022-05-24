@@ -20,7 +20,7 @@ export default class Service {
     }
 
     $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
-        return new Promise((s, e) => {
+        return new Promise<any>((s, e) => {
             let methodName = httpOption.url;
             let type = httpOption.type;
             let header = httpOption.header;
@@ -76,7 +76,7 @@ export default class Service {
     }
 
     $download(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
-        return new Promise((s: Function, e) => {
+        return new Promise<any>((s: Function, e) => {
             let methodName = httpOption.url;
             let urlData = httpOption.urlData;
             if (variable.isEmpty(methodName)) {

@@ -1,5 +1,5 @@
 export default {
-    then(promise: Promise<any>, callback: (data: any) => void): Promise<any> {
+    then<T>(promise: Promise<T>, callback: (data: T) => void): Promise<T> {
         return new Promise((s, e) => {
             promise.then((data) => {
                 callback(data);
