@@ -16,7 +16,7 @@ export default {
     },
 
     selectMore(): Promise<FileList> {
-        return new Promise((s: Function) => {
+        return new Promise<FileList>((s: Function) => {
             let fileE = document.createElement("input");
             fileE.type = "file";
             fileE.multiple = true;

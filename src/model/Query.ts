@@ -1,9 +1,9 @@
 export default class Query {
     page?: number | string;
     size?: number | string;
-    filter: { [key: string]: any } = {};
-    sort: {
+    filter?: object;
+    sort?: {
         column?: string,
         orderBy?: string
-    } = {};
+    };
 };

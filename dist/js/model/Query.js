@@ -1,7 +1,7 @@
 export default class Query {
     page;
     size;
-    filter = {};
-    sort = {};
+    filter;
+    sort;
 }
 ;

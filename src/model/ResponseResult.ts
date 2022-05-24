@@ -2,7 +2,7 @@ import variable from "../variable";
 
 export default class ResponseResult {
 
-    flag: any;
+    flag: boolean = false;
 
     code: any;
 

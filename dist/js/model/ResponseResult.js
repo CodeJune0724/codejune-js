@@ -1,6 +1,6 @@
 import variable from "../variable";
 export default class ResponseResult {
-    flag;
+    flag = false;
     code;
     message;
     result;
