@@ -1,9 +1,9 @@
-import HttpOption from "./model/HttpOption";
+import HttpRequest from "./model/HttpRequest";
 import variable from "./variable";
 import httpType from "./model/httpType";
 
 export default {
-    send(data: HttpOption): Promise<any> {
+    send(data: HttpRequest): Promise<any> {
         return new Promise((success, error) => {
             let url: string = this._getUrl(data);
             let type: httpType = data.type;
@@ -82,7 +82,7 @@ export default {
         });
     },
 
-    download(data: HttpOption): Promise<any> {
+    download(data: HttpRequest): Promise<any> {
         return new Promise((success: Function, error) => {
             try {
                 window.open(this._getUrl(data));
@@ -93,7 +93,7 @@ export default {
         });
     },
 
-    asyncDownload(data: HttpOption): Promise<any> {
+    asyncDownload(data: HttpRequest): Promise<any> {
         return new Promise((success: any, error) => {
             fetch(this._getUrl(data)).then((response) => {
                 response.blob().then((blob) => {
@@ -120,13 +120,13 @@ export default {
         });
     },
 
-    _getUrl(data: HttpOption): string {
+    _getUrl(data: HttpRequest): string {
         let url = data.url;
-        let urlData: { [key: string]: string } = data.urlData ? data.urlData : {};
-        if (!variable.isEmpty(urlData)) {
+        let param: { [key: string]: string } = data.param ? data.param : {};
+        if (!variable.isEmpty(param)) {
             let u = "?";
-            for (let key in urlData) {
-                let value = urlData[key];
+            for (let key in param) {
+                let value = param[key];
                 if (!variable.isEmpty(value)) {
                     u = u + key + "=" + value + "&";
                 }

@@ -1,5 +1,5 @@
 import ResponseResult from "../model/ResponseResult";
-import HttpOption from "../model/HttpOption";
+import HttpRequest from "../model/HttpRequest";
 import Service from "../Service";
 
 export default class BaseService extends Service {
@@ -16,7 +16,7 @@ export default class BaseService extends Service {
         super(url);
     }
 
-    $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<ResponseResult> {
+    $send(httpOption: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<ResponseResult> {
         return new Promise<ResponseResult>((success, error) => {
             super.$send(httpOption, requestHandler).then((responseData) => {
                 if (responseData.flag) {

@@ -118,11 +118,11 @@ export default {
     },
     _getUrl(data) {
         let url = data.url;
-        let urlData = data.urlData ? data.urlData : {};
-        if (!variable.isEmpty(urlData)) {
+        let param = data.param ? data.param : {};
+        if (!variable.isEmpty(param)) {
             let u = "?";
-            for (let key in urlData) {
-                let value = urlData[key];
+            for (let key in param) {
+                let value = param[key];
                 if (!variable.isEmpty(value)) {
                     u = u + key + "=" + value + "&";
                 }
