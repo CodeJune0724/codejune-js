@@ -2,7 +2,7 @@ import variable from "./variable";
 import InfoException from "./exception/InfoException";
 import http from "./http";
 import httpType from "./model/httpType";
-import HttpOption from "./model/HttpOption";
+import HttpRequest from "./model/HttpRequest";
 
 export default class Service {
 
@@ -20,13 +20,13 @@ export default class Service {
         this.url = url;
     }
 
-    $send(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
+    $send(httpOption: HttpRequest, requestHandler?: (httpRequest: HttpRequest) => void): Promise<any> {
         return new Promise<any>((s, e) => {
             let methodName = httpOption.url;
             let type = httpOption.type;
             let header = httpOption.header;
             let data = httpOption.data;
-            let urlData = httpOption.urlData;
+            let param = httpOption.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
@@ -46,12 +46,12 @@ export default class Service {
                 requestHandler = () => {}
             }
 
-            let requestData: HttpOption = {
+            let requestData: HttpRequest = {
                 url: this.url + "/" + methodName,
                 type: type,
                 header: header,
                 data: this.data[methodName].request,
-                urlData: urlData
+                param: param
             };
             requestHandler(requestData);
             this.$requestHandler(requestData);
@@ -76,10 +76,10 @@ export default class Service {
         });
     }
 
-    $download(httpOption: HttpOption, requestHandler?: (requestData: HttpOption) => void): Promise<any> {
+    $download(httpOption: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<any> {
         return new Promise<any>((s: Function, e) => {
             let methodName = httpOption.url;
-            let urlData = httpOption.urlData;
+            let param = httpOption.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
@@ -89,16 +89,16 @@ export default class Service {
                     response: null
                 };
             }
-            if (urlData !== undefined) {
-                this.data[methodName].request = urlData;
+            if (param !== undefined) {
+                this.data[methodName].request = param;
             }
             if (requestHandler === undefined || variable.isEmpty(requestHandler)) {
                 requestHandler = () => {}
             }
-            let requestData: HttpOption = {
+            let requestData: HttpRequest = {
                 url: this.url + "/" + methodName,
                 type: httpType.GET,
-                urlData: this.data[methodName].request
+                param: this.data[methodName].request
             };
             requestHandler(requestData);
             this.$requestHandler(requestData);
@@ -110,7 +110,7 @@ export default class Service {
         });
     }
 
-    $requestHandler(requestData: HttpOption): void {}
+    $requestHandler(httpRequest: HttpRequest): void {}
 
     $addData(methodName: string, request?: any, result?: any): void {
         if (request === undefined) {

@@ -1,6 +1,6 @@
 import InfoException from "./exception/InfoException";
 
-import HttpOption from "./model/HttpOption";
+import HttpRequest from "./model/HttpRequest";
 import httpType from "./model/httpType";
 import Query from "./model/Query";
 import ResponseResult from "./model/ResponseResult";
@@ -18,7 +18,7 @@ import Service from "./Service";
 
 export {
     InfoException,
-    HttpOption,
+    HttpRequest,
     httpType,
     variable,
     http,
