@@ -1,5 +1,5 @@
 import InfoException from "./exception/InfoException";
-import HttpOption from "./model/HttpOption";
+import HttpRequest from "./model/HttpRequest";
 import httpType from "./model/httpType";
 import Query from "./model/Query";
 import ResponseResult from "./model/ResponseResult";
@@ -12,4 +12,4 @@ import base64 from "./base64";
 import file from "./file";
 import promise from "./promise";
 import Service from "./Service";
-export { InfoException, HttpOption, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service };
+export { InfoException, HttpRequest, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service };

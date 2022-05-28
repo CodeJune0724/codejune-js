@@ -14,7 +14,7 @@ export default class Service {
             let type = httpOption.type;
             let header = httpOption.header;
             let data = httpOption.data;
-            let urlData = httpOption.urlData;
+            let param = httpOption.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
@@ -38,7 +38,7 @@ export default class Service {
                 type: type,
                 header: header,
                 data: this.data[methodName].request,
-                urlData: urlData
+                param: param
             };
             requestHandler(requestData);
             this.$requestHandler(requestData);
@@ -67,7 +67,7 @@ export default class Service {
     $download(httpOption, requestHandler) {
         return new Promise((s, e) => {
             let methodName = httpOption.url;
-            let urlData = httpOption.urlData;
+            let param = httpOption.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
@@ -77,8 +77,8 @@ export default class Service {
                     response: null
                 };
             }
-            if (urlData !== undefined) {
-                this.data[methodName].request = urlData;
+            if (param !== undefined) {
+                this.data[methodName].request = param;
             }
             if (requestHandler === undefined || variable.isEmpty(requestHandler)) {
                 requestHandler = () => { };
@@ -86,7 +86,7 @@ export default class Service {
             let requestData = {
                 url: this.url + "/" + methodName,
                 type: httpType.GET,
-                urlData: this.data[methodName].request
+                param: this.data[methodName].request
             };
             requestHandler(requestData);
             this.$requestHandler(requestData);
@@ -97,7 +97,7 @@ export default class Service {
             });
         });
     }
-    $requestHandler(requestData) { }
+    $requestHandler(httpRequest) { }
     $addData(methodName, request, result) {
         if (request === undefined) {
             request = null;
