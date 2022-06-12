@@ -7,7 +7,7 @@ export default class BaseService extends Service {
     data: {
         [key: string]: {
             request?: any,
-            response: ResponseResult,
+            response: ResponseResult<any>,
             [ key: string ]: any
         }
     } = {};
@@ -16,8 +16,8 @@ export default class BaseService extends Service {
         super(url);
     }
 
-    $send(httpOption: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<ResponseResult> {
-        return new Promise<ResponseResult>((success, error) => {
+    $send<T>(httpOption: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<ResponseResult<T>> {
+        return new Promise<ResponseResult<T>>((success, error) => {
             super.$send(httpOption, requestHandler).then((responseData) => {
                 if (responseData.flag) {
                     success(responseData);

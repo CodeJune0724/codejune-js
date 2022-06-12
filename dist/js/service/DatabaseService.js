@@ -9,12 +9,7 @@ export default class DatabaseService extends BaseService {
         this.data = {
             query: {
                 request: new Query(),
-                response: new ResponseResult({
-                    result: {
-                        count: null,
-                        data: null
-                    }
-                })
+                response: new ResponseResult()
             },
             save: {
                 request: t === undefined ? null : t,

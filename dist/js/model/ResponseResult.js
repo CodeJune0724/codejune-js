@@ -3,9 +3,12 @@ export default class ResponseResult {
     flag = false;
     code;
     message;
-    result;
+    result = null;
     constructor(data) {
         variable.assignment(this, data);
     }
 }
 ;
+let test1 = {
+    name: new ResponseResult()
+};
