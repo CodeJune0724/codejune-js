@@ -4,6 +4,7 @@ import HttpRequest from "./model/HttpRequest";
 import httpType from "./model/httpType";
 import Query from "./model/Query";
 import ResponseResult from "./model/ResponseResult";
+import QueryResult from "./model/QueryResult";
 
 import BasePO from "./service/BasePO";
 import BaseService from "./service/BaseService";
@@ -30,5 +31,6 @@ export {
     ResponseResult,
     BaseService,
     promise,
-    Service
+    Service,
+    QueryResult
 };

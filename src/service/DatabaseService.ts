@@ -3,33 +3,34 @@ import BasePO from "./BasePO";
 import Query from "../model/Query";
 import httpType from "../model/httpType";
 import BaseService from "./BaseService";
+import QueryResult from "../model/QueryResult";
 
 export default class DatabaseService<T extends BasePO> extends BaseService {
 
     data: {
         query: {
             request: Query,
-            response: ResponseResult;
+            response: ResponseResult<QueryResult<T>>;
         },
         save: {
             request: T | null,
-            response: ResponseResult
+            response: ResponseResult<T>
         },
         saveList: {
             request: T[] | null,
-            response: ResponseResult
+            response: ResponseResult<T[]>
         },
         delete: {
             request: T | null,
-            response: ResponseResult
+            response: ResponseResult<null>
         },
         deleteList: {
             request: T[] | null,
-            response: ResponseResult
+            response: ResponseResult<null>
         },
         [key: string]: {
             request: any,
-            response: ResponseResult
+            response: ResponseResult<any>
         }
     };
 
@@ -38,12 +39,7 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
         this.data = {
             query: {
                 request: new Query(),
-                response: new ResponseResult({
-                    result: {
-                        count: null,
-                        data: null
-                    }
-                })
+                response: new ResponseResult()
             },
             save: {
                 request: t === undefined ? null : t,
@@ -66,7 +62,7 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
     }
 
     query(request?: Query) {
-        return this.$send({
+        return this.$send<QueryResult<T>>({
             url: "query",
             type: httpType.POST,
             data: request
@@ -74,7 +70,7 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
     }
 
     save(request?: T) {
-        return this.$send({
+        return this.$send<T>({
             url: "save",
             type: httpType.POST,
             data: request
@@ -82,7 +78,7 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
     }
 
     saveList(request?: T[]) {
-        return this.$send({
+        return this.$send<T[]>({
             url: "saveList",
             type: httpType.POST,
             data: request
@@ -90,7 +86,7 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
     }
 
     doDelete(request?: T) {
-        return this.$send({
+        return this.$send<null>({
             url: "delete",
             type: httpType.POST,
             data: request
@@ -98,7 +94,7 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
     }
 
     deleteList(request?: T[]) {
-        return this.$send({
+        return this.$send<null>({
             url: "deleteList",
             type: httpType.POST,
             data: request
