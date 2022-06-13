@@ -2,6 +2,7 @@ import ResponseResult from "../model/ResponseResult";
 import Query from "../model/Query";
 import httpType from "../model/httpType";
 import BaseService from "./BaseService";
+import QueryResult from "../model/QueryResult";
 export default class DatabaseService extends BaseService {
     data;
     constructor(url, t) {
@@ -9,7 +10,9 @@ export default class DatabaseService extends BaseService {
         this.data = {
             query: {
                 request: new Query(),
-                response: new ResponseResult()
+                response: new ResponseResult({
+                    result: new QueryResult()
+                })
             },
             save: {
                 request: t === undefined ? null : t,
