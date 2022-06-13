@@ -9,6 +9,3 @@ export default class ResponseResult {
     }
 }
 ;
-let test1 = {
-    name: new ResponseResult()
-};
