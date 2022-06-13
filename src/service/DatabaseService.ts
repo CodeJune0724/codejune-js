@@ -34,12 +34,14 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
         }
     };
 
-    constructor(url: string, t?: T) {
+    constructor(url: string, t: T) {
         super(url);
         this.data = {
             query: {
                 request: new Query(),
-                response: new ResponseResult()
+                response: new ResponseResult({
+                    result: new QueryResult()
+                })
             },
             save: {
                 request: t === undefined ? null : t,

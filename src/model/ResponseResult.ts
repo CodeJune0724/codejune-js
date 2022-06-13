@@ -15,16 +15,3 @@ export default class ResponseResult<T> {
     }
 
 };
-
-
-type test = {
-    name: ResponseResult<{
-        count: null,
-        data: null
-    }>
-}
-
-
-let test1: test = {
-    name: new ResponseResult<{count: null; data: null}>()
-}
