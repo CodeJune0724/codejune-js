@@ -16,19 +16,19 @@ export default class DatabaseService<T extends BasePO, FILTER extends addNull<fi
             response: ResponseResult<QueryResult<T>>;
         },
         save: {
-            request: T | null,
+            request: T,
             response: ResponseResult<T>
         },
         saveList: {
-            request: T[] | null,
+            request: T[],
             response: ResponseResult<T[]>
         },
         delete: {
-            request: T | null,
+            request: T,
             response: ResponseResult<null>
         },
         deleteList: {
-            request: T[] | null,
+            request: T[],
             response: ResponseResult<null>
         },
         [key: string]: {
