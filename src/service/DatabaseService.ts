@@ -6,6 +6,7 @@ import BaseService from "./BaseService";
 import QueryResult from "../model/QueryResult";
 import filter from "../model/filter";
 import { addNull } from "../util/TypeUtil";
+import variable from "../variable";
 
 export default class DatabaseService<T extends BasePO, FILTER extends addNull<filter<T>> = null> extends BaseService {
 
@@ -36,30 +37,32 @@ export default class DatabaseService<T extends BasePO, FILTER extends addNull<fi
         }
     };
 
-    constructor(url: string, t: T) {
+    constructor(url: string, t: T, filter?: FILTER) {
         super(url);
         this.data = {
             query: {
-                request: new Query(),
+                request: new Query({
+                    filter: filter
+                }),
                 response: new ResponseResult({
                     result: new QueryResult()
                 })
             },
             save: {
-                request: t === undefined ? null : t,
+                request: variable.clone(t),
                 response: new ResponseResult()
             },
             saveList: {
-                request: t === undefined ? null : [],
+                request: [],
                 response: new ResponseResult()
             },
 
             delete: {
-                request: t === undefined ? null : t,
+                request: variable.clone(t),
                 response: new ResponseResult()
             },
             deleteList: {
-                request: t === undefined ? null : [],
+                request: [],
                 response: new ResponseResult()
             }
         };
