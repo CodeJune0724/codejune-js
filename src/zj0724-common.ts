@@ -1,5 +1,6 @@
 import InfoException from "./exception/InfoException";
 
+import filter from "./model/filter";
 import HttpRequest from "./model/HttpRequest";
 import httpType from "./model/httpType";
 import Query from "./model/Query";
@@ -17,6 +18,8 @@ import file from "./file";
 import promise from "./promise";
 import Service from "./Service";
 
+import { addNull } from "./util/TypeUtil";
+
 export {
     InfoException,
     HttpRequest,
@@ -32,5 +35,7 @@ export {
     BaseService,
     promise,
     Service,
-    QueryResult
+    QueryResult,
+    addNull,
+    filter
 };
