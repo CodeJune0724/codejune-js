@@ -13,4 +13,5 @@ import base64 from "./base64";
 import file from "./file";
 import promise from "./promise";
 import Service from "./Service";
-export { InfoException, HttpRequest, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service, QueryResult };
+import popupUtil from "./util/popupUtil";
+export { InfoException, HttpRequest, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service, QueryResult, popupUtil };
