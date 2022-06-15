@@ -18,7 +18,7 @@ import file from "./file";
 import promise from "./promise";
 import Service from "./Service";
 
-import { addNull } from "./util/TypeUtil";
+import popupUtil from "./util/popupUtil";
 
 export {
     InfoException,
@@ -36,6 +36,6 @@ export {
     promise,
     Service,
     QueryResult,
-    addNull,
+    popupUtil,
     filter
 };

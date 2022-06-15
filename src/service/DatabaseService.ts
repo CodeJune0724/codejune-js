@@ -5,10 +5,9 @@ import httpType from "../model/httpType";
 import BaseService from "./BaseService";
 import QueryResult from "../model/QueryResult";
 import filter from "../model/filter";
-import { addNull } from "../util/TypeUtil";
 import variable from "../variable";
 
-export default class DatabaseService<T extends BasePO, FILTER extends addNull<filter<T>> = null> extends BaseService {
+export default class DatabaseService<T extends BasePO, FILTER extends filter<T> | null = null> extends BaseService {
 
     data: {
         query: {
