@@ -7,6 +7,9 @@ class HttpRequest {
     header?: { [key: string]: string };
     param?: { [key: string]: string };
     data?: any;
+    config?: {
+        dataType: "BODY" | "FORM_DATA"
+    };
 
     constructor(data: HttpRequest) {
         this.url = data.url;
@@ -14,6 +17,7 @@ class HttpRequest {
         this.header = data.header ? data.header : {};
         this.param = data.param ? data.param : {};
         this.data = data.data ? data.data : {};
+        this.config = data.config;
     }
 
 }

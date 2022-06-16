@@ -20,13 +20,13 @@ export default class Service {
         this.url = url;
     }
 
-    $send(httpOption: HttpRequest, requestHandler?: (httpRequest: HttpRequest) => void): Promise<any> {
+    $send(httpRequest: HttpRequest, requestHandler?: (httpRequest: HttpRequest) => void): Promise<any> {
         return new Promise<any>((s, e) => {
-            let methodName = httpOption.url;
-            let type = httpOption.type;
-            let header = httpOption.header;
-            let data = httpOption.data;
-            let param = httpOption.param;
+            let methodName = httpRequest.url;
+            let type = httpRequest.type;
+            let header = httpRequest.header;
+            let data = httpRequest.data;
+            let param = httpRequest.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
@@ -76,10 +76,10 @@ export default class Service {
         });
     }
 
-    $download(httpOption: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<any> {
+    $download(httpRequest: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<any> {
         return new Promise<any>((s: Function, e) => {
-            let methodName = httpOption.url;
-            let param = httpOption.param;
+            let methodName = httpRequest.url;
+            let param = httpRequest.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
