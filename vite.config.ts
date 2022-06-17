@@ -7,7 +7,7 @@ export default defineConfig({
     },
     build: {
         outDir: "./dist",
-        target: "esnext",
+        target: "ESNext",
         lib: {
             entry: "./src/zj0724-common.ts",
             name: "zj0724-common",
@@ -18,7 +18,7 @@ export default defineConfig({
                 assetFileNames: (assetInfo) => {
                     if (assetInfo.name) {
                         if (/\.css$/i.test(assetInfo.name)) {
-                            return "index.css";
+                            return "css/index.css";
                         }
                     }
                     return "[name].[ext]";

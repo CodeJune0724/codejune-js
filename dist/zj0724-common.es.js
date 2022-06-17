@@ -1,11 +1,9 @@
-var index = /* #__PURE__ */ (() => ".auto-break{word-break:break-all}.no-break{white-space:nowrap}.center{display:flex;justify-content:center;align-items:center}\n")();
-
+var index = /* @__PURE__ */ (() => ".auto-break{word-break:break-all}.no-break{white-space:nowrap}.center{display:flex;justify-content:center;align-items:center}\n")();
 class InfoException extends Error {
   constructor(message) {
     super(message);
   }
 }
-
 class HttpRequest {
   constructor(data) {
     this.url = data.url;
@@ -16,7 +14,6 @@ class HttpRequest {
     this.config = data.config;
   }
 }
-
 var type = /* @__PURE__ */ ((type2) => {
   type2["POST"] = "POST";
   type2["GET"] = "GET";
@@ -24,7 +21,6 @@ var type = /* @__PURE__ */ ((type2) => {
   type2["DELETE"] = "DELETE";
   return type2;
 })(type || {});
-
 var variable = {
   isNull(data) {
     return data === void 0 || data === null;
@@ -33,14 +29,14 @@ var variable = {
     if (this.isNull(data)) {
       return true;
     }
-    let type = this.getType(data);
-    if (type === String && data === "") {
+    let type2 = this.getType(data);
+    if (type2 === String && data === "") {
       return true;
     }
-    if (type === Array && data.length === 0) {
+    if (type2 === Array && data.length === 0) {
       return true;
     }
-    return type === Object && Object.keys(data).length === 0;
+    return type2 === Object && Object.keys(data).length === 0;
   },
   getType(data) {
     if (this.isNull(data)) {
@@ -53,20 +49,20 @@ var variable = {
       return false;
     }
     if (data instanceof Object) {
-      let type = this.getType(data);
-      if (type == null) {
+      let type2 = this.getType(data);
+      if (type2 == null) {
         return false;
       }
       if (JSON.stringify(data) !== void 0) {
         return true;
       }
-      if (type.toString().indexOf("class") === 0) {
+      if (type2.toString().indexOf("class") === 0) {
         return true;
       }
-      if (type === Array) {
+      if (type2 === Array) {
         return true;
       }
-      return type === Object;
+      return type2 === Object;
     }
     return false;
   },
@@ -188,13 +184,11 @@ var variable = {
     }
   }
 };
-
 class Query {
   constructor(data) {
     variable.assignment(this, data);
   }
 }
-
 class ResponseResult {
   constructor(data) {
     this.flag = false;
@@ -202,17 +196,14 @@ class ResponseResult {
     variable.assignment(this, data);
   }
 }
-
 class QueryResult {
   constructor() {
     this.count = 0;
     this.data = [];
   }
 }
-
 class BasePO {
 }
-
 var http = {
   send(data) {
     return new Promise((success, error) => {
@@ -358,7 +349,6 @@ var http = {
     return url;
   }
 };
-
 class Service {
   constructor(url) {
     this.data = {};
@@ -367,14 +357,14 @@ class Service {
   $send(httpRequest, requestHandler) {
     return new Promise((s, e) => {
       let methodName = httpRequest.url;
-      let type = httpRequest.type;
+      let type2 = httpRequest.type;
       let header = httpRequest.header;
       let data = httpRequest.data;
       let param = httpRequest.param;
       if (variable.isEmpty(methodName)) {
         throw new InfoException("\u65B9\u6CD5\u540D is null");
       }
-      if (variable.isEmpty(type)) {
+      if (variable.isEmpty(type2)) {
         throw new InfoException("type is null");
       }
       if (variable.isEmpty(this.data[methodName])) {
@@ -392,7 +382,7 @@ class Service {
       }
       let requestData = {
         url: this.url + "/" + methodName,
-        type,
+        type: type2,
         header,
         data: this.data[methodName].request,
         param
@@ -468,7 +458,6 @@ class Service {
     };
   }
 }
-
 class BaseService extends Service {
   constructor(url) {
     super(url);
@@ -488,7 +477,6 @@ class BaseService extends Service {
     });
   }
 }
-
 class DatabaseService extends BaseService {
   constructor(url, t, filter2) {
     super(url);
@@ -555,7 +543,6 @@ class DatabaseService extends BaseService {
     });
   }
 }
-
 let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 let _utf8_encode = function(string) {
   let utftext = "";
@@ -646,7 +633,6 @@ var base64 = {
     return output;
   }
 };
-
 var file = {
   select() {
     return new Promise((s) => {
@@ -676,11 +662,10 @@ var file = {
     });
   }
 };
-
 var promise = {
-  then(promise, callback) {
+  then(promise2, callback) {
     return new Promise((s, e) => {
-      promise.then((data) => {
+      promise2.then((data) => {
         callback(data);
         s(data);
       }).catch((data) => {
@@ -689,7 +674,6 @@ var promise = {
     });
   }
 };
-
 var popupUtil = {
   create(data) {
     return {
@@ -710,5 +694,4 @@ var popupUtil = {
     };
   }
 };
-
 export { BasePO, BaseService, DatabaseService, HttpRequest, InfoException, Query, QueryResult, ResponseResult, Service, base64, file, http, type as httpType, popupUtil, promise, variable };

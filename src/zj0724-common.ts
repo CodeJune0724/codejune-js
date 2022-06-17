@@ -1,4 +1,4 @@
-import "./index.css";
+import "./css/index.css";
 
 import InfoException from "./exception/InfoException";
 

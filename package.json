@@ -4,7 +4,7 @@
   "description": "zj0724-common",
   "main": "dist/zj0724-common.umd.js",
   "module": "dist/zj0724-common.es.js",
-  "types": "dist/type/zj0724-common.d.ts",
+  "types": "dist/zj0724-common.d.ts",
   "scripts": {
     "build": "npm install && vite build && tsc -d"
   },

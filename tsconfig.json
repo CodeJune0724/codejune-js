@@ -3,10 +3,10 @@
     "./src/**/*"
   ],
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "strict": true,
     "moduleResolution": "Node",
-    "outDir": "./dist/type"
+    "outDir": "./dist"
   }
 }
