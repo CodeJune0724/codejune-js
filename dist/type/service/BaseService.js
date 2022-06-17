@@ -4,9 +4,9 @@ export default class BaseService extends Service {
     constructor(url) {
         super(url);
     }
-    $send(httpOption, requestHandler) {
+    $send(httpRequest, requestHandler) {
         return new Promise((success, error) => {
-            super.$send(httpOption, requestHandler).then((responseData) => {
+            super.$send(httpRequest, requestHandler).then((responseData) => {
                 if (responseData.flag) {
                     success(responseData);
                 }

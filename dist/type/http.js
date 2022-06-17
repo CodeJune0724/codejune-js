@@ -7,6 +7,7 @@ export default {
             let type = data.type;
             let header = data.header ? data.header : {};
             let sendData = data.data;
+            let config = data.config;
             // 判断是否有文件
             let isExistFile = false;
             if (variable.isObject(sendData)) {
@@ -49,7 +50,22 @@ export default {
             // 转换请求数据
             if (variable.isObject(sendData)) {
                 if (variable.getType(sendData) !== FormData) {
-                    sendData = JSON.stringify(sendData);
+                    let dataType = "BODY";
+                    if (config) {
+                        dataType = config.dataType;
+                    }
+                    switch (dataType) {
+                        case "BODY":
+                            sendData = JSON.stringify(sendData);
+                            break;
+                        case "FORM_DATA":
+                            let formData = new FormData();
+                            for (let key in sendData) {
+                                formData.append(key, sendData[key]);
+                            }
+                            sendData = formData;
+                            break;
+                    }
                 }
             }
             // 添加application/json
