@@ -1,15 +1,15 @@
 {
   "name": "zj0724-common",
-  "version": "1.1.50",
+  "version": "1.1.51-beta2",
   "description": "zj0724-common",
-  "main": "dist/index.js",
-  "types": "src/zj0724-common.d.ts",
+  "main": "dist/zj0724-common.umd.js",
+  "module": "dist/zj0724-common.es.js",
+  "types": "dist/type/zj0724-common.d.ts",
   "scripts": {
-    "build": "npm install && webpack && tsc"
+    "build": "npm install && vite build && tsc -d"
   },
   "files": [
     "dist/*",
-    "src",
     "package.json",
     "README.md"
   ],
@@ -24,12 +24,7 @@
   },
   "homepage": "https://github.com/ZJ0724/zj0724-common-js#readme",
   "devDependencies": {
-    "css-loader": "^6.4.0",
-    "css-minimizer-webpack-plugin": "^3.1.1",
-    "mini-css-extract-plugin": "^2.4.2",
-    "ts-loader": "^9.2.8",
-    "typescript": "^4.6.3",
-    "webpack": "^5.53.0",
-    "webpack-cli": "^4.8.0"
+    "typescript": "^4.7.3",
+    "vite": "^2.9.12"
   }
 }

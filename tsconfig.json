@@ -6,8 +6,7 @@
     "target": "esnext",
     "module": "esnext",
     "strict": true,
-    "jsx": "preserve",
-    "moduleResolution": "node",
-    "outDir": "./dist/js"
+    "moduleResolution": "Node",
+    "outDir": "./dist/type"
   }
 }
