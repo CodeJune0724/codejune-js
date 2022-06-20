@@ -5,7 +5,10 @@ export default class Query {
     filter;
     sort;
     constructor(data) {
-        variable.assignment(this, data);
+        if (data) {
+            variable.filterKey(data, ["page", "size", "filter", "sort"]);
+            variable.assignment(this, data, false);
+        }
     }
 }
 ;
