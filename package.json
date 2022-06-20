@@ -1,6 +1,6 @@
 {
   "name": "zj0724-common",
-  "version": "1.1.57",
+  "version": "1.1.58",
   "description": "zj0724-common",
   "main": "dist/zj0724-common.umd.js",
   "module": "dist/zj0724-common.es.js",
