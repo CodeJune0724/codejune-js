@@ -63,5 +63,11 @@ declare const _default: {
      * 追加节点
      * */
     addKey(object1: any, object2: any): void;
+    /**
+     * 过滤节点
+     * */
+    filterKey(object: {
+        [x: string]: any;
+    }, keys: string[]): void;
 };
 export default _default;

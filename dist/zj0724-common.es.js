@@ -77,16 +77,8 @@ var variable = {
       } else {
         let newData = {};
         for (let key in data) {
-          if (data.hasOwnProperty(key)) {
-            let value = data[key];
-            if (this.isObject(value)) {
-              newData[key] = this.clone(value);
-            } else {
-              newData[key] = null;
-            }
-          }
+          newData[key] = this.clone(data[key]);
         }
-        this.assignment(newData, data);
         return newData;
       }
     } else {
@@ -111,28 +103,34 @@ var variable = {
         if (ok) {
           object1.splice(0, object1.length);
           for (let item of object2) {
-            object1.push(this.clone(item));
+            object1.push(item);
           }
         }
       } else {
-        for (let key in object1) {
-          let value1 = object1[key];
-          let value2 = object2[key];
-          if (value2 === void 0) {
-            continue;
-          }
-          if (value1 == null) {
-            object1[key] = this.clone(value2);
-            continue;
-          }
-          if (isStrictBoolean) {
-            if (value2 === null && !this.isObject(value1)) {
-              object1[key] = this.clone(value2);
-            } else if (this.getType(value1) === this.getType(value2)) {
-              object1[key] = this.clone(value2);
+        if (isStrictBoolean) {
+          for (let key in object1) {
+            let value1 = object1[key];
+            let value2 = object2[key];
+            if (value1 === void 0 || value2 === void 0) {
+              continue;
             }
-          } else {
-            object1[key] = this.clone(value2);
+            let isClone = false;
+            if (value2 === null && !this.isObject(value1)) {
+              isClone = true;
+            } else if (this.getType(value1) === this.getType(value2)) {
+              isClone = true;
+            }
+            if (isClone) {
+              object1[key] = value2;
+            }
+          }
+        } else {
+          for (let key in object2) {
+            let value2 = object2[key];
+            if (value2 === void 0) {
+              continue;
+            }
+            object1[key] = value2;
           }
         }
       }
@@ -181,6 +179,13 @@ var variable = {
         }
       }
       this.addKey(object1[key], o2);
+    }
+  },
+  filterKey(object, keys) {
+    for (let key in object) {
+      if (keys.indexOf(key) === -1) {
+        delete object[key];
+      }
     }
   }
 };
@@ -398,8 +403,7 @@ class Service {
           responseDataJson = responseData;
         }
         if (variable.isObject(this.data[methodName].response)) {
-          variable.addKey(this.data[methodName].response, responseDataJson);
-          variable.assignment(this.data[methodName].response, responseDataJson);
+          variable.assignment(this.data[methodName].response, responseDataJson, false);
         } else {
           this.data[methodName].response = responseDataJson;
         }
@@ -676,7 +680,7 @@ var promise = {
 };
 var popupUtil = {
   create(data) {
-    return {
+    let result = {
       loading: false,
       display: false,
       ...data,
@@ -692,6 +696,15 @@ var popupUtil = {
         this.display = false;
       }
     };
+    if (data.close) {
+      result.close = data.close;
+    }
+    return result;
   }
 };
-export { BasePO, BaseService, DatabaseService, HttpRequest, InfoException, Query, QueryResult, ResponseResult, Service, base64, file, http, type as httpType, popupUtil, promise, variable };
+var windowUtil = {
+  getScreenHeight() {
+    return window.screen.height;
+  }
+};
+export { BasePO, BaseService, DatabaseService, HttpRequest, InfoException, Query, QueryResult, ResponseResult, Service, base64, file, http, type as httpType, popupUtil, promise, variable, windowUtil };
