@@ -1,4 +1,4 @@
-import "./css/index.css";
+import "./index.css";
 
 import InfoException from "./exception/InfoException";
 
@@ -20,6 +20,7 @@ import promise from "./promise";
 import Service from "./Service";
 
 import popupUtil from "./util/popupUtil";
+import windowUtil from "./util/windowUtil";
 
 export {
     InfoException,
@@ -37,5 +38,6 @@ export {
     promise,
     Service,
     QueryResult,
-    popupUtil
+    popupUtil,
+    windowUtil
 };
