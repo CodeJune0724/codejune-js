@@ -1,6 +1,6 @@
 export default {
     create(data) {
-        return {
+        let result = {
             loading: false,
             display: false,
             ...data,
@@ -16,5 +16,9 @@ export default {
                 this.display = false;
             }
         };
+        if (data.close) {
+            result.close = data.close;
+        }
+        return result;
     }
 };

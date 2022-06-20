@@ -90,17 +90,8 @@ export default {
             else {
                 let newData = {};
                 for (let key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        let value = data[key];
-                        if (this.isObject(value)) {
-                            newData[key] = this.clone(value);
-                        }
-                        else {
-                            newData[key] = null;
-                        }
-                    }
+                    newData[key] = this.clone(data[key]);
                 }
-                this.assignment(newData, data);
                 return newData;
             }
         }
@@ -133,31 +124,37 @@ export default {
                 if (ok) {
                     object1.splice(0, object1.length);
                     for (let item of object2) {
-                        object1.push(this.clone(item));
+                        object1.push(item);
                     }
                 }
             }
             else {
-                for (let key in object1) {
-                    let value1 = object1[key];
-                    let value2 = object2[key];
-                    if (value2 === undefined) {
-                        continue;
-                    }
-                    if (value1 == null) {
-                        object1[key] = this.clone(value2);
-                        continue;
-                    }
-                    if (isStrictBoolean) {
+                if (isStrictBoolean) {
+                    for (let key in object1) {
+                        let value1 = object1[key];
+                        let value2 = object2[key];
+                        if (value1 === undefined || value2 === undefined) {
+                            continue;
+                        }
+                        let isClone = false;
                         if (value2 === null && !this.isObject(value1)) {
-                            object1[key] = this.clone(value2);
+                            isClone = true;
                         }
                         else if (this.getType(value1) === this.getType(value2)) {
-                            object1[key] = this.clone(value2);
+                            isClone = true;
+                        }
+                        if (isClone) {
+                            object1[key] = value2;
                         }
                     }
-                    else {
-                        object1[key] = this.clone(value2);
+                }
+                else {
+                    for (let key in object2) {
+                        let value2 = object2[key];
+                        if (value2 === undefined) {
+                            continue;
+                        }
+                        object1[key] = value2;
                     }
                 }
             }
@@ -223,6 +220,16 @@ export default {
                 }
             }
             this.addKey(object1[key], o2);
+        }
+    },
+    /**
+     * 过滤节点
+     * */
+    filterKey(object, keys) {
+        for (let key in object) {
+            if (keys.indexOf(key) === -1) {
+                delete object[key];
+            }
         }
     }
 };

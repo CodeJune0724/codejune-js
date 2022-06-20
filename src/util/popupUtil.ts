@@ -6,8 +6,8 @@ type popup<T extends object> = {
 } & T;
 
 export default {
-    create<T extends object>(data: T & { openHandler?: (data: any) => void }): popup<T> {
-        return {
+    create<T extends object>(data: T & { openHandler?: (data: any) => void, close?: () => void }): popup<T> {
+        let result = {
             loading: false,
             display: false,
             ...data,
@@ -23,5 +23,9 @@ export default {
                 this.display = false;
             }
         };
+        if (data.close) {
+            result.close = data.close;
+        }
+        return result;
     }
 };

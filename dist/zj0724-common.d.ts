@@ -1,4 +1,4 @@
-import "./index.css";
+import "./css/index.css";
 import InfoException from "./exception/InfoException";
 import HttpRequest from "./model/HttpRequest";
 import httpType from "./model/httpType";
@@ -15,4 +15,5 @@ import file from "./file";
 import promise from "./promise";
 import Service from "./Service";
 import popupUtil from "./util/popupUtil";
-export { InfoException, HttpRequest, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service, QueryResult, popupUtil };
+import windowUtil from "./util/windowUtil";
+export { InfoException, HttpRequest, httpType, variable, http, base64, file, DatabaseService, Query, BasePO, ResponseResult, BaseService, promise, Service, QueryResult, popupUtil, windowUtil };
