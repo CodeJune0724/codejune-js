@@ -91,47 +91,50 @@ var variable = {
   assignment(object1, object2, isStrict) {
     let type1 = this.getType(object1);
     let isStrictBoolean = this.isEmpty(isStrict) ? true : isStrict === true;
-    if (this.isObject(object1) && this.isObject(object2)) {
-      if (type1 === Array) {
-        let ok = true;
-        if (isStrictBoolean && this.getType(object2) !== Array) {
-          ok = false;
+    if (!this.isObject(object1) || !this.isObject(object2)) {
+      return;
+    }
+    if (type1 === Array) {
+      let ok = true;
+      if (isStrictBoolean && this.getType(object2) !== Array) {
+        ok = false;
+      }
+      if (type1 !== this.getType(object2)) {
+        ok = false;
+      }
+      if (ok) {
+        object1.splice(0, object1.length);
+        for (let item of object2) {
+          object1.push(item);
         }
-        if (type1 !== this.getType(object2)) {
-          ok = false;
-        }
-        if (ok) {
-          object1.splice(0, object1.length);
-          for (let item of object2) {
-            object1.push(item);
+      }
+    } else {
+      if (isStrictBoolean) {
+        for (let key in object1) {
+          let value1 = object1[key];
+          let value2 = object2[key];
+          if (value1 === void 0 || value2 === void 0) {
+            continue;
+          }
+          let isAssignment = false;
+          if (value1 === null) {
+            isAssignment = true;
+          } else if (value2 === null && !this.isObject(value1)) {
+            isAssignment = true;
+          } else if (this.getType(value1) === this.getType(value2)) {
+            isAssignment = true;
+          }
+          if (isAssignment) {
+            object1[key] = value2;
           }
         }
       } else {
-        if (isStrictBoolean) {
-          for (let key in object1) {
-            let value1 = object1[key];
-            let value2 = object2[key];
-            if (value1 === void 0 || value2 === void 0) {
-              continue;
-            }
-            let isClone = false;
-            if (value2 === null && !this.isObject(value1)) {
-              isClone = true;
-            } else if (this.getType(value1) === this.getType(value2)) {
-              isClone = true;
-            }
-            if (isClone) {
-              object1[key] = value2;
-            }
+        for (let key in object2) {
+          let value2 = object2[key];
+          if (value2 === void 0) {
+            continue;
           }
-        } else {
-          for (let key in object2) {
-            let value2 = object2[key];
-            if (value2 === void 0) {
-              continue;
-            }
-            object1[key] = value2;
-          }
+          object1[key] = value2;
         }
       }
     }
@@ -211,6 +214,9 @@ class QueryResult {
   }
 }
 class BasePO {
+  constructor() {
+    this.id = null;
+  }
 }
 var http = {
   send(data) {
