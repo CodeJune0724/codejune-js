@@ -1,6 +1,6 @@
 declare type type = "$gt" | "$gte" | "$lt" | "$lte" | "$equals" | "$!equals" | "$in" | "$!in" | "$contains" | "$!contains";
 declare type filterItem<T extends object> = {
-    [key in keyof T]?: string | {
+    [key in keyof T]?: string | null | {
         [key in type]?: any;
     };
 };
