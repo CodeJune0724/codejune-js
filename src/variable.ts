@@ -115,47 +115,50 @@ export default {
     assignment(object1: any, object2: any, isStrict?: boolean): void {
         let type1 = this.getType(object1);
         let isStrictBoolean: boolean = this.isEmpty(isStrict) ? true : isStrict === true;
-        if (this.isObject(object1) && this.isObject(object2)) {
-            if (type1 === Array) {
-                let ok = true;
-                if (isStrictBoolean && this.getType(object2) !== Array) {
-                    ok = false;
+        if (!this.isObject(object1) || !this.isObject(object2)) {
+            return;
+        }
+        if (type1 === Array) {
+            let ok = true;
+            if (isStrictBoolean && this.getType(object2) !== Array) {
+                ok = false;
+            }
+            if (type1 !== this.getType(object2)) {
+                ok = false;
+            }
+            if (ok) {
+                object1.splice(0, object1.length);
+                for (let item of object2) {
+                    object1.push(item);
                 }
-                if (type1 !== this.getType(object2)) {
-                    ok = false;
-                }
-                if (ok) {
-                    object1.splice(0, object1.length);
-                    for (let item of object2) {
-                        object1.push(item);
+            }
+        } else {
+            if (isStrictBoolean) {
+                for (let key in object1) {
+                    let value1: any = object1[key];
+                    let value2: any = object2[key];
+                    if (value1 === undefined || value2 === undefined) {
+                        continue;
+                    }
+                    let isAssignment = false;
+                    if (value1 === null) {
+                        isAssignment = true;
+                    } else if (value2 === null && !this.isObject(value1)) {
+                        isAssignment = true;
+                    } else if (this.getType(value1) === this.getType(value2)) {
+                        isAssignment = true;
+                    }
+                    if (isAssignment) {
+                        object1[key] = value2;
                     }
                 }
             } else {
-                if (isStrictBoolean) {
-                    for (let key in object1) {
-                        let value1: any = object1[key];
-                        let value2: any = object2[key];
-                        if (value1 === undefined || value2 === undefined) {
-                            continue;
-                        }
-                        let isClone = false;
-                        if (value2 === null && !this.isObject(value1)) {
-                            isClone = true;
-                        } else if (this.getType(value1) === this.getType(value2)) {
-                            isClone = true;
-                        }
-                        if (isClone) {
-                            object1[key] = value2;
-                        }
+                for (let key in object2) {
+                    let value2: any = object2[key];
+                    if (value2 === undefined) {
+                        continue;
                     }
-                } else {
-                    for (let key in object2) {
-                        let value2: any = object2[key];
-                        if (value2 === undefined) {
-                            continue;
-                        }
-                        object1[key] = value2;
-                    }
+                    object1[key] = value2;
                 }
             }
         }
