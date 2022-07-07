@@ -1,5 +1,5 @@
 export default class BasePO {
 
-    id?: any;
+    id: any = null;
 
 }
