@@ -12,5 +12,4 @@ export default class Service {
     $send(httpRequest: HttpRequest, requestHandler?: (httpRequest: HttpRequest) => void): Promise<any>;
     $download(httpRequest: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<any>;
     $requestHandler(httpRequest: HttpRequest): void;
-    $addData(methodName: string, request?: any, result?: any): void;
 }

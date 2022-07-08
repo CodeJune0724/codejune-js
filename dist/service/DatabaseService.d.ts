@@ -4,10 +4,10 @@ import Query from "../model/Query";
 import BaseService from "./BaseService";
 import QueryResult from "../model/QueryResult";
 import filter from "../model/filter";
-export default class DatabaseService<T extends BasePO, FILTER extends filter<T> | null = null> extends BaseService {
+export default class DatabaseService<T extends BasePO> extends BaseService {
     data: {
         query: {
-            request: Query<FILTER>;
+            request: Query<T>;
             response: ResponseResult<QueryResult<T>>;
         };
         save: {
@@ -31,8 +31,8 @@ export default class DatabaseService<T extends BasePO, FILTER extends filter<T> 
             response: ResponseResult<any>;
         };
     };
-    constructor(url: string, t: T, filter?: FILTER);
-    query(request?: Query): Promise<ResponseResult<QueryResult<T>>>;
+    constructor(url: string, t: T, filter?: filter<T>);
+    query(request?: Query<T>): Promise<ResponseResult<QueryResult<T>>>;
     save(request?: T): Promise<ResponseResult<T>>;
     saveList(request?: T[]): Promise<ResponseResult<T[]>>;
     doDelete(request?: T): Promise<ResponseResult<null>>;
