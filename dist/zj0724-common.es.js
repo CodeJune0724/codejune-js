@@ -675,18 +675,6 @@ var file = {
     });
   }
 };
-var promise = {
-  then(promise2, callback) {
-    return new Promise((s, e) => {
-      promise2.then((data) => {
-        callback(data);
-        s(data);
-      }).catch((data) => {
-        e(data);
-      });
-    });
-  }
-};
 var popupUtil = {
   create(data) {
     let result = {
@@ -716,4 +704,4 @@ var windowUtil = {
     return window.screen.height;
   }
 };
-export { BasePO, BaseService, DatabaseService, HttpRequest, InfoException, Query, QueryResult, ResponseResult, Service, base64, file, http, type as httpType, popupUtil, promise, variable, windowUtil };
+export { BasePO, BaseService, DatabaseService, HttpRequest, InfoException, Query, QueryResult, ResponseResult, Service, base64, file, http, type as httpType, popupUtil, variable, windowUtil };

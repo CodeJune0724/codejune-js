@@ -16,7 +16,6 @@ import variable from "./variable";
 import http from "./http";
 import base64 from "./base64";
 import file from "./file";
-import promise from "./promise";
 import Service from "./Service";
 
 import popupUtil from "./util/popupUtil";
@@ -35,7 +34,6 @@ export {
     BasePO,
     ResponseResult,
     BaseService,
-    promise,
     Service,
     QueryResult,
     popupUtil,
