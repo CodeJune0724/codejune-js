@@ -111,17 +111,4 @@ export default class Service {
 
     $requestHandler(httpRequest: HttpRequest): void {}
 
-    $addData(methodName: string, request?: any, result?: any): void {
-        if (request === undefined) {
-            request = null;
-        }
-        if (result === undefined) {
-            result = null;
-        }
-        this.data[methodName] = {
-            request: request,
-            response: result
-        };
-    }
-
 };

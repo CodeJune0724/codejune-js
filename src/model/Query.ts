@@ -1,10 +1,10 @@
 import filter from "./filter";
 import variable from "../variable";
 
-export default class Query<FILTER extends filter<T> | null = null, T extends object = {}> {
+export default class Query<T extends object> {
     page?: number | string;
     size?: number | string;
-    filter?: FILTER;
+    filter?: filter<T>;
     sort?: {
         column?: string,
         orderBy?: string

@@ -7,11 +7,11 @@ import QueryResult from "../model/QueryResult";
 import filter from "../model/filter";
 import variable from "../variable";
 
-export default class DatabaseService<T extends BasePO, FILTER extends filter<T> | null = null> extends BaseService {
+export default class DatabaseService<T extends BasePO> extends BaseService {
 
     data: {
         query: {
-            request: Query<FILTER>,
+            request: Query<T>,
             response: ResponseResult<QueryResult<T>>;
         },
         save: {
@@ -36,7 +36,7 @@ export default class DatabaseService<T extends BasePO, FILTER extends filter<T> 
         }
     };
 
-    constructor(url: string, t: T, filter?: FILTER) {
+    constructor(url: string, t: T, filter?: filter<T>) {
         super(url);
         this.data = {
             query: {
@@ -67,7 +67,7 @@ export default class DatabaseService<T extends BasePO, FILTER extends filter<T> 
         };
     }
 
-    query(request?: Query) {
+    query(request?: Query<T>) {
         return this.$send<QueryResult<T>>({
             url: "query",
             type: httpType.POST,
