@@ -458,18 +458,6 @@ class Service {
   }
   $requestHandler(httpRequest) {
   }
-  $addData(methodName, request, result) {
-    if (request === void 0) {
-      request = null;
-    }
-    if (result === void 0) {
-      result = null;
-    }
-    this.data[methodName] = {
-      request,
-      response: result
-    };
-  }
 }
 class BaseService extends Service {
   constructor(url) {

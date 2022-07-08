@@ -97,17 +97,5 @@ export default class Service {
         });
     }
     $requestHandler(httpRequest) { }
-    $addData(methodName, request, result) {
-        if (request === undefined) {
-            request = null;
-        }
-        if (result === undefined) {
-            result = null;
-        }
-        this.data[methodName] = {
-            request: request,
-            response: result
-        };
-    }
 }
 ;
