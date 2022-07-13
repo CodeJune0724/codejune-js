@@ -129,7 +129,7 @@ var variable = {
               value2 = this.clone(value2);
             }
             if (this.isObject(value1) && this.isObject(value2)) {
-              this.assignment(value1, value2);
+              this.assignment(value1, value2, true);
             } else {
               object1[key] = value2;
             }
@@ -159,17 +159,16 @@ var variable = {
     return data.toString();
   },
   clean(data) {
-    if (this.isObject(data)) {
+    let type2 = this.getType(data);
+    if (type2 === Array) {
+      data.splice(0);
+    } else if (type2 === Object) {
       for (let key in data) {
-        if (data.hasOwnProperty(key)) {
-          let value = data[key];
-          if (this.getType(value) === Array) {
-            data[key] = [];
-          } else if (this.isObject(value)) {
-            this.clean(value);
-          } else {
-            data[key] = null;
-          }
+        let value = data[key];
+        if (this.isObject(value)) {
+          this.clean(value);
+        } else {
+          data[key] = null;
         }
       }
     }
