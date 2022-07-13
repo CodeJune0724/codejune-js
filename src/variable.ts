@@ -149,6 +149,9 @@ export default {
                         isAssignment = true;
                     }
                     if (isAssignment) {
+                        if (this.isObject(value2)) {
+                            value2 = this.clone(value2);
+                        }
                         if (this.isObject(value1) && this.isObject(value2)) {
                             this.assignment(value1, value2);
                         } else {
@@ -161,6 +164,9 @@ export default {
                     let value2: any = object2[key];
                     if (value2 === undefined) {
                         continue;
+                    }
+                    if (this.isObject(value2)) {
+                        value2 = this.clone(value2);
                     }
                     object1[key] = value2;
                 }
