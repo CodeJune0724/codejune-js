@@ -125,6 +125,9 @@ var variable = {
             isAssignment = true;
           }
           if (isAssignment) {
+            if (this.isObject(value2)) {
+              value2 = this.clone(value2);
+            }
             if (this.isObject(value1) && this.isObject(value2)) {
               this.assignment(value1, value2);
             } else {
@@ -137,6 +140,9 @@ var variable = {
           let value2 = object2[key];
           if (value2 === void 0) {
             continue;
+          }
+          if (this.isObject(value2)) {
+            value2 = this.clone(value2);
           }
           object1[key] = value2;
         }
