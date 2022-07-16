@@ -8,6 +8,7 @@ export default class DatabaseService extends BaseService {
     data;
     constructor(url, t, filter) {
         super(url);
+        // @ts-ignore
         this.data = {
             query: {
                 request: new Query({
