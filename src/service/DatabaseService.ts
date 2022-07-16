@@ -7,7 +7,7 @@ import QueryResult from "../model/QueryResult";
 import filter from "../model/filter";
 import variable from "../variable";
 
-export default class DatabaseService<T extends BasePO> extends BaseService {
+export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key: string]: { request?: any, response: ResponseResult<any> } } = {}> extends BaseService {
 
     data: {
         query: {
@@ -29,15 +29,12 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
         deleteList: {
             request: T[],
             response: ResponseResult<null>
-        },
-        [key: string]: {
-            request: any,
-            response: ResponseResult<any>
         }
-    };
+    } & DATA_MORE;
 
     constructor(url: string, t: T, filter?: filter<T>) {
         super(url);
+        // @ts-ignore
         this.data = {
             query: {
                 request: new Query({
@@ -55,7 +52,6 @@ export default class DatabaseService<T extends BasePO> extends BaseService {
                 request: [],
                 response: new ResponseResult()
             },
-
             delete: {
                 request: variable.clone(t),
                 response: new ResponseResult()
