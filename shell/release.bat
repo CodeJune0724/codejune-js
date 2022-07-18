@@ -21,10 +21,6 @@ if "%isOk%"=="1" (
 set /p isOk="解决冲突:"
 if "%isOk%"=="1" (
     :: 后置步骤
-	git checkout %mainBranch%
-	echo username: zj0724
-    echo password: June3259123
-    echo email:    1476253236@qq.com
     call npm publish
 	git checkout %branch%
 )

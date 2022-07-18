@@ -9,9 +9,9 @@ export default defineConfig({
         outDir: "./dist",
         target: "ESNext",
         lib: {
-            entry: "./src/zj0724-common.ts",
-            name: "zj0724-common",
-            fileName: (format: string) => `zj0724-common.${format}.js`
+            entry: "./src/codejune.ts",
+            name: "codejune",
+            fileName: (format: string) => `codejune.${format}.js`
         },
         rollupOptions: {
             output: {

@@ -1,4 +1,4 @@
-var index = /* @__PURE__ */ (() => ".auto-break{word-break:break-all}.no-break{white-space:nowrap}.center{display:flex;justify-content:center;align-items:center}\n")();
+var index = "";
 class InfoException extends Error {
   constructor(message) {
     super(message);
