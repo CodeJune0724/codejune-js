@@ -6,7 +6,7 @@ export default {
             let url = this._getUrl(data);
             let type = data.type;
             let header = data.header ? data.header : {};
-            let sendData = data.data;
+            let sendData = data.body;
             let config = data.config;
             // 判断是否有文件
             let isExistFile = false;

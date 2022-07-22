@@ -25,7 +25,7 @@ export default class Service {
             let methodName = httpRequest.url;
             let type = httpRequest.type;
             let header = httpRequest.header;
-            let data = httpRequest.data;
+            let body = httpRequest.body;
             let param = httpRequest.param;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
@@ -39,8 +39,8 @@ export default class Service {
                     response: null
                 };
             }
-            if (data !== undefined && data !== null) {
-                this.data[methodName].request = data;
+            if (body !== undefined && body !== null) {
+                this.data[methodName].request = body;
             }
             if (variable.isEmpty(requestHandler) || requestHandler === undefined) {
                 requestHandler = () => {}
@@ -50,7 +50,7 @@ export default class Service {
                 url: this.url + "/" + methodName,
                 type: type,
                 header: header,
-                data: this.data[methodName].request,
+                body: this.data[methodName].request,
                 param: param
             };
             requestHandler(requestData);

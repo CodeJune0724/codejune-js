@@ -8,9 +8,9 @@ class HttpRequest {
   constructor(data) {
     this.url = data.url;
     this.type = data.type;
-    this.header = data.header ? data.header : {};
-    this.param = data.param ? data.param : {};
-    this.data = data.data ? data.data : {};
+    this.header = data.header;
+    this.param = data.param;
+    this.body = data.body;
     this.config = data.config;
   }
 }
@@ -233,7 +233,7 @@ var http = {
       let url = this._getUrl(data);
       let type$1 = data.type;
       let header = data.header ? data.header : {};
-      let sendData = data.data;
+      let sendData = data.body;
       let config = data.config;
       let isExistFile = false;
       if (variable.isObject(sendData)) {
@@ -382,7 +382,7 @@ class Service {
       let methodName = httpRequest.url;
       let type2 = httpRequest.type;
       let header = httpRequest.header;
-      let data = httpRequest.data;
+      let body = httpRequest.body;
       let param = httpRequest.param;
       if (variable.isEmpty(methodName)) {
         throw new InfoException("\u65B9\u6CD5\u540D is null");
@@ -396,8 +396,8 @@ class Service {
           response: null
         };
       }
-      if (data !== void 0 && data !== null) {
-        this.data[methodName].request = data;
+      if (body !== void 0 && body !== null) {
+        this.data[methodName].request = body;
       }
       if (variable.isEmpty(requestHandler) || requestHandler === void 0) {
         requestHandler = () => {
@@ -407,7 +407,7 @@ class Service {
         url: this.url + "/" + methodName,
         type: type2,
         header,
-        data: this.data[methodName].request,
+        body: this.data[methodName].request,
         param
       };
       requestHandler(requestData);
@@ -521,35 +521,35 @@ class DatabaseService extends BaseService {
     return this.$send({
       url: "query",
       type: type.POST,
-      data: request
+      body: request
     });
   }
   save(request) {
     return this.$send({
       url: "save",
       type: type.POST,
-      data: request
+      body: request
     });
   }
   saveList(request) {
     return this.$send({
       url: "saveList",
       type: type.POST,
-      data: request
+      body: request
     });
   }
   doDelete(request) {
     return this.$send({
       url: "delete",
       type: type.POST,
-      data: request
+      body: request
     });
   }
   deleteList(request) {
     return this.$send({
       url: "deleteList",
       type: type.POST,
-      data: request
+      body: request
     });
   }
 }
