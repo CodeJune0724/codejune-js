@@ -40,35 +40,35 @@ export default class DatabaseService extends BaseService {
         return this.$send({
             url: "query",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
     save(request) {
         return this.$send({
             url: "save",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
     saveList(request) {
         return this.$send({
             url: "saveList",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
     doDelete(request) {
         return this.$send({
             url: "delete",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
     deleteList(request) {
         return this.$send({
             url: "deleteList",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
 }

@@ -8,7 +8,7 @@ declare class HttpRequest {
     param?: {
         [key: string]: string;
     };
-    data?: any;
+    body?: any;
     config?: {
         dataType: "BODY" | "FORM_DATA";
     };

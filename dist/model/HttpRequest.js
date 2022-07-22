@@ -3,14 +3,14 @@ class HttpRequest {
     type;
     header;
     param;
-    data;
+    body;
     config;
     constructor(data) {
         this.url = data.url;
         this.type = data.type;
-        this.header = data.header ? data.header : {};
-        this.param = data.param ? data.param : {};
-        this.data = data.data ? data.data : {};
+        this.header = data.header;
+        this.param = data.param;
+        this.body = data.body;
         this.config = data.config;
     }
 }
