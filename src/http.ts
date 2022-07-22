@@ -8,7 +8,7 @@ export default {
             let url: string = this._getUrl(data);
             let type: httpType = data.type;
             let header: { [key: string]: string } = data.header ? data.header : {};
-            let sendData: any = data.data;
+            let sendData: any = data.body;
             let config = data.config;
 
             // 判断是否有文件

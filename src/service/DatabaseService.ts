@@ -67,7 +67,7 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
         return this.$send<QueryResult<T>>({
             url: "query",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
 
@@ -75,7 +75,7 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
         return this.$send<T>({
             url: "save",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
 
@@ -83,7 +83,7 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
         return this.$send<T[]>({
             url: "saveList",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
 
@@ -91,7 +91,7 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
         return this.$send<null>({
             url: "delete",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
 
@@ -99,7 +99,7 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
         return this.$send<null>({
             url: "deleteList",
             type: httpType.POST,
-            data: request
+            body: request
         });
     }
 
