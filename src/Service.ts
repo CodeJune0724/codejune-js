@@ -22,57 +22,58 @@ export default class Service {
 
     $send(httpRequest: HttpRequest, requestHandler?: (httpRequest: HttpRequest) => void): Promise<any> {
         return new Promise<any>((s, e) => {
-            let methodName = httpRequest.url;
+            let name = httpRequest.url;
+            let url = httpRequest.url;
             let type = httpRequest.type;
             let header = httpRequest.header;
             let body = httpRequest.body;
             let param = httpRequest.param;
             let config = httpRequest.config;
-            if (variable.isEmpty(methodName)) {
+            if (variable.isEmpty(name)) {
                 throw new InfoException("方法名 is null");
             }
             if (variable.isEmpty(type)) {
                 throw new InfoException("type is null");
             }
             if (config && config.name) {
-                methodName = config.name;
+                name = config.name;
             }
-            if (variable.isEmpty(this.data[methodName])) {
-                this.data[methodName] = {
+            if (variable.isEmpty(this.data[name])) {
+                this.data[name] = {
                     request: null,
                     response: null
                 };
             }
             if (body !== undefined && body !== null) {
-                this.data[methodName].request = body;
+                this.data[name].request = body;
             }
             if (variable.isEmpty(requestHandler) || requestHandler === undefined) {
                 requestHandler = () => {}
             }
 
             let requestData: HttpRequest = {
-                url: this.url + "/" + methodName,
+                url: this.url + "/" + url,
                 type: type,
                 header: header,
-                body: this.data[methodName].request,
+                body: this.data[name].request,
                 param: param
             };
             requestHandler(requestData);
             this.$requestHandler(requestData);
             http.send(requestData).then((responseData) => {
-                variable.clean(this.data[methodName].response);
+                variable.clean(this.data[name].response);
                 let responseDataJson;
                 try {
                     responseDataJson = JSON.parse(responseData);
                 } catch (exception) {
                     responseDataJson = responseData;
                 }
-                if (variable.isObject(this.data[methodName].response)) {
-                    variable.assignment(this.data[methodName].response, responseDataJson, false);
+                if (variable.isObject(this.data[name].response)) {
+                    variable.assignment(this.data[name].response, responseDataJson, false);
                 } else {
-                    this.data[methodName].response = responseDataJson;
+                    this.data[name].response = responseDataJson;
                 }
-                s(this.data[methodName].response);
+                s(this.data[name].response);
             }).catch((responseData) => {
                 e(responseData);
             });
