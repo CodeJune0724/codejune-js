@@ -27,11 +27,15 @@ export default class Service {
             let header = httpRequest.header;
             let body = httpRequest.body;
             let param = httpRequest.param;
+            let config = httpRequest.config;
             if (variable.isEmpty(methodName)) {
                 throw new InfoException("方法名 is null");
             }
             if (variable.isEmpty(type)) {
                 throw new InfoException("type is null");
+            }
+            if (config && config.name) {
+                methodName = config.name;
             }
             if (variable.isEmpty(this.data[methodName])) {
                 this.data[methodName] = {
