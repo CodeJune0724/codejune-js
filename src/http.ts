@@ -54,7 +54,9 @@ export default {
                 if (variable.getType(sendData) !== FormData) {
                     let dataType = "BODY";
                     if (config) {
-                        dataType = config.dataType;
+                        if (config.dataType) {
+                            dataType = config.dataType;
+                        }
                     }
                     switch (dataType) {
                         case "BODY":

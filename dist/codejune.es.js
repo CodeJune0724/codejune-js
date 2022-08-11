@@ -275,7 +275,9 @@ var http = {
         if (variable.getType(sendData) !== FormData) {
           let dataType = "BODY";
           if (config) {
-            dataType = config.dataType;
+            if (config.dataType) {
+              dataType = config.dataType;
+            }
           }
           switch (dataType) {
             case "BODY":
@@ -379,53 +381,58 @@ class Service {
   }
   $send(httpRequest, requestHandler) {
     return new Promise((s, e) => {
-      let methodName = httpRequest.url;
+      let name = httpRequest.url;
+      let url = httpRequest.url;
       let type2 = httpRequest.type;
       let header = httpRequest.header;
       let body = httpRequest.body;
       let param = httpRequest.param;
-      if (variable.isEmpty(methodName)) {
+      let config = httpRequest.config;
+      if (variable.isEmpty(name)) {
         throw new InfoException("\u65B9\u6CD5\u540D is null");
       }
       if (variable.isEmpty(type2)) {
         throw new InfoException("type is null");
       }
-      if (variable.isEmpty(this.data[methodName])) {
-        this.data[methodName] = {
+      if (config && config.name) {
+        name = config.name;
+      }
+      if (variable.isEmpty(this.data[name])) {
+        this.data[name] = {
           request: null,
           response: null
         };
       }
       if (body !== void 0 && body !== null) {
-        this.data[methodName].request = body;
+        this.data[name].request = body;
       }
       if (variable.isEmpty(requestHandler) || requestHandler === void 0) {
         requestHandler = () => {
         };
       }
       let requestData = {
-        url: this.url + "/" + methodName,
+        url: this.url + "/" + url,
         type: type2,
         header,
-        body: this.data[methodName].request,
+        body: this.data[name].request,
         param
       };
       requestHandler(requestData);
       this.$requestHandler(requestData);
       http.send(requestData).then((responseData) => {
-        variable.clean(this.data[methodName].response);
+        variable.clean(this.data[name].response);
         let responseDataJson;
         try {
           responseDataJson = JSON.parse(responseData);
         } catch (exception) {
           responseDataJson = responseData;
         }
-        if (variable.isObject(this.data[methodName].response)) {
-          variable.assignment(this.data[methodName].response, responseDataJson, false);
+        if (variable.isObject(this.data[name].response)) {
+          variable.assignment(this.data[name].response, responseDataJson, false);
         } else {
-          this.data[methodName].response = responseDataJson;
+          this.data[name].response = responseDataJson;
         }
-        s(this.data[methodName].response);
+        s(this.data[name].response);
       }).catch((responseData) => {
         e(responseData);
       });

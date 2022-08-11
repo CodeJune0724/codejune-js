@@ -8,7 +8,8 @@ class HttpRequest {
     param?: { [key: string]: string };
     body?: any;
     config?: {
-        dataType: "BODY" | "FORM_DATA"
+        dataType?: "BODY" | "FORM_DATA",
+        name?: string
     };
 
     constructor(data: HttpRequest) {
