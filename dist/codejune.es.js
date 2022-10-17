@@ -344,7 +344,7 @@ var http = {
                 filename = fileNameList[1];
               }
               a.href = url;
-              a.download = filename;
+              a.download = decodeURI(filename);
               a.click();
               window.URL.revokeObjectURL(url);
               success();
