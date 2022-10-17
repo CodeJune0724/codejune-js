@@ -137,7 +137,9 @@ export default {
                         }
                     });
                 } else {
-                    error(response.text());
+                    response.text().then((text) => {
+                        error(text);
+                    });
                 }
             });
         });
