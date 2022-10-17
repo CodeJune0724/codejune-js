@@ -330,26 +330,31 @@ var http = {
   asyncDownload(data) {
     return new Promise((success, error) => {
       fetch(this._getUrl(data)).then((response) => {
-        response.blob().then((blob) => {
-          try {
-            let a = document.createElement("a");
-            let url = window.URL.createObjectURL(blob);
-            let filename = response.headers.get("Content-Disposition");
-            filename = filename ? filename : "";
-            let test = /filename=(.*?)$/g;
-            let fileNameList = test.exec(filename);
-            if (fileNameList !== null) {
-              filename = fileNameList[1];
+        let contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.indexOf("download") !== -1) {
+          response.blob().then((blob) => {
+            try {
+              let a = document.createElement("a");
+              let url = window.URL.createObjectURL(blob);
+              let filename = response.headers.get("Content-Disposition");
+              filename = filename ? filename : "";
+              let test = /filename=(.*?)$/g;
+              let fileNameList = test.exec(filename);
+              if (fileNameList !== null) {
+                filename = fileNameList[1];
+              }
+              a.href = url;
+              a.download = filename;
+              a.click();
+              window.URL.revokeObjectURL(url);
+              success();
+            } catch (e) {
+              error(e);
             }
-            a.href = url;
-            a.download = filename;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            success();
-          } catch (e) {
-            error(e);
-          }
-        });
+          });
+        } else {
+          error(response.text());
+        }
       });
     });
   },
@@ -381,45 +386,8 @@ class Service {
   }
   $send(httpRequest, requestHandler) {
     return new Promise((s, e) => {
-      let name = httpRequest.url;
-      let url = httpRequest.url;
-      let type2 = httpRequest.type;
-      let header = httpRequest.header;
-      let body = httpRequest.body;
-      let param = httpRequest.param;
-      let config = httpRequest.config;
-      if (variable.isEmpty(name)) {
-        throw new InfoException("\u65B9\u6CD5\u540D is null");
-      }
-      if (variable.isEmpty(type2)) {
-        throw new InfoException("type is null");
-      }
-      if (config && config.name) {
-        name = config.name;
-      }
-      if (variable.isEmpty(this.data[name])) {
-        this.data[name] = {
-          request: null,
-          response: null
-        };
-      }
-      if (body !== void 0 && body !== null) {
-        this.data[name].request = body;
-      }
-      if (variable.isEmpty(requestHandler) || requestHandler === void 0) {
-        requestHandler = () => {
-        };
-      }
-      let requestData = {
-        url: this.url + "/" + url,
-        type: type2,
-        header,
-        body: this.data[name].request,
-        param
-      };
-      requestHandler(requestData);
-      this.$requestHandler(requestData);
-      http.send(requestData).then((responseData) => {
+      let name = this._getName(httpRequest);
+      http.send(this._getHttpRequest(httpRequest, requestHandler)).then((responseData) => {
         variable.clean(this.data[name].response);
         let responseDataJson;
         try {
@@ -440,31 +408,8 @@ class Service {
   }
   $download(httpRequest, requestHandler) {
     return new Promise((s, e) => {
-      let methodName = httpRequest.url;
-      let param = httpRequest.param;
-      if (variable.isEmpty(methodName)) {
-        throw new InfoException("\u65B9\u6CD5\u540D is null");
-      }
-      if (variable.isEmpty(this.data[methodName])) {
-        this.data[methodName] = {
-          request: null,
-          response: null
-        };
-      }
-      if (param !== void 0) {
-        this.data[methodName].request = param;
-      }
-      if (requestHandler === void 0 || variable.isEmpty(requestHandler)) {
-        requestHandler = () => {
-        };
-      }
-      let requestData = {
-        url: this.url + "/" + methodName,
-        type: type.GET,
-        param: this.data[methodName].request
-      };
-      requestHandler(requestData);
-      this.$requestHandler(requestData);
+      let requestData = this._getHttpRequest(httpRequest, requestHandler);
+      requestData.param = requestData.body;
       http.download(requestData).then(() => {
         s();
       }).catch((responseData) => {
@@ -472,7 +417,68 @@ class Service {
       });
     });
   }
+  $asyncDownload(httpRequest, requestHandler) {
+    return new Promise((s, e) => {
+      let requestData = this._getHttpRequest(httpRequest, requestHandler);
+      http.asyncDownload(requestData).then(() => {
+        s();
+      }).catch((responseData) => {
+        let responseDataJson;
+        try {
+          responseDataJson = JSON.parse(responseData);
+        } catch (exception) {
+          responseDataJson = responseData;
+        }
+        e(responseDataJson);
+      });
+    });
+  }
   $requestHandler(httpRequest) {
+  }
+  _getHttpRequest(httpRequest, requestHandler) {
+    let name = this._getName(httpRequest);
+    let url = httpRequest.url;
+    let type2 = httpRequest.type;
+    let header = httpRequest.header;
+    let body = httpRequest.body;
+    let param = httpRequest.param;
+    if (variable.isEmpty(name)) {
+      throw new InfoException("\u65B9\u6CD5\u540D is null");
+    }
+    if (variable.isEmpty(type2)) {
+      throw new InfoException("type is null");
+    }
+    if (variable.isEmpty(this.data[name])) {
+      this.data[name] = {
+        request: null,
+        response: null
+      };
+    }
+    if (body !== void 0 && body !== null) {
+      this.data[name].request = body;
+    }
+    if (variable.isEmpty(requestHandler) || requestHandler === void 0) {
+      requestHandler = () => {
+      };
+    }
+    let result = {
+      url: this.url + "/" + url,
+      type: type2,
+      header,
+      body: this.data[name].request,
+      param
+    };
+    requestHandler(result);
+    this.$requestHandler(result);
+    return result;
+  }
+  _getName(httpRequest) {
+    let result = httpRequest.url;
+    let config = httpRequest.config;
+    if (config && config.name) {
+      result = config.name;
+    }
+    return result;
   }
 }
 class BaseService extends Service {

@@ -110,27 +110,33 @@ export default {
     asyncDownload(data) {
         return new Promise((success, error) => {
             fetch(this._getUrl(data)).then((response) => {
-                response.blob().then((blob) => {
-                    try {
-                        let a = document.createElement("a");
-                        let url = window.URL.createObjectURL(blob);
-                        let filename = response.headers.get("Content-Disposition");
-                        filename = filename ? filename : "";
-                        let test = /filename=(.*?)$/g;
-                        let fileNameList = test.exec(filename);
-                        if (fileNameList !== null) {
-                            filename = fileNameList[1];
+                let contentType = response.headers.get("Content-Type");
+                if (contentType && contentType.indexOf("download") !== -1) {
+                    response.blob().then((blob) => {
+                        try {
+                            let a = document.createElement("a");
+                            let url = window.URL.createObjectURL(blob);
+                            let filename = response.headers.get("Content-Disposition");
+                            filename = filename ? filename : "";
+                            let test = /filename=(.*?)$/g;
+                            let fileNameList = test.exec(filename);
+                            if (fileNameList !== null) {
+                                filename = fileNameList[1];
+                            }
+                            a.href = url;
+                            a.download = filename;
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                            success();
                         }
-                        a.href = url;
-                        a.download = filename;
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        success();
-                    }
-                    catch (e) {
-                        error(e);
-                    }
-                });
+                        catch (e) {
+                            error(e);
+                        }
+                    });
+                }
+                else {
+                    error(response.text());
+                }
             });
         });
     },
