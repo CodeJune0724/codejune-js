@@ -1,6 +1,6 @@
 import HttpRequest from "./model/HttpRequest";
 export default class Service {
-    url: string;
+    url?: string;
     data: {
         [key: string]: {
             request?: any;
@@ -8,7 +8,7 @@ export default class Service {
             [key: string]: any;
         };
     };
-    constructor(url: string);
+    constructor(url?: string);
     $send(httpRequest: HttpRequest, requestHandler?: (httpRequest: HttpRequest) => void): Promise<any>;
     $download(httpRequest: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<any>;
     $asyncDownload(httpRequest: HttpRequest, requestHandler?: (requestData: HttpRequest) => void): Promise<any>;
