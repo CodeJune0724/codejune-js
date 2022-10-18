@@ -166,7 +166,7 @@ export default {
             referrer: "no-referrer",
             method: type,
             headers: header,
-            body: sendData
+            body: type !== httpType.GET ? sendData : undefined
         });
     }
 };
