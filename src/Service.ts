@@ -5,7 +5,7 @@ import HttpRequest from "./model/HttpRequest";
 
 export default class Service {
 
-    url: string;
+    url?: string;
 
     data: {
         [key: string]: {
@@ -15,7 +15,7 @@ export default class Service {
         }
     } = {};
 
-    constructor(url: string) {
+    constructor(url?: string) {
         this.url = url;
     }
 
@@ -98,7 +98,6 @@ export default class Service {
         if (variable.isEmpty(requestHandler) || requestHandler === undefined) {
             requestHandler = () => {}
         }
-
         let result: HttpRequest = {
             url: this.url + "/" + url,
             type: type,
