@@ -380,7 +380,7 @@ var http = {
       referrer: "no-referrer",
       method: type$1,
       headers: header,
-      body: sendData
+      body: type$1 !== type.GET ? sendData : void 0
     });
   }
 };
