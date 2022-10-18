@@ -31,6 +31,10 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends {
             request: T[];
             response: ResponseResult<null>;
         };
+        getDetails: {
+            request: any;
+            response: ResponseResult<object>;
+        };
     } & DATA_MORE;
     constructor(url: string, t: T, filter?: filter<T>);
     query(request?: Query<T>): Promise<ResponseResult<QueryResult<T>>>;
@@ -38,4 +42,5 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends {
     saveList(request?: T[]): Promise<ResponseResult<T[]>>;
     doDelete(request?: T): Promise<ResponseResult<null>>;
     deleteList(request?: T[]): Promise<ResponseResult<null>>;
+    getDetails(id?: any): Promise<ResponseResult<object>>;
 }

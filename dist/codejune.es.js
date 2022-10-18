@@ -570,6 +570,18 @@ class DatabaseService extends BaseService {
       body: request
     });
   }
+  getDetails(id) {
+    if (id) {
+      this.data.getDetails.request = id;
+    }
+    return this.$send({
+      config: {
+        name: "getDetails"
+      },
+      url: this.data.getDetails.request,
+      type: type.GET
+    });
+  }
 }
 let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 let _utf8_encode = function(string) {
