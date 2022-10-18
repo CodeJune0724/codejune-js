@@ -71,5 +71,17 @@ export default class DatabaseService extends BaseService {
             body: request
         });
     }
+    getDetails(id) {
+        if (id) {
+            this.data.getDetails.request = id;
+        }
+        return this.$send({
+            config: {
+                name: "getDetails"
+            },
+            url: this.data.getDetails.request,
+            type: httpType.GET
+        });
+    }
 }
 ;
