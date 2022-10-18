@@ -29,6 +29,10 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
         deleteList: {
             request: T[],
             response: ResponseResult<null>
+        },
+        getDetails: {
+            request: any,
+            response: ResponseResult<object>
         }
     } & DATA_MORE;
 
@@ -100,6 +104,19 @@ export default class DatabaseService<T extends BasePO, DATA_MORE extends { [key:
             url: "deleteList",
             type: httpType.POST,
             body: request
+        });
+    }
+
+    getDetails(id?: any) {
+        if (id) {
+            this.data.getDetails.request = id;
+        }
+        return this.$send<object>({
+            config: {
+                name: "getDetails"
+            },
+            url: this.data.getDetails.request,
+            type: httpType.GET
         });
     }
 
