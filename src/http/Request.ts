@@ -1,18 +1,17 @@
-import httpType from "./httpType";
+import type from "./type";
 
-class HttpRequest {
+class Request {
 
     url: string;
-    type: httpType;
+    type: type;
     header?: { [key: string]: string };
     param?: { [key: string]: string };
     body?: any;
     config?: {
-        dataType?: "BODY" | "FORM_DATA",
-        name?: string
+        dataType?: "BODY" | "FORM_DATA"
     };
 
-    constructor(data: HttpRequest) {
+    constructor(data: Request) {
         this.url = data.url;
         this.type = data.type;
         this.header = data.header;
@@ -23,4 +22,4 @@ class HttpRequest {
 
 }
 
-export default HttpRequest;
+export default Request;

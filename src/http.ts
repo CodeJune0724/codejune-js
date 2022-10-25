@@ -1,9 +1,9 @@
-import HttpRequest from "./model/HttpRequest";
+import Request from "./http/Request";
 import variable from "./variable";
-import httpType from "./model/httpType";
+import httpType from "./http/type";
 
 export default {
-    send(data: HttpRequest): Promise<any> {
+    send(data: Request): Promise<any> {
         return new Promise((success, error) => {
             this._getFetch(data).then((response) => {
                 let responseText = response.text();
@@ -18,7 +18,7 @@ export default {
         });
     },
 
-    download(data: HttpRequest): Promise<any> {
+    download(data: Request): Promise<any> {
         return new Promise((success: Function, error) => {
             try {
                 window.open(this._getUrl(data));
@@ -29,7 +29,7 @@ export default {
         });
     },
 
-    asyncDownload(data: HttpRequest): Promise<any> {
+    asyncDownload(data: Request): Promise<any> {
         return new Promise((success: any, error) => {
             this._getFetch(data).then((response) => {
                 let contentType = response.headers.get("Content-Type");
@@ -63,7 +63,7 @@ export default {
         });
     },
 
-    _getUrl(data: HttpRequest): string {
+    _getUrl(data: Request): string {
         let url = data.url;
         let param: { [key: string]: string } = data.param ? data.param : {};
         if (!variable.isEmpty(param)) {
@@ -84,7 +84,7 @@ export default {
         return url;
     },
 
-    _getFetch(data: HttpRequest): Promise<Response> {
+    _getFetch(data: Request): Promise<Response> {
         let url: string = this._getUrl(data);
         let type: httpType = data.type;
         let header: { [key: string]: string } = data.header ? data.header : {};
