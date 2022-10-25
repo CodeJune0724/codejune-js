@@ -4,7 +4,7 @@ class InfoException extends Error {
     super(message);
   }
 }
-class HttpRequest {
+class Request {
   constructor(data) {
     this.url = data.url;
     this.type = data.type;
@@ -201,32 +201,6 @@ var variable = {
     }
   }
 };
-class Query {
-  constructor(data) {
-    if (data) {
-      variable.filterKey(data, ["page", "size", "filter", "sort"]);
-      variable.assignment(this, data, false);
-    }
-  }
-}
-class ResponseResult {
-  constructor(data) {
-    this.flag = false;
-    this.result = null;
-    variable.assignment(this, data);
-  }
-}
-class QueryResult {
-  constructor() {
-    this.count = 0;
-    this.data = [];
-  }
-}
-class BasePO {
-  constructor() {
-    this.id = null;
-  }
-}
 var http = {
   send(data) {
     return new Promise((success, error) => {
@@ -384,205 +358,6 @@ var http = {
     });
   }
 };
-class Service {
-  constructor(url) {
-    this.data = {};
-    this.url = url;
-  }
-  $send(httpRequest, requestHandler) {
-    return new Promise((s, e) => {
-      let name = this._getName(httpRequest);
-      http.send(this._getHttpRequest(httpRequest, requestHandler)).then((responseData) => {
-        variable.clean(this.data[name].response);
-        let responseDataJson;
-        try {
-          responseDataJson = JSON.parse(responseData);
-        } catch (exception) {
-          responseDataJson = responseData;
-        }
-        if (variable.isObject(this.data[name].response)) {
-          variable.assignment(this.data[name].response, responseDataJson, false);
-        } else {
-          this.data[name].response = responseDataJson;
-        }
-        s(this.data[name].response);
-      }).catch((responseData) => {
-        e(responseData);
-      });
-    });
-  }
-  $download(httpRequest, requestHandler) {
-    return new Promise((s, e) => {
-      let requestData = this._getHttpRequest(httpRequest, requestHandler);
-      requestData.param = requestData.body;
-      http.download(requestData).then(() => {
-        s();
-      }).catch((responseData) => {
-        e(responseData);
-      });
-    });
-  }
-  $asyncDownload(httpRequest, requestHandler) {
-    return new Promise((s, e) => {
-      let requestData = this._getHttpRequest(httpRequest, requestHandler);
-      http.asyncDownload(requestData).then(() => {
-        s();
-      }).catch((responseData) => {
-        let responseDataJson;
-        try {
-          responseDataJson = JSON.parse(responseData);
-        } catch (exception) {
-          responseDataJson = responseData;
-        }
-        e(responseDataJson);
-      });
-    });
-  }
-  $requestHandler(httpRequest) {
-  }
-  _getHttpRequest(httpRequest, requestHandler) {
-    let name = this._getName(httpRequest);
-    let url = httpRequest.url;
-    let type2 = httpRequest.type;
-    let header = httpRequest.header;
-    let body = httpRequest.body;
-    let param = httpRequest.param;
-    if (variable.isEmpty(name)) {
-      throw new InfoException("\u65B9\u6CD5\u540D is null");
-    }
-    if (variable.isEmpty(type2)) {
-      throw new InfoException("type is null");
-    }
-    if (variable.isEmpty(this.data[name])) {
-      this.data[name] = {
-        request: null,
-        response: null
-      };
-    }
-    if (body !== void 0 && body !== null) {
-      this.data[name].request = body;
-    }
-    if (variable.isEmpty(requestHandler) || requestHandler === void 0) {
-      requestHandler = () => {
-      };
-    }
-    let result = {
-      url: this.url + "/" + url,
-      type: type2,
-      header,
-      body: this.data[name].request,
-      param
-    };
-    requestHandler(result);
-    this.$requestHandler(result);
-    return result;
-  }
-  _getName(httpRequest) {
-    let result = httpRequest.url;
-    let config = httpRequest.config;
-    if (config && config.name) {
-      result = config.name;
-    }
-    return result;
-  }
-}
-class BaseService extends Service {
-  constructor(url) {
-    super(url);
-    this.data = {};
-  }
-  $send(httpRequest, requestHandler) {
-    return new Promise((success, error) => {
-      super.$send(httpRequest, requestHandler).then((responseData) => {
-        if (responseData.flag) {
-          success(responseData);
-        } else {
-          error(responseData);
-        }
-      }).catch((e) => {
-        error(e);
-      });
-    });
-  }
-}
-class DatabaseService extends BaseService {
-  constructor(url, t, filter2) {
-    super(url);
-    this.data = {
-      query: {
-        request: new Query({
-          filter: filter2
-        }),
-        response: new ResponseResult({
-          result: new QueryResult()
-        })
-      },
-      save: {
-        request: variable.clone(t),
-        response: new ResponseResult()
-      },
-      saveList: {
-        request: [],
-        response: new ResponseResult()
-      },
-      delete: {
-        request: variable.clone(t),
-        response: new ResponseResult()
-      },
-      deleteList: {
-        request: [],
-        response: new ResponseResult()
-      }
-    };
-  }
-  query(request) {
-    return this.$send({
-      url: "query",
-      type: type.POST,
-      body: request
-    });
-  }
-  save(request) {
-    return this.$send({
-      url: "save",
-      type: type.POST,
-      body: request
-    });
-  }
-  saveList(request) {
-    return this.$send({
-      url: "saveList",
-      type: type.POST,
-      body: request
-    });
-  }
-  doDelete(request) {
-    return this.$send({
-      url: "delete",
-      type: type.POST,
-      body: request
-    });
-  }
-  deleteList(request) {
-    return this.$send({
-      url: "deleteList",
-      type: type.POST,
-      body: request
-    });
-  }
-  getDetails(id) {
-    if (id) {
-      this.data.getDetails.request = id;
-    }
-    return this.$send({
-      config: {
-        name: "getDetails"
-      },
-      url: this.data.getDetails.request,
-      type: type.GET
-    });
-  }
-}
 let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 let _utf8_encode = function(string) {
   let utftext = "";
@@ -702,7 +477,69 @@ var file = {
     });
   }
 };
-var popupUtil = {
+class Service {
+  constructor(url) {
+    this.url = url;
+  }
+  $send(request) {
+    return new Promise((s, e) => {
+      http.send(this._getHttpRequest(request)).then((responseData) => {
+        let responseDataJson;
+        try {
+          responseDataJson = JSON.parse(responseData);
+        } catch (exception) {
+          responseDataJson = responseData;
+        }
+        s(responseDataJson);
+      }).catch((responseData) => {
+        e(responseData);
+      });
+    });
+  }
+  $download(request) {
+    return new Promise((s, e) => {
+      http.download(this._getHttpRequest(request)).then(() => {
+        s();
+      }).catch((responseData) => {
+        e(responseData);
+      });
+    });
+  }
+  $asyncDownload(request) {
+    return new Promise((s, e) => {
+      http.asyncDownload(this._getHttpRequest(request)).then(() => {
+        s();
+      }).catch((responseData) => {
+        e(responseData);
+      });
+    });
+  }
+  $requestHandler(request) {
+  }
+  _getHttpRequest(request) {
+    let url = request.url;
+    let type2 = request.type;
+    let header = request.header;
+    let body = request.body;
+    let param = request.param;
+    if (variable.isEmpty(url)) {
+      throw new InfoException("url is null");
+    }
+    if (variable.isEmpty(type2)) {
+      throw new InfoException("type is null");
+    }
+    let result = {
+      url: url.indexOf("http") !== -1 ? url : this.url + "/" + url,
+      type: type2,
+      header,
+      body,
+      param
+    };
+    this.$requestHandler(result);
+    return result;
+  }
+}
+var popup = {
   create(data) {
     let result = {
       loading: false,
@@ -726,9 +563,9 @@ var popupUtil = {
     return result;
   }
 };
-var windowUtil = {
+var window$1 = {
   getScreenHeight() {
     return window.screen.height;
   }
 };
-export { BasePO, BaseService, DatabaseService, HttpRequest, InfoException, Query, QueryResult, ResponseResult, Service, base64, file, http, type as httpType, popupUtil, variable, windowUtil };
+export { Request as HttpRequest, InfoException, Service, base64, file, http, type as httpType, popup, variable, window$1 as window };

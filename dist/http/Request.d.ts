@@ -1,7 +1,7 @@
-import httpType from "./httpType";
-declare class HttpRequest {
+import type from "./type";
+declare class Request {
     url: string;
-    type: httpType;
+    type: type;
     header?: {
         [key: string]: string;
     };
@@ -11,8 +11,7 @@ declare class HttpRequest {
     body?: any;
     config?: {
         dataType?: "BODY" | "FORM_DATA";
-        name?: string;
     };
-    constructor(data: HttpRequest);
+    constructor(data: Request);
 }
-export default HttpRequest;
+export default Request;
