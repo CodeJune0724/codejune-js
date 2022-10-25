@@ -1,9 +1,9 @@
-import HttpRequest from "./model/HttpRequest";
+import Request from "./http/Request";
 declare const _default: {
-    send(data: HttpRequest): Promise<any>;
-    download(data: HttpRequest): Promise<any>;
-    asyncDownload(data: HttpRequest): Promise<any>;
-    _getUrl(data: HttpRequest): string;
-    _getFetch(data: HttpRequest): Promise<Response>;
+    send(data: Request): Promise<any>;
+    download(data: Request): Promise<any>;
+    asyncDownload(data: Request): Promise<any>;
+    _getUrl(data: Request): string;
+    _getFetch(data: Request): Promise<Response>;
 };
 export default _default;

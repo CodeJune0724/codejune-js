@@ -1,4 +1,4 @@
-class HttpRequest {
+class Request {
     url;
     type;
     header;
@@ -14,4 +14,4 @@ class HttpRequest {
         this.config = data.config;
     }
 }
-export default HttpRequest;
+export default Request;

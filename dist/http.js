@@ -1,5 +1,5 @@
 import variable from "./variable";
-import httpType from "./model/httpType";
+import httpType from "./http/type";
 export default {
     send(data) {
         return new Promise((success, error) => {
