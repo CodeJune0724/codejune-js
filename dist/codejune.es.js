@@ -14,13 +14,6 @@ class Request {
     this.config = data.config;
   }
 }
-var type = /* @__PURE__ */ ((type2) => {
-  type2["POST"] = "POST";
-  type2["GET"] = "GET";
-  type2["PUT"] = "PUT";
-  type2["DELETE"] = "DELETE";
-  return type2;
-})(type || {});
 var variable = {
   isNull(data) {
     return data === void 0 || data === null;
@@ -29,14 +22,14 @@ var variable = {
     if (this.isNull(data)) {
       return true;
     }
-    let type2 = this.getType(data);
-    if (type2 === String && data === "") {
+    let type = this.getType(data);
+    if (type === String && data === "") {
       return true;
     }
-    if (type2 === Array && data.length === 0) {
+    if (type === Array && data.length === 0) {
       return true;
     }
-    return type2 === Object && Object.keys(data).length === 0;
+    return type === Object && Object.keys(data).length === 0;
   },
   getType(data) {
     if (this.isNull(data)) {
@@ -49,20 +42,20 @@ var variable = {
       return false;
     }
     if (data instanceof Object) {
-      let type2 = this.getType(data);
-      if (type2 == null) {
+      let type = this.getType(data);
+      if (type == null) {
         return false;
       }
       if (JSON.stringify(data) !== void 0) {
         return true;
       }
-      if (type2.toString().indexOf("class") === 0) {
+      if (type.toString().indexOf("class") === 0) {
         return true;
       }
-      if (type2 === Array) {
+      if (type === Array) {
         return true;
       }
-      return type2 === Object;
+      return type === Object;
     }
     return false;
   },
@@ -280,7 +273,7 @@ var http = {
   },
   _getFetch(data) {
     let url = this._getUrl(data);
-    let type$1 = data.type;
+    let type = data.type;
     let header = data.header ? data.header : {};
     let sendData = data.body;
     let config = data.config;
@@ -342,7 +335,7 @@ var http = {
         }
       }
     }
-    if (type$1 !== type.GET && !isExistFile) {
+    if (type !== "GET" && !isExistFile) {
       header["content-type"] = "application/json";
     }
     return fetch(url, {
@@ -351,9 +344,9 @@ var http = {
       mode: "cors",
       redirect: "follow",
       referrer: "no-referrer",
-      method: type$1,
+      method: type,
       headers: header,
-      body: type$1 !== type.GET ? sendData : void 0
+      body: type !== "GET" ? sendData : void 0
     });
   }
 };
@@ -517,19 +510,19 @@ class Service {
   }
   _getHttpRequest(request) {
     let url = request.url;
-    let type2 = request.type;
+    let type = request.type;
     let header = request.header;
     let body = request.body;
     let param = request.param;
     if (variable.isEmpty(url)) {
       throw new InfoException("url is null");
     }
-    if (variable.isEmpty(type2)) {
+    if (variable.isEmpty(type)) {
       throw new InfoException("type is null");
     }
     let result = {
       url: url.indexOf("http") !== -1 ? url : this.url + "/" + url,
-      type: type2,
+      type,
       header,
       body,
       param
@@ -567,4 +560,4 @@ var window$1 = {
     return window.screen.height;
   }
 };
-export { Request as HttpRequest, InfoException, Service, base64, file, http, type as httpType, popup, variable, window$1 as window };
+export { Request as HttpRequest, InfoException, Service, base64, file, http, popup, variable, window$1 as window };
