@@ -1,6 +1,5 @@
 import Request from "./http/Request";
 import variable from "./variable";
-import httpType from "./http/type";
 
 export default {
     send(data: Request): Promise<any> {
@@ -86,7 +85,7 @@ export default {
 
     _getFetch(data: Request): Promise<Response> {
         let url: string = this._getUrl(data);
-        let type: httpType = data.type;
+        let type = data.type;
         let header: { [key: string]: string } = data.header ? data.header : {};
         let sendData: any = data.body;
         let config = data.config;
@@ -154,7 +153,7 @@ export default {
         }
 
         // 添加application/json
-        if (type !== httpType.GET && !isExistFile) {
+        if (type !== "GET" && !isExistFile) {
             header["content-type"] = "application/json";
         }
 
@@ -166,7 +165,7 @@ export default {
             referrer: "no-referrer",
             method: type,
             headers: header,
-            body: type !== httpType.GET ? sendData : undefined
+            body: type !== "GET" ? sendData : undefined
         });
     }
 };

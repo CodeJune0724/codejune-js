@@ -1,5 +1,4 @@
 import variable from "./variable";
-import httpType from "./http/type";
 export default {
     send(data) {
         return new Promise((success, error) => {
@@ -152,7 +151,7 @@ export default {
             }
         }
         // 添加application/json
-        if (type !== httpType.GET && !isExistFile) {
+        if (type !== "GET" && !isExistFile) {
             header["content-type"] = "application/json";
         }
         return fetch(url, {
@@ -163,7 +162,7 @@ export default {
             referrer: "no-referrer",
             method: type,
             headers: header,
-            body: type !== httpType.GET ? sendData : undefined
+            body: type !== "GET" ? sendData : undefined
         });
     }
 };
