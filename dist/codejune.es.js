@@ -159,10 +159,9 @@ var variable = {
     return data.toString();
   },
   clean(data) {
-    let type2 = this.getType(data);
-    if (type2 === Array) {
+    if (data instanceof Array) {
       data.splice(0);
-    } else if (type2 === Object) {
+    } else if (this.isObject(data)) {
       for (let key in data) {
         let value = data[key];
         if (this.isObject(value)) {
