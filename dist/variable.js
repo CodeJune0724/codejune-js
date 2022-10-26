@@ -195,11 +195,10 @@ export default {
      * @param data 数据
      * */
     clean(data) {
-        let type = this.getType(data);
-        if (type === Array) {
+        if (data instanceof Array) {
             data.splice(0);
         }
-        else if (type === Object) {
+        else if (this.isObject(data)) {
             for (let key in data) {
                 let value = data[key];
                 if (this.isObject(value)) {
