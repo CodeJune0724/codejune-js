@@ -1,9 +1,7 @@
-import type from "./type";
-
 class Request {
 
     url: string;
-    type: type;
+    type: "GET" | "POST" | "PUT" | "DELETE";
     header?: { [key: string]: string };
     param?: { [key: string]: string };
     body?: any;
