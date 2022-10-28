@@ -8,6 +8,7 @@ import file from "./file";
 import Service from "./Service";
 import popup from "./popup";
 import window from "./window";
+import Websocket from "./Websocket";
 
 export {
     InfoException,
@@ -17,5 +18,6 @@ export {
     file,
     Service,
     popup,
-    window
+    window,
+    Websocket
 };
