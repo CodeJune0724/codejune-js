@@ -1,8 +1,45 @@
 import variable from "./variable";
-export default {
-    send(data) {
+export default class Http {
+    url = "";
+    type = "GET";
+    param = {};
+    header = {};
+    contentType = null;
+    body = null;
+    constructor(url, type) {
+        this.url = url;
+        this.type = type;
+    }
+    addHeader(key, value) {
+        this.header[key] = value;
+    }
+    addParam(key, value) {
+        this.param[key] = value;
+    }
+    setContentType(contentType) {
+        this.contentType = contentType;
+        let key = "Content-type";
+        switch (contentType) {
+            case "APPLICATION_JSON":
+                this.header[key] = "application/json";
+                break;
+            case "APPLICATION_XML":
+                this.header[key] = "application/xml";
+                break;
+            case "ROW":
+                this.header[key] = "text/plain";
+                break;
+            case null:
+                delete this.header[key];
+                break;
+        }
+    }
+    setBody(body) {
+        this.body = body;
+    }
+    send() {
         return new Promise((success, error) => {
-            this._getFetch(data).then((response) => {
+            this._getFetch().then((response) => {
                 let responseText = response.text();
                 if (response.ok) {
                     success(responseText);
@@ -14,21 +51,21 @@ export default {
                 error(m);
             });
         });
-    },
-    download(data) {
+    }
+    download() {
         return new Promise((success, error) => {
             try {
-                window.open(this._getUrl(data));
+                window.open(this._getUrl());
                 success();
             }
             catch (e) {
                 error(e);
             }
         });
-    },
-    asyncDownload(data) {
+    }
+    asyncDownload() {
         return new Promise((success, error) => {
-            this._getFetch(data).then((response) => {
+            this._getFetch().then((response) => {
                 let contentType = response.headers.get("Content-Type");
                 if (contentType && contentType.indexOf("download") !== -1) {
                     response.blob().then((blob) => {
@@ -60,45 +97,19 @@ export default {
                 }
             });
         });
-    },
-    _getUrl(data) {
-        let url = data.url;
-        let param = data.param ? data.param : {};
-        if (!variable.isEmpty(param)) {
-            let u = "?";
-            for (let key in param) {
-                let value = param[key];
-                if (!variable.isEmpty(value)) {
-                    u = u + key + "=" + value + "&";
-                }
-            }
-            if (u !== "?") {
-                u = u.substring(0, u.length - 1);
-            }
-            else {
-                u = "";
-            }
-            url = url + u;
-        }
-        return url;
-    },
-    _getFetch(data) {
-        let url = this._getUrl(data);
-        let type = data.type;
-        let header = data.header ? data.header : {};
-        let sendData = data.body;
-        let config = data.config;
-        // 判断是否有文件
+    }
+    _getFetch() {
         let isExistFile = false;
-        if (variable.isObject(sendData)) {
-            for (let key in sendData) {
-                let valueType = variable.getType(sendData[key]);
+        if (variable.isObject(this.body)) {
+            for (let key in this.body) {
+                let value = this.body[key];
+                let valueType = variable.getType(value);
                 if (valueType === File || valueType === FileList) {
                     isExistFile = true;
                     break;
                 }
                 if (valueType === Array) {
-                    for (let item of sendData[key]) {
+                    for (let item of value) {
                         if (variable.getType(item) === File || variable.getType(item) === FileList) {
                             isExistFile = true;
                             break;
@@ -107,9 +118,14 @@ export default {
                 }
             }
             if (isExistFile) {
-                let formData = new FormData();
-                for (let key in sendData) {
-                    let value = sendData[key];
+                this.contentType = "FORM_DATA";
+            }
+        }
+        if (this.contentType === "FORM_DATA") {
+            let formData = new FormData();
+            if (variable.isObject(this.body)) {
+                for (let key in this.body) {
+                    let value = this.body[key];
                     if (variable.getType(value) === FileList) {
                         for (let item of value) {
                             formData.append(key, item);
@@ -124,45 +140,39 @@ export default {
                         formData.append(key, value);
                     }
                 }
-                sendData = formData;
             }
+            this.body = formData;
         }
-        // 转换请求数据
-        if (variable.isObject(sendData)) {
-            if (variable.getType(sendData) !== FormData) {
-                let dataType = "BODY";
-                if (config) {
-                    if (config.dataType) {
-                        dataType = config.dataType;
-                    }
-                }
-                switch (dataType) {
-                    case "BODY":
-                        sendData = JSON.stringify(sendData);
-                        break;
-                    case "FORM_DATA":
-                        let formData = new FormData();
-                        for (let key in sendData) {
-                            formData.append(key, sendData[key]);
-                        }
-                        sendData = formData;
-                        break;
-                }
-            }
-        }
-        // 添加application/json
-        if (type !== "GET" && !isExistFile) {
-            header["content-type"] = "application/json";
-        }
-        return fetch(url, {
+        return fetch(this._getUrl(), {
             cache: "no-cache",
             credentials: "same-origin",
             mode: "cors",
             redirect: "follow",
             referrer: "no-referrer",
-            method: type,
-            headers: header,
-            body: type !== "GET" ? sendData : undefined
+            method: this.type,
+            headers: this.header,
+            body: this.type !== "GET" ? this.body : undefined
         });
     }
-};
+    _getUrl() {
+        let result = this.url;
+        if (!variable.isEmpty(this.param)) {
+            let param = "?";
+            for (let key in this.param) {
+                let value = this.param[key];
+                if (value) {
+                    param = param + key + "=" + value + "&";
+                }
+            }
+            if (param !== "?") {
+                param = param.substring(0, param.length - 1);
+            }
+            else {
+                param = "";
+            }
+            result = result + param;
+        }
+        return result;
+    }
+}
+;

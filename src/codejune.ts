@@ -1,9 +1,8 @@
 import "./css/index.css";
 
 import InfoException from "./exception/InfoException";
-import HttpRequest from "./http/Request";
 import variable from "./variable";
-import http from "./http";
+import Http from "./http";
 import base64 from "./base64";
 import file from "./file";
 import Service from "./Service";
@@ -12,9 +11,8 @@ import window from "./window";
 
 export {
     InfoException,
-    HttpRequest,
     variable,
-    http,
+    Http,
     base64,
     file,
     Service,
