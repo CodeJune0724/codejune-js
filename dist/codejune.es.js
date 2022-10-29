@@ -45,24 +45,24 @@ const f = {
     let r = this.getType(t), l = this.isEmpty(i) ? !0 : i === !0;
     if (!(!this.isObject(t) || !this.isObject(e)))
       if (r === Array) {
-        let n = !0;
-        if (l && this.getType(e) !== Array && (n = !1), r !== this.getType(e) && (n = !1), n) {
+        let s = !0;
+        if (l && this.getType(e) !== Array && (s = !1), r !== this.getType(e) && (s = !1), s) {
           t.splice(0, t.length);
-          for (let s of e)
-            t.push(s);
+          for (let n of e)
+            t.push(n);
         }
       } else if (l)
-        for (let n in t) {
-          let s = t[n], o = e[n];
-          if (s === void 0 || o === void 0)
+        for (let s in t) {
+          let n = t[s], o = e[s];
+          if (n === void 0 || o === void 0)
             continue;
           let h = !1;
-          (s === null || o === null && !this.isObject(s) || this.getType(s) === this.getType(o)) && (h = !0), h && (this.isObject(o) && (o = this.clone(o)), this.isObject(s) && this.isObject(o) ? this.assignment(s, o, !0) : t[n] = o);
+          (n === null || o === null && !this.isObject(n) || this.getType(n) === this.getType(o)) && (h = !0), h && (this.isObject(o) && (o = this.clone(o)), this.isObject(n) && this.isObject(o) ? this.assignment(n, o, !0) : t[s] = o);
         }
       else
-        for (let n in e) {
-          let s = e[n];
-          s !== void 0 && (this.isObject(s) && (s = this.clone(s)), t[n] = s);
+        for (let s in e) {
+          let n = e[s];
+          n !== void 0 && (this.isObject(n) && (n = this.clone(n)), t[s] = n);
         }
   },
   toStr(t) {
@@ -149,17 +149,17 @@ class u {
     return new Promise((e, i) => {
       this._getFetch().then((r) => {
         let l = r.headers.get("Content-Type");
-        l && l.indexOf("download") !== -1 ? r.blob().then((n) => {
+        l && l.indexOf("download") !== -1 ? r.blob().then((s) => {
           try {
-            let s = document.createElement("a"), o = window.URL.createObjectURL(n), h = r.headers.get("Content-Disposition");
+            let n = document.createElement("a"), o = window.URL.createObjectURL(s), h = r.headers.get("Content-Disposition");
             h = h || "";
             let d = /filename=(.*?)$/g.exec(h);
-            d !== null && (h = d[1]), s.href = o, s.download = decodeURI(h), s.click(), window.URL.revokeObjectURL(o), e();
-          } catch (s) {
-            i(s);
+            d !== null && (h = d[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
+          } catch (n) {
+            i(n);
           }
-        }) : r.text().then((n) => {
-          i(n);
+        }) : r.text().then((s) => {
+          i(s);
         });
       });
     });
@@ -174,8 +174,8 @@ class u {
           break;
         }
         if (l === Array) {
-          for (let n of r)
-            if (f.getType(n) === File || f.getType(n) === FileList) {
+          for (let s of r)
+            if (f.getType(s) === File || f.getType(s) === FileList) {
               e = !0;
               break;
             }
@@ -189,16 +189,17 @@ class u {
         for (let r in this.body) {
           let l = this.body[r];
           if (f.getType(l) === FileList)
-            for (let n of l)
-              i.append(r, n);
+            for (let s of l)
+              i.append(r, s);
           else if (f.getType(l) === Array)
-            for (let n of l)
-              i.append(r, n);
+            for (let s of l)
+              i.append(r, s);
           else
             i.append(r, l);
         }
       this.body = i;
-    }
+    } else
+      f.isObject(this.body) && (this.body = JSON.stringify(this.body));
     return fetch(this._getUrl(), {
       cache: "no-cache",
       credentials: "same-origin",
@@ -233,22 +234,22 @@ let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", y =
   }
   return e;
 }, p = function(t) {
-  let e = "", i = 0, r, l, n = 0;
+  let e = "", i = 0, r, l, s = 0;
   for (; i < t.length; )
-    r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (l = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | l & 63), i += 2) : (l = t.charCodeAt(i + 1), n = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (l & 63) << 6 | n & 63), i += 3);
+    r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (l = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | l & 63), i += 2) : (l = t.charCodeAt(i + 1), s = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (l & 63) << 6 | s & 63), i += 3);
   return e;
 };
 const m = {
   encode(t) {
-    let e = "", i, r, l, n, s, o, h, c = 0;
+    let e = "", i, r, l, s, n, o, h, c = 0;
     for (t = y(t); c < t.length; )
-      i = t.charCodeAt(c++), r = t.charCodeAt(c++), l = t.charCodeAt(c++), n = i >> 2, s = (i & 3) << 4 | r >> 4, o = (r & 15) << 2 | l >> 6, h = l & 63, isNaN(r) ? o = h = 64 : isNaN(l) && (h = 64), e = e + a.charAt(n) + a.charAt(s) + a.charAt(o) + a.charAt(h);
+      i = t.charCodeAt(c++), r = t.charCodeAt(c++), l = t.charCodeAt(c++), s = i >> 2, n = (i & 3) << 4 | r >> 4, o = (r & 15) << 2 | l >> 6, h = l & 63, isNaN(r) ? o = h = 64 : isNaN(l) && (h = 64), e = e + a.charAt(s) + a.charAt(n) + a.charAt(o) + a.charAt(h);
     return e;
   },
   decode(t) {
-    let e = "", i, r, l, n, s, o, h, c = 0;
+    let e = "", i, r, l, s, n, o, h, c = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); c < t.length; )
-      n = a.indexOf(t.charAt(c++)), s = a.indexOf(t.charAt(c++)), o = a.indexOf(t.charAt(c++)), h = a.indexOf(t.charAt(c++)), i = n << 2 | s >> 4, r = (s & 15) << 4 | o >> 2, l = (o & 3) << 6 | h, e = e + String.fromCharCode(i), o !== 64 && (e = e + String.fromCharCode(r)), h !== 64 && (e = e + String.fromCharCode(l));
+      s = a.indexOf(t.charAt(c++)), n = a.indexOf(t.charAt(c++)), o = a.indexOf(t.charAt(c++)), h = a.indexOf(t.charAt(c++)), i = s << 2 | n >> 4, r = (n & 15) << 4 | o >> 2, l = (o & 3) << 6 | h, e = e + String.fromCharCode(i), o !== 64 && (e = e + String.fromCharCode(r)), h !== 64 && (e = e + String.fromCharCode(l));
     return e = p(e), e;
   }
 }, w = {
@@ -279,13 +280,13 @@ class O {
   $send(e) {
     return new Promise((i, r) => {
       this._getHttp(e).send().then((l) => {
-        let n;
+        let s;
         try {
-          n = JSON.parse(l);
+          s = JSON.parse(l);
         } catch {
-          n = l;
+          s = l;
         }
-        i(n);
+        i(s);
       }).catch((l) => {
         r(l);
       });
