@@ -143,6 +143,11 @@ export default class Http {
             }
             this.body = formData;
         }
+        else {
+            if (variable.isObject(this.body)) {
+                this.body = JSON.stringify(this.body);
+            }
+        }
         return fetch(this._getUrl(), {
             cache: "no-cache",
             credentials: "same-origin",
