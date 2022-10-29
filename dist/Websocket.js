@@ -25,7 +25,12 @@ export default class Websocket {
     }
     send(data) {
         if (this.websocket) {
-            this.websocket.send(data);
+            if (data instanceof Blob || data instanceof ArrayBuffer || typeof data === "string") {
+                this.websocket.send(data);
+            }
+            else {
+                this.websocket.send(JSON.stringify(data));
+            }
         }
     }
     close() {
