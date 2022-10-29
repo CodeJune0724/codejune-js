@@ -1,4 +1,4 @@
-import { type } from "./http";
+import { type } from "./Http";
 declare type request = {
     url: string;
     type: type;
@@ -19,4 +19,4 @@ export default class Service {
     $requestHandler(request: request): void;
     private _getHttp;
 }
-export {};
+export { request };

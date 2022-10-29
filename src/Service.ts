@@ -1,4 +1,4 @@
-import Http, { type } from "./http";
+import Http, { type } from "./Http";
 import variable from "./variable";
 
 type request = {
@@ -76,4 +76,8 @@ export default class Service {
         return result;
     }
 
+};
+
+export {
+    request
 };
