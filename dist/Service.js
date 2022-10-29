@@ -1,6 +1,5 @@
+import Http from "./http";
 import variable from "./variable";
-import InfoException from "./exception/InfoException";
-import http from "./http";
 export default class Service {
     url;
     constructor(url) {
@@ -8,7 +7,7 @@ export default class Service {
     }
     $send(request) {
         return new Promise((s, e) => {
-            http.send(this._getHttpRequest(request)).then((responseData) => {
+            this._getHttp(request).send().then((responseData) => {
                 let responseDataJson;
                 try {
                     responseDataJson = JSON.parse(responseData);
@@ -24,7 +23,7 @@ export default class Service {
     }
     $download(request) {
         return new Promise((s, e) => {
-            http.download(this._getHttpRequest(request)).then(() => {
+            this._getHttp(request).download().then(() => {
                 s();
             }).catch((responseData) => {
                 e(responseData);
@@ -33,7 +32,7 @@ export default class Service {
     }
     $asyncDownload(request) {
         return new Promise((s, e) => {
-            http.asyncDownload(this._getHttpRequest(request)).then(() => {
+            this._getHttp(request).asyncDownload().then(() => {
                 s();
             }).catch((responseData) => {
                 e(responseData);
@@ -41,26 +40,24 @@ export default class Service {
         });
     }
     $requestHandler(request) { }
-    _getHttpRequest(request) {
-        let url = request.url;
-        let type = request.type;
-        let header = request.header;
-        let body = request.body;
-        let param = request.param;
-        if (variable.isEmpty(url)) {
-            throw new InfoException("url is null");
+    _getHttp(request) {
+        request.url = request.url.indexOf("http") !== -1 ? request.url : this.url + "/" + request.url;
+        this.$requestHandler(request);
+        let result = new Http(request.url, request.type);
+        if (request.header) {
+            for (let key in request.header) {
+                result.addHeader(key, request.header[key]);
+            }
         }
-        if (variable.isEmpty(type)) {
-            throw new InfoException("type is null");
+        if (request.param) {
+            for (let key in request.param) {
+                result.addParam(key, request.param[key]);
+            }
         }
-        let result = {
-            url: url.indexOf("http") !== -1 ? url : this.url + "/" + url,
-            type: type,
-            header: header,
-            body: body,
-            param: param
-        };
-        this.$requestHandler(result);
+        result.setBody(request.body);
+        if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
+            result.setContentType("APPLICATION_JSON");
+        }
         return result;
     }
 }

@@ -1,10 +1,61 @@
-import Request from "./http/Request";
 import variable from "./variable";
 
-export default {
-    send(data: Request): Promise<any> {
+type type = "GET" | "POST" | "PUT" | "DELETE";
+type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "ROW";
+
+export default class Http {
+
+    readonly url: string = "";
+
+    readonly type: type = "GET";
+
+    readonly param: { [key in string]: string } = {};
+
+    readonly header: { [key in string]: string } & { "Content-type"?: type } = {};
+
+    contentType: contentType | null = null;
+
+    body: any = null;
+
+    constructor(url: string, type: type) {
+        this.url = url;
+        this.type = type;
+    }
+
+    addHeader(key: string, value: string) {
+        this.header[key] = value;
+    }
+
+    addParam(key: string, value: string) {
+        this.param[key] = value;
+    }
+
+    setContentType(contentType: contentType | null) {
+        this.contentType = contentType;
+        let key = "Content-type";
+        switch (contentType) {
+            case "APPLICATION_JSON":
+                this.header[key] = "application/json";
+                break;
+            case "APPLICATION_XML":
+                this.header[key] = "application/xml";
+                break;
+            case "ROW":
+                this.header[key] = "text/plain";
+                break;
+            case null:
+                delete this.header[key];
+                break;
+        }
+    }
+
+    setBody(body: any) {
+        this.body = body;
+    }
+
+    send(): Promise<string> {
         return new Promise((success, error) => {
-            this._getFetch(data).then((response) => {
+            this._getFetch().then((response) => {
                 let responseText = response.text();
                 if (response.ok) {
                     success(responseText);
@@ -15,22 +66,22 @@ export default {
                 error(m);
             });
         });
-    },
+    }
 
-    download(data: Request): Promise<any> {
+    download(): Promise<undefined> {
         return new Promise((success: Function, error) => {
             try {
-                window.open(this._getUrl(data));
+                window.open(this._getUrl());
                 success();
             } catch (e) {
                 error(e);
             }
         });
-    },
+    }
 
-    asyncDownload(data: Request): Promise<any> {
+    asyncDownload(): Promise<undefined> {
         return new Promise((success: any, error) => {
-            this._getFetch(data).then((response) => {
+            this._getFetch().then((response) => {
                 let contentType = response.headers.get("Content-Type");
                 if (contentType && contentType.indexOf("download") !== -1) {
                     response.blob().then((blob) => {
@@ -60,47 +111,20 @@ export default {
                 }
             });
         });
-    },
+    }
 
-    _getUrl(data: Request): string {
-        let url = data.url;
-        let param: { [key: string]: string } = data.param ? data.param : {};
-        if (!variable.isEmpty(param)) {
-            let u = "?";
-            for (let key in param) {
-                let value = param[key];
-                if (!variable.isEmpty(value)) {
-                    u = u + key + "=" + value + "&";
-                }
-            }
-            if (u !== "?") {
-                u = u.substring(0, u.length - 1);
-            } else {
-                u = "";
-            }
-            url = url + u;
-        }
-        return url;
-    },
-
-    _getFetch(data: Request): Promise<Response> {
-        let url: string = this._getUrl(data);
-        let type = data.type;
-        let header: { [key: string]: string } = data.header ? data.header : {};
-        let sendData: any = data.body;
-        let config = data.config;
-
-        // 判断是否有文件
+    private _getFetch(): Promise<Response> {
         let isExistFile: boolean = false;
-        if (variable.isObject(sendData)) {
-            for (let key in sendData) {
-                let valueType = variable.getType(sendData[key]);
+        if (variable.isObject(this.body)) {
+            for (let key in this.body) {
+                let value = this.body[key];
+                let valueType = variable.getType(value);
                 if (valueType === File || valueType === FileList) {
                     isExistFile = true;
                     break;
                 }
                 if (valueType === Array) {
-                    for (let item of sendData[key]) {
+                    for (let item of value) {
                         if (variable.getType(item) === File || variable.getType(item) === FileList) {
                             isExistFile = true;
                             break;
@@ -109,9 +133,14 @@ export default {
                 }
             }
             if (isExistFile) {
-                let formData = new FormData();
-                for (let key in sendData) {
-                    let value = sendData[key];
+                this.contentType = "FORM_DATA";
+            }
+        }
+        if (this.contentType === "FORM_DATA") {
+            let formData = new FormData();
+            if (variable.isObject(this.body)) {
+                for (let key in this.body) {
+                    let value = this.body[key];
                     if (variable.getType(value) === FileList) {
                         for (let item of value) {
                             formData.append(key, item);
@@ -124,48 +153,41 @@ export default {
                         formData.append(key, value);
                     }
                 }
-                sendData = formData;
             }
+            this.body = formData;
         }
-
-        // 转换请求数据
-        if (variable.isObject(sendData)) {
-            if (variable.getType(sendData) !== FormData) {
-                let dataType = "BODY";
-                if (config) {
-                    if (config.dataType) {
-                        dataType = config.dataType;
-                    }
-                }
-                switch (dataType) {
-                    case "BODY":
-                        sendData = JSON.stringify(sendData);
-                        break;
-                    case "FORM_DATA":
-                        let formData = new FormData();
-                        for (let key in sendData) {
-                            formData.append(key, sendData[key]);
-                        }
-                        sendData = formData;
-                        break;
-                }
-            }
-        }
-
-        // 添加application/json
-        if (type !== "GET" && !isExistFile) {
-            header["content-type"] = "application/json";
-        }
-
-        return fetch(url, {
+        return fetch(this._getUrl(), {
             cache: "no-cache",
             credentials: "same-origin",
             mode: "cors",
             redirect: "follow",
             referrer: "no-referrer",
-            method: type,
-            headers: header,
-            body: type !== "GET" ? sendData : undefined
+            method: this.type,
+            headers: this.header,
+            body: this.type !== "GET" ? this.body : undefined
         });
     }
+
+    private _getUrl(): string {
+        let result = this.url;
+        if (!variable.isEmpty(this.param)) {
+            let param = "?";
+            for (let key in this.param) {
+                let value = this.param[key];
+                if (value) {
+                    param = param + key + "=" + value + "&";
+                }
+            }
+            if (param !== "?") {
+                param = param.substring(0, param.length - 1);
+            } else {
+                param = "";
+            }
+            result = result + param;
+        }
+        return result;
+    }
+
 };
+
+export { type };
