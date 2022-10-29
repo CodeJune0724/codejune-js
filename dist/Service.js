@@ -1,4 +1,4 @@
-import Http from "./http";
+import Http from "./Http";
 import variable from "./variable";
 export default class Service {
     url;

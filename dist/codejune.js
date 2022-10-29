@@ -1,7 +1,7 @@
 import "./css/index.css";
 import InfoException from "./exception/InfoException";
 import variable from "./variable";
-import Http from "./http";
+import Http from "./Http";
 import base64 from "./base64";
 import file from "./file";
 import Service from "./Service";
