@@ -1,19 +1,47 @@
-export default class Ws {
+export default class Websocket {
     url = "";
     websocket = null;
-    onOpen = () => { };
-    onMessage = () => { };
-    onClose = () => { };
-    onError = () => { };
     constructor(url) {
         this.url = url;
     }
     open() {
         this.websocket = new WebSocket(this.url);
-        this.websocket.onopen = this.onOpen;
-        this.websocket.onmessage = this.onMessage;
-        this.websocket.onclose = this.onClose;
-        this.websocket.onerror = this.onError;
+    }
+    onOpen() {
+        return new Promise((success) => {
+            if (this.websocket) {
+                this.websocket.onopen = () => {
+                    success(undefined);
+                };
+            }
+        });
+    }
+    onMessage() {
+        return new Promise((success) => {
+            if (this.websocket) {
+                this.websocket.onmessage = (message) => {
+                    success(message);
+                };
+            }
+        });
+    }
+    onClose() {
+        return new Promise((success) => {
+            if (this.websocket) {
+                this.websocket.onclose = () => {
+                    success(undefined);
+                };
+            }
+        });
+    }
+    onError() {
+        return new Promise((success) => {
+            if (this.websocket) {
+                this.websocket.onerror = () => {
+                    success(undefined);
+                };
+            }
+        });
     }
     send(data) {
         if (this.websocket) {

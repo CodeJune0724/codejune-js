@@ -1,12 +1,12 @@
-export default class Ws {
+export default class Websocket {
     private readonly url;
     private websocket;
-    onOpen: (this: WebSocket, ev: Event) => any;
-    onMessage: (this: WebSocket, ev: MessageEvent<any>) => any;
-    onClose: (this: WebSocket, ev: CloseEvent) => any;
-    onError: (this: WebSocket, ev: Event) => any;
     constructor(url: string);
     open(): void;
-    send(data: string | ArrayBufferLike | Blob | ArrayBufferView | ArrayBuffer): void;
+    onOpen(): Promise<undefined>;
+    onMessage(): Promise<MessageEvent<any>>;
+    onClose(): Promise<undefined>;
+    onError(): Promise<undefined>;
+    send(data: any): void;
     close(): void;
 }
