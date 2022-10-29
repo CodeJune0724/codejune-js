@@ -24,7 +24,7 @@ export default class Ws {
         this.websocket.onerror = this.onError;
     }
 
-    send(data: string | ArrayBufferLike | Blob | ArrayBufferView | ArrayBuffer) {
+    send(data: any) {
         if (this.websocket) {
             this.websocket.send(data);
         }
