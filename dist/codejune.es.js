@@ -324,7 +324,7 @@ class O {
     return i.setBody(e.body), i.contentType === null && e.type !== "GET" && f.isObject(e.body) && i.setContentType("APPLICATION_JSON"), i;
   }
 }
-const C = {
+const b = {
   create(t) {
     let e = {
       loading: !1,
@@ -339,7 +339,7 @@ const C = {
     };
     return t.close && (e.close = t.close), e;
   }
-}, b = {
+}, C = {
   getScreenHeight() {
     return window.screen.height;
   }
@@ -362,7 +362,7 @@ class k {
     this.websocket = new WebSocket(this.url), this.websocket.onopen = this.onOpen, this.websocket.onmessage = this.onMessage, this.websocket.onclose = this.onClose, this.websocket.onerror = this.onError;
   }
   send(e) {
-    this.websocket?.send(e);
+    this.websocket && this.websocket.send(e);
   }
   close() {
     this.websocket && this.websocket.close();
@@ -375,7 +375,7 @@ export {
   k as Websocket,
   m as base64,
   w as file,
-  C as popup,
+  b as popup,
   f as variable,
-  b as window
+  C as window
 };

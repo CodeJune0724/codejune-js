@@ -16,7 +16,9 @@ export default class Ws {
         this.websocket.onerror = this.onError;
     }
     send(data) {
-        this.websocket?.send(data);
+        if (this.websocket) {
+            this.websocket.send(data);
+        }
     }
     close() {
         if (this.websocket) {
