@@ -7,4 +7,5 @@ import file from "./file";
 import Service from "./Service";
 import popup from "./popup";
 import window from "./window";
-export { InfoException, variable, Http, base64, file, Service, popup, window };
+import Websocket from "./Websocket";
+export { InfoException, variable, Http, base64, file, Service, popup, window, Websocket };
