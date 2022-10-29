@@ -137,6 +137,7 @@ export default class Http {
             }
         }
         if (this.contentType === "FORM_DATA") {
+            delete this.header["Content-type"];
             let formData = new FormData();
             if (variable.isObject(this.body)) {
                 for (let key in this.body) {

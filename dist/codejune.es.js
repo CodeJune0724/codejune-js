@@ -89,7 +89,7 @@ const f = {
       e.indexOf(i) === -1 && delete t[i];
   }
 };
-class d {
+class u {
   url = "";
   type = "GET";
   param = {};
@@ -153,8 +153,8 @@ class d {
           try {
             let n = document.createElement("a"), o = window.URL.createObjectURL(l), h = r.headers.get("Content-Disposition");
             h = h || "";
-            let u = /filename=(.*?)$/g.exec(h);
-            u !== null && (h = u[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
+            let d = /filename=(.*?)$/g.exec(h);
+            d !== null && (h = d[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
           } catch (n) {
             i(n);
           }
@@ -184,6 +184,7 @@ class d {
       e && (this.contentType = "FORM_DATA");
     }
     if (this.contentType === "FORM_DATA") {
+      delete this.header["Content-type"];
       let i = new FormData();
       if (f.isObject(this.body))
         for (let r in this.body) {
@@ -314,7 +315,7 @@ class O {
   }
   _getHttp(e) {
     e.url = e.url.indexOf("http") !== -1 ? e.url : this.url + "/" + e.url, this.$requestHandler(e);
-    let i = new d(e.url, e.type);
+    let i = new u(e.url, e.type);
     if (e.header)
       for (let r in e.header)
         i.addHeader(r, e.header[r]);
@@ -377,7 +378,7 @@ class k {
   }
 }
 export {
-  d as Http,
+  u as Http,
   g as InfoException,
   O as Service,
   k as Websocket,
