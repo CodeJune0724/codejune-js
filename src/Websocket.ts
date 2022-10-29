@@ -4,13 +4,13 @@ export default class Ws {
 
     private websocket: WebSocket | null = null;
 
-    onOpen = () => {};
+    onOpen: (this:WebSocket, ev: Event) => any = () => {};
 
-    onMessage = () => {};
+    onMessage: (this:WebSocket, ev: MessageEvent<any>) => any = () => {};
 
-    onClose = () => {};
+    onClose: (this:WebSocket, ev: CloseEvent) => any = () => {};
 
-    onError = () => {};
+    onError: (this:WebSocket, ev: Event) => any = () => {};
 
     constructor(url: string) {
         this.url = url;
@@ -24,8 +24,10 @@ export default class Ws {
         this.websocket.onerror = this.onError;
     }
 
-    send(data: string | ArrayBufferLike | Blob | ArrayBufferView) {
-        this.websocket?.send(data);
+    send(data: string | ArrayBufferLike | Blob | ArrayBufferView | ArrayBuffer) {
+        if (this.websocket) {
+            this.websocket.send(data);
+        }
     }
 
     close() {
