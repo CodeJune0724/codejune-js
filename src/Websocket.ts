@@ -1,16 +1,8 @@
-export default class Ws {
+export default class Websocket {
 
     private readonly url: string = "";
 
     private websocket: WebSocket | null = null;
-
-    onOpen: (this:WebSocket, ev: Event) => any = () => {};
-
-    onMessage: (this:WebSocket, ev: MessageEvent<any>) => any = () => {};
-
-    onClose: (this:WebSocket, ev: CloseEvent) => any = () => {};
-
-    onError: (this:WebSocket, ev: Event) => any = () => {};
 
     constructor(url: string) {
         this.url = url;
@@ -18,10 +10,46 @@ export default class Ws {
 
     open() {
         this.websocket = new WebSocket(this.url);
-        this.websocket.onopen = this.onOpen;
-        this.websocket.onmessage = this.onMessage;
-        this.websocket.onclose = this.onClose;
-        this.websocket.onerror = this.onError;
+    }
+
+    onOpen(): Promise<undefined> {
+        return new Promise<undefined>((success) => {
+            if (this.websocket) {
+                this.websocket.onopen = () => {
+                    success(undefined);
+                };
+            }
+        });
+    }
+
+    onMessage(): Promise<MessageEvent<any>> {
+        return new Promise<MessageEvent<any>>((success) => {
+            if (this.websocket) {
+                this.websocket.onmessage = (message) => {
+                    success(message);
+                };
+            }
+        });
+    }
+
+    onClose(): Promise<undefined> {
+        return new Promise<undefined>((success) => {
+            if (this.websocket) {
+                this.websocket.onclose = () => {
+                    success(undefined);
+                };
+            }
+        });
+    }
+
+    onError(): Promise<undefined> {
+        return new Promise<undefined>((success) => {
+            if (this.websocket) {
+                this.websocket.onerror = () => {
+                    success(undefined);
+                };
+            }
+        });
     }
 
     send(data: any) {
