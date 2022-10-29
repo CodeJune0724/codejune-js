@@ -77,3 +77,7 @@ export default class Service {
     }
 
 };
+
+export {
+    request
+};
