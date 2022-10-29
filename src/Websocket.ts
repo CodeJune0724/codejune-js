@@ -4,52 +4,32 @@ export default class Websocket {
 
     private websocket: WebSocket | null = null;
 
+    onOpen: (ev: Event) => any = () => {};
+
+    onMessage: (ev: MessageEvent<any>) => any = () => {};
+
+    onClose: (ev: CloseEvent) => any = () => {};
+
+    onError: (ev: Event) => any = () => {};
+
     constructor(url: string) {
         this.url = url;
     }
 
     open() {
         this.websocket = new WebSocket(this.url);
-    }
-
-    onOpen(): Promise<undefined> {
-        return new Promise<undefined>((success) => {
-            if (this.websocket) {
-                this.websocket.onopen = () => {
-                    success(undefined);
-                };
-            }
-        });
-    }
-
-    onMessage(): Promise<MessageEvent<any>> {
-        return new Promise<MessageEvent<any>>((success) => {
-            if (this.websocket) {
-                this.websocket.onmessage = (message) => {
-                    success(message);
-                };
-            }
-        });
-    }
-
-    onClose(): Promise<undefined> {
-        return new Promise<undefined>((success) => {
-            if (this.websocket) {
-                this.websocket.onclose = () => {
-                    success(undefined);
-                };
-            }
-        });
-    }
-
-    onError(): Promise<undefined> {
-        return new Promise<undefined>((success) => {
-            if (this.websocket) {
-                this.websocket.onerror = () => {
-                    success(undefined);
-                };
-            }
-        });
+        this.websocket.onopen = (ev) => {
+            this.onOpen(ev);
+        };
+        this.websocket.onmessage = (ev) => {
+            this.onMessage(ev);
+        };
+        this.websocket.onclose = (ev) => {
+            this.onClose(ev);
+        };
+        this.websocket.onerror = (ev) => {
+            this.onError(ev);
+        };
     }
 
     send(data: any) {
@@ -61,6 +41,7 @@ export default class Websocket {
     close() {
         if (this.websocket) {
             this.websocket.close();
+            this.websocket = null;
         }
     }
 

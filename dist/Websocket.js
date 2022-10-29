@@ -1,47 +1,27 @@
 export default class Websocket {
     url = "";
     websocket = null;
+    onOpen = () => { };
+    onMessage = () => { };
+    onClose = () => { };
+    onError = () => { };
     constructor(url) {
         this.url = url;
     }
     open() {
         this.websocket = new WebSocket(this.url);
-    }
-    onOpen() {
-        return new Promise((success) => {
-            if (this.websocket) {
-                this.websocket.onopen = () => {
-                    success(undefined);
-                };
-            }
-        });
-    }
-    onMessage() {
-        return new Promise((success) => {
-            if (this.websocket) {
-                this.websocket.onmessage = (message) => {
-                    success(message);
-                };
-            }
-        });
-    }
-    onClose() {
-        return new Promise((success) => {
-            if (this.websocket) {
-                this.websocket.onclose = () => {
-                    success(undefined);
-                };
-            }
-        });
-    }
-    onError() {
-        return new Promise((success) => {
-            if (this.websocket) {
-                this.websocket.onerror = () => {
-                    success(undefined);
-                };
-            }
-        });
+        this.websocket.onopen = (ev) => {
+            this.onOpen(ev);
+        };
+        this.websocket.onmessage = (ev) => {
+            this.onMessage(ev);
+        };
+        this.websocket.onclose = (ev) => {
+            this.onClose(ev);
+        };
+        this.websocket.onerror = (ev) => {
+            this.onError(ev);
+        };
     }
     send(data) {
         if (this.websocket) {
@@ -51,6 +31,7 @@ export default class Websocket {
     close() {
         if (this.websocket) {
             this.websocket.close();
+            this.websocket = null;
         }
     }
 }
