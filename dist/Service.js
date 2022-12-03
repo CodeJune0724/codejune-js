@@ -41,7 +41,7 @@ export default class Service {
     }
     $requestHandler(request) { }
     _getHttp(request) {
-        request.url = request.url.indexOf("http") !== -1 ? request.url : this.url + "/" + request.url;
+        request.url = request.url.startsWith("http") ? request.url : this.url ? this.url + (request.url.startsWith("/") ? request.url : "/" + request.url) : request.url;
         this.$requestHandler(request);
         let result = new Http(request.url, request.type);
         if (request.header) {
