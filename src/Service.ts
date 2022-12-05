@@ -55,6 +55,8 @@ export default class Service {
 
     $requestHandler(request: request): void {}
 
+    $responseHandler<RESPONSE = any>(response: RESPONSE): void {}
+
     private _getHttp(request: request): Http {
         request.url = request.url.startsWith("http") ? request.url : this.url ? this.url + (request.url.startsWith("/") ? request.url : "/" + request.url) : request.url;
         this.$requestHandler(request);
