@@ -89,7 +89,7 @@ const f = {
       e.indexOf(i) === -1 && delete t[i];
   }
 };
-class u {
+class d {
   url = "";
   type = "GET";
   param = {};
@@ -153,8 +153,8 @@ class u {
           try {
             let n = document.createElement("a"), o = window.URL.createObjectURL(l), h = r.headers.get("Content-Disposition");
             h = h || "";
-            let d = /filename=(.*?)$/g.exec(h);
-            d !== null && (h = d[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
+            let u = /filename=(.*?)$/g.exec(h);
+            u !== null && (h = u[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
           } catch (n) {
             i(n);
           }
@@ -287,7 +287,7 @@ class O {
         } catch {
           l = s;
         }
-        this.$responseHandler(l), i(l);
+        i(l);
       }).catch((s) => {
         r(s);
       });
@@ -311,13 +311,9 @@ class O {
       });
     });
   }
-  $requestHandler(e) {
-  }
-  $responseHandler(e) {
-  }
   _getHttp(e) {
-    e.url = e.url.startsWith("http") ? e.url : this.url ? this.url + (e.url.startsWith("/") ? e.url : "/" + e.url) : e.url, this.$requestHandler(e);
-    let i = new u(e.url, e.type);
+    e.url = e.url.startsWith("http") ? e.url : this.url ? this.url + (e.url.startsWith("/") ? e.url : "/" + e.url) : e.url;
+    let i = new d(e.url, e.type);
     if (e.header)
       for (let r in e.header)
         i.addHeader(r, e.header[r]);
@@ -380,7 +376,7 @@ class k {
   }
 }
 export {
-  u as Http,
+  d as Http,
   g as InfoException,
   O as Service,
   k as Websocket,

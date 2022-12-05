@@ -15,7 +15,6 @@ export default class Service {
                 catch (exception) {
                     responseDataJson = responseData;
                 }
-                this.$responseHandler(responseDataJson);
                 s(responseDataJson);
             }).catch((responseData) => {
                 e(responseData);
@@ -40,11 +39,8 @@ export default class Service {
             });
         });
     }
-    $requestHandler(request) { }
-    $responseHandler(response) { }
     _getHttp(request) {
         request.url = request.url.startsWith("http") ? request.url : this.url ? this.url + (request.url.startsWith("/") ? request.url : "/" + request.url) : request.url;
-        this.$requestHandler(request);
         let result = new Http(request.url, request.type);
         if (request.header) {
             for (let key in request.header) {
