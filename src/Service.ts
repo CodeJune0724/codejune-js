@@ -26,6 +26,7 @@ export default class Service {
                 } catch (exception) {
                     responseDataJson = responseData;
                 }
+                this.$responseHandler(responseDataJson);
                 s(responseDataJson);
             }).catch((responseData) => {
                 e(responseData);

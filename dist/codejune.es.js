@@ -89,7 +89,7 @@ const f = {
       e.indexOf(i) === -1 && delete t[i];
   }
 };
-class d {
+class u {
   url = "";
   type = "GET";
   param = {};
@@ -153,8 +153,8 @@ class d {
           try {
             let n = document.createElement("a"), o = window.URL.createObjectURL(l), h = r.headers.get("Content-Disposition");
             h = h || "";
-            let u = /filename=(.*?)$/g.exec(h);
-            u !== null && (h = u[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
+            let d = /filename=(.*?)$/g.exec(h);
+            d !== null && (h = d[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
           } catch (n) {
             i(n);
           }
@@ -287,7 +287,7 @@ class O {
         } catch {
           l = s;
         }
-        i(l);
+        this.$responseHandler(l), i(l);
       }).catch((s) => {
         r(s);
       });
@@ -317,7 +317,7 @@ class O {
   }
   _getHttp(e) {
     e.url = e.url.startsWith("http") ? e.url : this.url ? this.url + (e.url.startsWith("/") ? e.url : "/" + e.url) : e.url, this.$requestHandler(e);
-    let i = new d(e.url, e.type);
+    let i = new u(e.url, e.type);
     if (e.header)
       for (let r in e.header)
         i.addHeader(r, e.header[r]);
@@ -380,7 +380,7 @@ class k {
   }
 }
 export {
-  d as Http,
+  u as Http,
   g as InfoException,
   O as Service,
   k as Websocket,
