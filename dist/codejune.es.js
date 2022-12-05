@@ -313,6 +313,8 @@ class O {
   }
   $requestHandler(e) {
   }
+  $responseHandler(e) {
+  }
   _getHttp(e) {
     e.url = e.url.startsWith("http") ? e.url : this.url ? this.url + (e.url.startsWith("/") ? e.url : "/" + e.url) : e.url, this.$requestHandler(e);
     let i = new d(e.url, e.type);

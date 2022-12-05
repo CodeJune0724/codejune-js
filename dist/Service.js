@@ -40,6 +40,7 @@ export default class Service {
         });
     }
     $requestHandler(request) { }
+    $responseHandler(response) { }
     _getHttp(request) {
         request.url = request.url.startsWith("http") ? request.url : this.url ? this.url + (request.url.startsWith("/") ? request.url : "/" + request.url) : request.url;
         this.$requestHandler(request);
