@@ -11,6 +11,8 @@ git checkout ${mainBranch}
 git merge --squash ${branch}
 
 # 前置步骤
+rm -rf dist
+npm run build
 
 read -p "手动修改版本进行提交:" isOk
 if [ "${isOk}" == "1" ]; then
