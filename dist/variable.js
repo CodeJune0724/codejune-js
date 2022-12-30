@@ -148,6 +148,9 @@ export default {
                     else if (this.getType(value1) === this.getType(value2)) {
                         isAssignment = true;
                     }
+                    else if (this.isObject(value1) && this.isObject(value2)) {
+                        isAssignment = true;
+                    }
                     if (isAssignment) {
                         if (this.isObject(value2)) {
                             value2 = this.clone(value2);

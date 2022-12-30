@@ -42,27 +42,27 @@ const f = {
       return this.isNull(t) ? null : t;
   },
   assignment(t, e, i) {
-    let r = this.getType(t), l = this.isEmpty(i) ? !0 : i === !0;
+    let r = this.getType(t), s = this.isEmpty(i) ? !0 : i === !0;
     if (!(!this.isObject(t) || !this.isObject(e)))
       if (r === Array) {
-        let s = !0;
-        if (l && this.getType(e) !== Array && (s = !1), r !== this.getType(e) && (s = !1), s) {
+        let l = !0;
+        if (s && this.getType(e) !== Array && (l = !1), r !== this.getType(e) && (l = !1), l) {
           t.splice(0, t.length);
           for (let n of e)
             t.push(n);
         }
-      } else if (l)
-        for (let s in t) {
-          let n = t[s], o = e[s];
+      } else if (s)
+        for (let l in t) {
+          let n = t[l], o = e[l];
           if (n === void 0 || o === void 0)
             continue;
           let h = !1;
-          (n === null || o === null && !this.isObject(n) || this.getType(n) === this.getType(o)) && (h = !0), h && (this.isObject(o) && (o = this.clone(o)), this.isObject(n) && this.isObject(o) ? this.assignment(n, o, !0) : t[s] = o);
+          (n === null || o === null && !this.isObject(n) || this.getType(n) === this.getType(o) || this.isObject(n) && this.isObject(o)) && (h = !0), h && (this.isObject(o) && (o = this.clone(o)), this.isObject(n) && this.isObject(o) ? this.assignment(n, o, !0) : t[l] = o);
         }
       else
-        for (let s in e) {
-          let n = e[s];
-          n !== void 0 && (this.isObject(n) && (n = this.clone(n)), t[s] = n);
+        for (let l in e) {
+          let n = e[l];
+          n !== void 0 && (this.isObject(n) && (n = this.clone(n)), t[l] = n);
         }
   },
   toStr(t) {
@@ -129,8 +129,8 @@ class d {
   send() {
     return new Promise((e, i) => {
       this._getFetch().then((r) => {
-        let l = r.text();
-        r.ok ? e(l) : i(l);
+        let s = r.text();
+        r.ok ? e(s) : i(s);
       }).catch((r) => {
         i(r);
       });
@@ -148,18 +148,18 @@ class d {
   asyncDownload() {
     return new Promise((e, i) => {
       this._getFetch().then((r) => {
-        let l = r.headers.get("Content-Type");
-        l && l.indexOf("download") !== -1 ? r.blob().then((s) => {
+        let s = r.headers.get("Content-Type");
+        s && s.indexOf("download") !== -1 ? r.blob().then((l) => {
           try {
-            let n = document.createElement("a"), o = window.URL.createObjectURL(s), h = r.headers.get("Content-Disposition");
+            let n = document.createElement("a"), o = window.URL.createObjectURL(l), h = r.headers.get("Content-Disposition");
             h = h || "";
             let u = /filename=(.*?)$/g.exec(h);
             u !== null && (h = u[1]), n.href = o, n.download = decodeURI(h), n.click(), window.URL.revokeObjectURL(o), e();
           } catch (n) {
             i(n);
           }
-        }) : r.text().then((s) => {
-          i(s);
+        }) : r.text().then((l) => {
+          i(l);
         });
       });
     });
@@ -168,14 +168,14 @@ class d {
     let e = !1;
     if (f.isObject(this.body)) {
       for (let i in this.body) {
-        let r = this.body[i], l = f.getType(r);
-        if (l === File || l === FileList) {
+        let r = this.body[i], s = f.getType(r);
+        if (s === File || s === FileList) {
           e = !0;
           break;
         }
-        if (l === Array) {
-          for (let s of r)
-            if (f.getType(s) === File || f.getType(s) === FileList) {
+        if (s === Array) {
+          for (let l of r)
+            if (f.getType(l) === File || f.getType(l) === FileList) {
               e = !0;
               break;
             }
@@ -188,15 +188,15 @@ class d {
       let i = new FormData();
       if (f.isObject(this.body))
         for (let r in this.body) {
-          let l = this.body[r];
-          if (f.getType(l) === FileList)
-            for (let s of l)
-              i.append(r, s);
-          else if (f.getType(l) === Array)
-            for (let s of l)
-              i.append(r, s);
+          let s = this.body[r];
+          if (f.getType(s) === FileList)
+            for (let l of s)
+              i.append(r, l);
+          else if (f.getType(s) === Array)
+            for (let l of s)
+              i.append(r, l);
           else
-            i.append(r, l);
+            i.append(r, s);
         }
       this.body = i;
     } else
@@ -217,8 +217,8 @@ class d {
     if (!f.isEmpty(this.param)) {
       let i = "?";
       for (let r in this.param) {
-        let l = this.param[r];
-        l && (i = i + r + "=" + l + "&");
+        let s = this.param[r];
+        s && (i = i + r + "=" + s + "&");
       }
       i !== "?" ? i = i.substring(0, i.length - 1) : i = "", e = e + i;
     }
@@ -235,22 +235,22 @@ let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", y =
   }
   return e;
 }, p = function(t) {
-  let e = "", i = 0, r, l, s = 0;
+  let e = "", i = 0, r, s, l = 0;
   for (; i < t.length; )
-    r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (l = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | l & 63), i += 2) : (l = t.charCodeAt(i + 1), s = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (l & 63) << 6 | s & 63), i += 3);
+    r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (s = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | s & 63), i += 2) : (s = t.charCodeAt(i + 1), l = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (s & 63) << 6 | l & 63), i += 3);
   return e;
 };
 const m = {
   encode(t) {
-    let e = "", i, r, l, s, n, o, h, c = 0;
+    let e = "", i, r, s, l, n, o, h, c = 0;
     for (t = y(t); c < t.length; )
-      i = t.charCodeAt(c++), r = t.charCodeAt(c++), l = t.charCodeAt(c++), s = i >> 2, n = (i & 3) << 4 | r >> 4, o = (r & 15) << 2 | l >> 6, h = l & 63, isNaN(r) ? o = h = 64 : isNaN(l) && (h = 64), e = e + a.charAt(s) + a.charAt(n) + a.charAt(o) + a.charAt(h);
+      i = t.charCodeAt(c++), r = t.charCodeAt(c++), s = t.charCodeAt(c++), l = i >> 2, n = (i & 3) << 4 | r >> 4, o = (r & 15) << 2 | s >> 6, h = s & 63, isNaN(r) ? o = h = 64 : isNaN(s) && (h = 64), e = e + a.charAt(l) + a.charAt(n) + a.charAt(o) + a.charAt(h);
     return e;
   },
   decode(t) {
-    let e = "", i, r, l, s, n, o, h, c = 0;
+    let e = "", i, r, s, l, n, o, h, c = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); c < t.length; )
-      s = a.indexOf(t.charAt(c++)), n = a.indexOf(t.charAt(c++)), o = a.indexOf(t.charAt(c++)), h = a.indexOf(t.charAt(c++)), i = s << 2 | n >> 4, r = (n & 15) << 4 | o >> 2, l = (o & 3) << 6 | h, e = e + String.fromCharCode(i), o !== 64 && (e = e + String.fromCharCode(r)), h !== 64 && (e = e + String.fromCharCode(l));
+      l = a.indexOf(t.charAt(c++)), n = a.indexOf(t.charAt(c++)), o = a.indexOf(t.charAt(c++)), h = a.indexOf(t.charAt(c++)), i = l << 2 | n >> 4, r = (n & 15) << 4 | o >> 2, s = (o & 3) << 6 | h, e = e + String.fromCharCode(i), o !== 64 && (e = e + String.fromCharCode(r)), h !== 64 && (e = e + String.fromCharCode(s));
     return e = p(e), e;
   }
 }, w = {
@@ -280,16 +280,16 @@ class O {
   }
   $send(e) {
     return new Promise((i, r) => {
-      this._getHttp(e).send().then((l) => {
-        let s;
+      this._getHttp(e).send().then((s) => {
+        let l;
         try {
-          s = JSON.parse(l);
+          l = JSON.parse(s);
         } catch {
-          s = l;
+          l = s;
         }
-        i(s);
-      }).catch((l) => {
-        r(l);
+        i(l);
+      }).catch((s) => {
+        r(s);
       });
     });
   }
@@ -297,8 +297,8 @@ class O {
     return new Promise((i, r) => {
       this._getHttp(e).download().then(() => {
         i();
-      }).catch((l) => {
-        r(l);
+      }).catch((s) => {
+        r(s);
       });
     });
   }
@@ -306,8 +306,8 @@ class O {
     return new Promise((i, r) => {
       this._getHttp(e).asyncDownload().then(() => {
         i();
-      }).catch((l) => {
-        r(l);
+      }).catch((s) => {
+        r(s);
       });
     });
   }
