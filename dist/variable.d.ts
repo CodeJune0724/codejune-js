@@ -46,7 +46,7 @@ declare const _default: {
      * @param object2 取值的对象
      * @param isStrict 是否是严谨模式
      * */
-    assignment(object1: any, object2: any, isStrict?: boolean | undefined): void;
+    assignment(object1: any, object2: any, isStrict?: boolean): void;
     /**
      * toString
      *

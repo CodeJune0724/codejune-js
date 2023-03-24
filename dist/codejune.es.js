@@ -4,18 +4,46 @@ class g extends Error {
   }
 }
 const f = {
+  /**
+   * 是否为空
+   *
+   * @param data data
+   *
+   * @return boolean
+   * */
   isNull(t) {
     return t == null;
   },
+  /**
+   * 对象是否为空
+   *
+   * @param data 数据
+   *
+   * @return Boolean
+   * */
   isEmpty(t) {
     if (this.isNull(t))
       return !0;
     let e = this.getType(t);
     return e === String && t === "" || e === Array && t.length === 0 ? !0 : e === Object && Object.keys(t).length === 0;
   },
+  /**
+   * 获取对象类型
+   *
+   * @param data 数据
+   *
+   * @return Function
+   * */
   getType(t) {
     return this.isNull(t) ? null : t.constructor;
   },
+  /**
+   * 是否是对象
+   *
+   * @param data 数据
+   *
+   * @return Boolean
+   * */
   isObject(t) {
     if (this.isNull(t))
       return !1;
@@ -25,6 +53,13 @@ const f = {
     }
     return !1;
   },
+  /**
+   * 克隆对象
+   *
+   * @param data 数据
+   *
+   * @return Object || 数据
+   * */
   clone(t) {
     if (this.isObject(t))
       if (this.getType(t) === Array) {
@@ -41,6 +76,13 @@ const f = {
     else
       return this.isNull(t) ? null : t;
   },
+  /**
+   * 给对象赋值
+   *
+   * @param object1 赋值的对象
+   * @param object2 取值的对象
+   * @param isStrict 是否是严谨模式
+   * */
   assignment(t, e, i) {
     let r = this.getType(t), s = this.isEmpty(i) ? !0 : i === !0;
     if (!(!this.isObject(t) || !this.isObject(e)))
@@ -65,18 +107,31 @@ const f = {
           n !== void 0 && (this.isObject(n) && (n = this.clone(n)), t[l] = n);
         }
   },
+  /**
+   * toString
+   *
+   * @param data data
+   * */
   toStr(t) {
     return this.isNull(t) ? null : this.isObject(t) ? JSON.stringify(t) : t.toString();
   },
+  /**
+   * 清空数据
+   *
+   * @param data 数据
+   * */
   clean(t) {
     if (t instanceof Array)
       t.splice(0);
     else if (this.isObject(t))
       for (let e in t) {
         let i = t[e];
-        this.isObject(i) ? this.clean(i) : t[e] = null;
+        this.getType(i) !== File && (this.isObject(i) ? this.clean(i) : t[e] = null);
       }
   },
+  /**
+   * 追加节点
+   * */
   addKey(t, e) {
     if (!(!this.isObject(t) || !this.isObject(e)))
       for (let i in e) {
@@ -84,6 +139,9 @@ const f = {
         this.isNull(t[i]) && (this.isObject(r) ? this.getType(r) === Array ? t[i] = [] : t[i] = {} : t[i] = null), this.addKey(t[i], r);
       }
   },
+  /**
+   * 过滤节点
+   * */
   filterKey(t, e) {
     for (let i in t)
       e.indexOf(i) === -1 && delete t[i];
