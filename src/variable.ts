@@ -202,6 +202,9 @@ export default {
         } else if (this.isObject(data)) {
             for (let key in data) {
                 let value = data[key];
+                if (this.getType(value) === File) {
+                    continue;
+                }
                 if (this.isObject(value)) {
                     this.clean(value);
                 } else {

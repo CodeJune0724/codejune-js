@@ -1,5 +1,5 @@
 import { type } from "./Http";
-declare type request = {
+type request = {
     url: string;
     type: type;
     header?: {

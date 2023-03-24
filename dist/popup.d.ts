@@ -1,4 +1,4 @@
-declare type popup<T extends object> = {
+type popup<T extends object> = {
     loading: boolean;
     display: boolean;
     open: (data?: any) => void;

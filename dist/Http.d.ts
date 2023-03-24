@@ -1,5 +1,5 @@
-declare type type = "GET" | "POST" | "PUT" | "DELETE";
-declare type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "ROW";
+type type = "GET" | "POST" | "PUT" | "DELETE";
+type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "ROW";
 export default class Http {
     readonly url: string;
     readonly type: type;
