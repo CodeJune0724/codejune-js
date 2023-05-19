@@ -1,4 +1,4 @@
-type popup<T extends object> = {
+type popupType<T extends object> = {
     loading: boolean,
     display: boolean,
     open: (data?: any) => void,
@@ -6,7 +6,7 @@ type popup<T extends object> = {
 } & T;
 
 export default {
-    create<T extends object>(data: T & { openHandler?: (data: any) => void, close?: () => void }): popup<T> {
+    create<T extends object>(data: T & { openHandler?: (data: any) => void, close?: () => void }): popupType<T> {
         let result = {
             loading: false,
             display: false,
@@ -29,3 +29,7 @@ export default {
         return result;
     }
 };
+
+export {
+    popupType
+}
