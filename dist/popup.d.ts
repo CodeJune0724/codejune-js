@@ -1,4 +1,4 @@
-type popup<T extends object> = {
+type popupType<T extends object> = {
     loading: boolean;
     display: boolean;
     open: (data?: any) => void;
@@ -8,6 +8,7 @@ declare const _default: {
     create<T extends object>(data: T & {
         openHandler?: ((data: any) => void) | undefined;
         close?: (() => void) | undefined;
-    }): popup<T>;
+    }): popupType<T>;
 };
 export default _default;
+export { popupType };
