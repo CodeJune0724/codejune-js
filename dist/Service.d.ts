@@ -1,5 +1,5 @@
 import { type } from "./Http";
-type request = {
+interface request {
     url: string;
     type: type;
     header?: {
@@ -9,7 +9,7 @@ type request = {
         [key: string]: string;
     };
     body?: any;
-};
+}
 export default class Service {
     readonly url?: string;
     constructor(url?: string);
