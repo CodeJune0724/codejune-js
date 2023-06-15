@@ -1,12 +1,12 @@
 import Http, { type } from "./Http";
 import variable from "./variable";
 
-type request = {
-    url: string,
-    type: type,
-    header?: { [key: string]: string },
-    param?: { [key: string]: string },
-    body?: any
+interface request {
+    url: string;
+    type: type;
+    header?: { [key: string]: string };
+    param?: { [key: string]: string };
+    body?: any;
 }
 
 export default class Service {
