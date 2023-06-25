@@ -1,5 +1,5 @@
 import { type } from "./Http";
-interface request {
+interface Request {
     url: string;
     type: type;
     header?: {
@@ -13,9 +13,9 @@ interface request {
 export default class Service {
     readonly url?: string;
     constructor(url?: string);
-    $send(request: request): Promise<any>;
-    $download(request: request): Promise<undefined>;
-    $asyncDownload(request: request): Promise<undefined>;
+    $send(request: Request): Promise<any>;
+    $download(request: Request): Promise<undefined>;
+    $asyncDownload(request: Request): Promise<undefined>;
     private _getHttp;
 }
-export { request };
+export { Request };
