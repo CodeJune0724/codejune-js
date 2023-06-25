@@ -10,35 +10,19 @@ declare const _default: {
     /**
      * 对象是否为空
      *
-     * @param data 数据
+     * @param data data
      *
-     * @return Boolean
+     * @return boolean
      * */
     isEmpty(data: any): boolean;
-    /**
-     * 获取对象类型
-     *
-     * @param data 数据
-     *
-     * @return Function
-     * */
-    getType(data: any): Function | null;
-    /**
-     * 是否是对象
-     *
-     * @param data 数据
-     *
-     * @return Boolean
-     * */
-    isObject(data: any): boolean;
     /**
      * 克隆对象
      *
      * @param data 数据
      *
-     * @return Object || 数据
+     * @return 克隆后的对象
      * */
-    clone(data: any): any;
+    clone<T extends object>(data: T): T;
     /**
      * 给对象赋值
      *
@@ -46,28 +30,26 @@ declare const _default: {
      * @param object2 取值的对象
      * @param isStrict 是否是严谨模式
      * */
-    assignment(object1: any, object2: any, isStrict?: boolean): void;
+    assignment(object1: {
+        [x: string]: any;
+    }, object2: {
+        [x: string]: any;
+    }, isStrict?: boolean): void;
     /**
      * toString
      *
      * @param data data
+     *
+     * @return string
      * */
-    toStr(data: any): string | null;
+    toStr(data: any): string;
     /**
      * 清空数据
      *
      * @param data 数据
      * */
-    clean(data: any): void;
-    /**
-     * 追加节点
-     * */
-    addKey(object1: any, object2: any): void;
-    /**
-     * 过滤节点
-     * */
-    filterKey(object: {
+    clean(data: {
         [x: string]: any;
-    }, keys: string[]): void;
+    }): void;
 };
 export default _default;
