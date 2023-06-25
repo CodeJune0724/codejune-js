@@ -114,39 +114,36 @@ export default class Http {
     }
 
     private _getFetch(): Promise<Response> {
-        let isExistFile: boolean = false;
-        if (variable.isObject(this.body)) {
-            for (let key in this.body) {
-                let value = this.body[key];
-                let valueType = variable.getType(value);
-                if (valueType === File || valueType === FileList) {
-                    isExistFile = true;
-                    break;
+        if (!variable.isNull(this.body) && typeof this.body === "object") {
+            let checkFile = (data: object): boolean => {
+                if (variable.isNull(data)) {
+                    return false;
                 }
-                if (valueType === Array) {
-                    for (let item of value) {
-                        if (variable.getType(item) === File || variable.getType(item) === FileList) {
-                            isExistFile = true;
-                            break;
-                        }
+                if (data.constructor === File || data.constructor === FileList) {
+                    return true;
+                }
+                for (let key in data) {
+                    let value = this.body[key];
+                    if (checkFile(value)) {
+                        return true;
                     }
                 }
-            }
-            if (isExistFile) {
+                return false;
+            };
+            if (checkFile(this.body)) {
                 this.contentType = "FORM_DATA";
             }
         }
         if (this.contentType === "FORM_DATA") {
             delete this.header["Content-type"];
             let formData = new FormData();
-            if (variable.isObject(this.body)) {
+            if (!variable.isNull(this.body) && typeof this.body === "object") {
                 for (let key in this.body) {
                     let value = this.body[key];
-                    if (variable.getType(value) === FileList) {
-                        for (let item of value) {
-                            formData.append(key, item);
-                        }
-                    } else if (variable.getType(value) === Array) {
+                    if (value === undefined) {
+                        continue;
+                    }
+                    if (!variable.isNull(value) && (value.constructor === FileList || Array.isArray(value))) {
                         for (let item of value) {
                             formData.append(key, item);
                         }
@@ -157,7 +154,7 @@ export default class Http {
             }
             this.body = formData;
         } else {
-            if (variable.isObject(this.body)) {
+            if (variable.isNull(this.body) && typeof this.body === "object") {
                 this.body = JSON.stringify(this.body);
             }
         }
