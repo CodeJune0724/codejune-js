@@ -1,7 +1,7 @@
 import Http, { type } from "./Http";
 import variable from "./variable";
 
-interface request {
+interface Request {
     url: string;
     type: type;
     header?: { [key: string]: string };
@@ -17,7 +17,7 @@ export default class Service {
         this.url = url;
     }
 
-    $send(request: request): Promise<any> {
+    $send(request: Request): Promise<any> {
         return new Promise<any>((s, e) => {
             this._getHttp(request).send().then((responseData) => {
                 let responseDataJson;
@@ -33,7 +33,7 @@ export default class Service {
         });
     }
 
-    $download(request: request): Promise<undefined> {
+    $download(request: Request): Promise<undefined> {
         return new Promise<any>((s: Function, e) => {
             this._getHttp(request).download().then(() => {
                 s();
@@ -43,7 +43,7 @@ export default class Service {
         });
     }
 
-    $asyncDownload(request: request): Promise<undefined> {
+    $asyncDownload(request: Request): Promise<undefined> {
         return new Promise<any>((s: Function, e) => {
             this._getHttp(request).asyncDownload().then(() => {
                 s();
@@ -53,7 +53,7 @@ export default class Service {
         });
     }
 
-    private _getHttp(request: request): Http {
+    private _getHttp(request: Request): Http {
         request.url = request.url.startsWith("http") ? request.url : this.url ? `${this.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
         let result = new Http(request.url, request.type);
         if (request.header) {
@@ -76,5 +76,5 @@ export default class Service {
 };
 
 export {
-    request
+    Request
 };
