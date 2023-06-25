@@ -1,5 +1,4 @@
 import Http, { type } from "./Http";
-import variable from "./variable";
 
 interface Request {
     url: string;
@@ -67,7 +66,7 @@ export default class Service {
             }
         }
         result.setBody(request.body);
-        if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
+        if (result.contentType === null && request.type !== "GET" && typeof request.body === "object") {
             result.setContentType("APPLICATION_JSON");
         }
         return result;
