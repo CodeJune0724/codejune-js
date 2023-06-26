@@ -114,7 +114,7 @@ export default class Http {
     }
 
     private _getFetch(): Promise<Response> {
-        if (!variable.isNull(this.body) && typeof this.body === "object") {
+        if (variable.isObject(this.body)) {
             let checkFile = (data: object): boolean => {
                 if (variable.isNull(data)) {
                     return false;
@@ -137,7 +137,7 @@ export default class Http {
         if (this.contentType === "FORM_DATA") {
             delete this.header["Content-type"];
             let formData = new FormData();
-            if (!variable.isNull(this.body) && typeof this.body === "object") {
+            if (variable.isObject(this.body)) {
                 for (let key in this.body) {
                     let value = this.body[key];
                     if (value === undefined) {
@@ -154,7 +154,7 @@ export default class Http {
             }
             this.body = formData;
         } else {
-            if (variable.isNull(this.body) && typeof this.body === "object") {
+            if (variable.isObject(this.body)) {
                 this.body = JSON.stringify(this.body);
             }
         }
