@@ -56,7 +56,7 @@ const a = {
    * @param isStrict 是否是严谨模式
    * */
   assignment(r, e, t) {
-    if (!this.isNull(t) && t === !0)
+    if (this.isNull(t) || t === !0)
       for (let i in r) {
         let o = r[i], n = e[i];
         if (!(o === void 0 || n === void 0)) {

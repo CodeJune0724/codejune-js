@@ -76,7 +76,7 @@ export default {
      * @param isStrict 是否是严谨模式
      * */
     assignment(object1: { [key in string]: any }, object2: { [key in string]: any }, isStrict?: boolean) {
-        if (this.isNull(isStrict) ? false : isStrict === true) {
+        if (this.isNull(isStrict) ? true : isStrict === true) {
             for (let key in object1) {
                 let value1 = object1[key];
                 let value2 = object2[key];
