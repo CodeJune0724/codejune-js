@@ -16,6 +16,14 @@ declare const _default: {
      * */
     isEmpty(data: any): boolean;
     /**
+     * 是否是对象
+     *
+     * @param data data
+     *
+     * @return boolean
+     * */
+    isObject(data: any): boolean;
+    /**
      * 克隆对象
      *
      * @param data 数据

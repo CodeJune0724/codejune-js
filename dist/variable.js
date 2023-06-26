@@ -20,7 +20,7 @@ export default {
         if (this.isNull(data)) {
             return true;
         }
-        if (typeof data === "object") {
+        if (this.isObject(data)) {
             return Object.keys(data).length === 0;
         }
         if (typeof data === "string") {
@@ -30,6 +30,19 @@ export default {
             return isNaN(data) || data === 0;
         }
         return typeof data !== "boolean";
+    },
+    /**
+     * 是否是对象
+     *
+     * @param data data
+     *
+     * @return boolean
+     * */
+    isObject(data) {
+        if (this.isNull(data)) {
+            return false;
+        }
+        return typeof data === "object";
     },
     /**
      * 克隆对象
@@ -56,7 +69,7 @@ export default {
                 if (value === undefined) {
                     continue;
                 }
-                if (typeof value === "object") {
+                if (this.isObject(value)) {
                     result[key] = this.clone(value);
                 }
                 else {
@@ -85,8 +98,8 @@ export default {
                     object1[key] = value2;
                     continue;
                 }
-                if (typeof value1 === "object") {
-                    if (typeof value2 === "object") {
+                if (this.isObject(value1)) {
+                    if (this.isObject(value2)) {
                         if (Array.isArray(value1) && Array.isArray(value2)) {
                             value1 = [];
                             for (let item of value2) {
@@ -128,7 +141,7 @@ export default {
         if (this.isNull(data)) {
             return `${data}`;
         }
-        if (typeof data === "object") {
+        if (this.isObject(data)) {
             return JSON.stringify(data);
         }
         return data.toString();
@@ -144,7 +157,7 @@ export default {
             if (this.isNull(value)) {
                 continue;
             }
-            if (typeof value === "object") {
+            if (this.isObject(value)) {
                 if (Array.isArray(value)) {
                     data[key] = [];
                 }
