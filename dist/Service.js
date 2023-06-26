@@ -1,4 +1,5 @@
 import Http from "./Http";
+import variable from "./variable";
 export default class Service {
     url;
     constructor(url) {
@@ -52,7 +53,7 @@ export default class Service {
             }
         }
         result.setBody(request.body);
-        if (result.contentType === null && request.type !== "GET" && typeof request.body === "object") {
+        if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
             result.setContentType("APPLICATION_JSON");
         }
         return result;
