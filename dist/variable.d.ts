@@ -56,7 +56,7 @@ declare const _default: {
      *
      * @param data 数据
      * */
-    clean(data: {
+    clean(data: any[] | {
         [x: string]: any;
     }): void;
 };

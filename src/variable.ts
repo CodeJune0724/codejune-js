@@ -154,20 +154,20 @@ export default {
      *
      * @param data 数据
      * */
-    clean(data: { [key in string]: any }): void {
-        for (let key in data) {
-            let value = data[key];
-            if (this.isNull(value)) {
-                continue;
-            }
-            if (this.isObject(value)) {
-                if (Array.isArray(value)) {
-                    data[key] = [];
-                } else {
-                    this.clean(value);
+    clean(data: { [key in string]: any } | any[]): void {
+        if (Array.isArray(data)) {
+            data.splice(0, data.length);
+        } else {
+            for (let key in data) {
+                let value = data[key];
+                if (this.isNull(value)) {
+                    continue;
                 }
-            } else {
-                data[key] = null;
+                if (this.isObject(value)) {
+                    this.clean(value);
+                } else {
+                    data[key] = null;
+                }
             }
         }
     }
