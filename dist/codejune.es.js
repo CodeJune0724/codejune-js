@@ -111,10 +111,13 @@ const a = {
    * @param data 数据
    * */
   clean(r) {
-    for (let e in r) {
-      let t = r[e];
-      this.isNull(t) || (this.isObject(t) ? Array.isArray(t) ? r[e] = [] : this.clean(t) : r[e] = null);
-    }
+    if (Array.isArray(r))
+      r.splice(0, r.length);
+    else
+      for (let e in r) {
+        let t = r[e];
+        this.isNull(t) || (this.isObject(t) ? this.clean(t) : r[e] = null);
+      }
   }
 };
 class d {
