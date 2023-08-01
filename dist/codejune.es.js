@@ -86,7 +86,7 @@ const a = {
               !Array.isArray(n) && !Array.isArray(l) && this.assignment(n, l, !0);
             }
           } else
-            typeof n == typeof l && (r[i] = l);
+            (l === null || typeof n == typeof l) && (r[i] = l);
         }
       }
     else
