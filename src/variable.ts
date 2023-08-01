@@ -116,7 +116,7 @@ export default {
                         }
                     }
                 } else {
-                    if (typeof value1 === typeof value2) {
+                    if (value2 === null || typeof value1 === typeof value2) {
                         object1[key] = value2;
                     }
                 }
