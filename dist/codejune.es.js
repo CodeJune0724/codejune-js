@@ -279,7 +279,7 @@ const g = {
       l = f.indexOf(r.charAt(h++)), s = f.indexOf(r.charAt(h++)), c = f.indexOf(r.charAt(h++)), o = f.indexOf(r.charAt(h++)), t = l << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | o, e = e + String.fromCharCode(t), c !== 64 && (e = e + String.fromCharCode(i)), o !== 64 && (e = e + String.fromCharCode(n));
     return e = p(e), e;
   }
-}, b = {
+}, w = {
   select() {
     return new Promise((r) => {
       let e = document.createElement("input");
@@ -299,7 +299,7 @@ const g = {
     });
   }
 };
-class w {
+class b {
   url;
   constructor(e) {
     this.url = e;
@@ -365,8 +365,21 @@ const C = {
     return r.close && (e.close = r.close), e;
   }
 }, A = {
+  /**
+   * 获取屏幕高度
+   *
+   * @return 屏幕高度
+   * */
   getScreenHeight() {
     return window.screen.height;
+  },
+  /**
+   * 获取屏幕宽度
+   *
+   * @return 屏幕宽度
+   * */
+  getScreenWidth() {
+    return window.screen.width;
   }
 };
 class k {
@@ -404,10 +417,10 @@ class k {
 export {
   d as Http,
   m as InfoException,
-  w as Service,
+  b as Service,
   k as Websocket,
   g as base64,
-  b as file,
+  w as file,
   C as popup,
   a as variable,
   A as window
