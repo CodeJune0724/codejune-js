@@ -49,14 +49,15 @@ const a = {
       for (let t of r)
         e.push(this.clone(t));
       return e;
-    } else {
+    } else if (this.isObject(r)) {
       let e = {};
       for (let t in r) {
         let i = r[t];
         i !== void 0 && (this.isObject(i) ? e[t] = this.clone(i) : e[t] = i);
       }
       return e;
-    }
+    } else
+      return r;
   },
   /**
    * 给对象赋值
