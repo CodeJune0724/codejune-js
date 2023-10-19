@@ -62,7 +62,7 @@ export default {
             }
             return result;
         }
-        else {
+        else if (this.isObject(data)) {
             let result = {};
             for (let key in data) {
                 let value = data[key];
@@ -77,6 +77,9 @@ export default {
                 }
             }
             return result;
+        }
+        else {
+            return data;
         }
     },
     /**
