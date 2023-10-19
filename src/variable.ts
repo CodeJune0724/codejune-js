@@ -65,7 +65,7 @@ export default {
                 result.push(this.clone(item));
             }
             return result as T;
-        } else {
+        } else if (this.isObject(data)) {
             let result: { [key: string]: any } = {};
             for (let key in data) {
                 let value = data[key];
@@ -79,6 +79,8 @@ export default {
                 }
             }
             return result as T;
+        } else {
+            return data;
         }
     },
 
