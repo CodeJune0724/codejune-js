@@ -14,8 +14,8 @@ export default class Service {
     readonly url?: string;
     constructor(url?: string);
     $send(request: Request): Promise<any>;
-    $download(request: Request): Promise<undefined>;
-    $asyncDownload(request: Request): Promise<undefined>;
+    $download(request: Request): Promise<any>;
+    $asyncDownload(request: Request): Promise<any>;
     private $getHttp;
     private $responseHandler;
 }
