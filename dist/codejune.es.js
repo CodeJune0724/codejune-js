@@ -69,25 +69,25 @@ const a = {
   assignment(r, e, t) {
     if (this.isNull(t) || t === !0)
       for (let i in r) {
-        let n = r[i], l = e[i];
-        if (!(n === void 0 || l === void 0)) {
+        let n = r[i], s = e[i];
+        if (!(n === void 0 || s === void 0)) {
           if (n === null) {
-            r[i] = l;
+            r[i] = s;
             continue;
           }
           if (this.isObject(n)) {
-            if (this.isObject(l)) {
-              if (Array.isArray(n) && Array.isArray(l)) {
+            if (this.isObject(s)) {
+              if (Array.isArray(n) && Array.isArray(s)) {
                 n = [];
-                for (let s of l)
-                  n.push(s);
+                for (let o of s)
+                  n.push(o);
                 r[i] = n;
                 continue;
               }
-              !Array.isArray(n) && !Array.isArray(l) && this.assignment(n, l, !0);
+              !Array.isArray(n) && !Array.isArray(s) && this.assignment(n, s, !0);
             }
           } else
-            (l === null || typeof n == typeof l) && (r[i] = l);
+            (s === null || typeof n == typeof s) && (r[i] = s);
         }
       }
     else
@@ -181,17 +181,17 @@ class d {
     return new Promise((e, t) => {
       this._getFetch().then((i) => {
         let n = i.headers.get("Content-Type");
-        n && n.indexOf("download") !== -1 ? i.blob().then((l) => {
+        n && n.indexOf("download") !== -1 ? i.blob().then((s) => {
           try {
-            let s = document.createElement("a"), c = window.URL.createObjectURL(l), o = i.headers.get("Content-Disposition");
-            o = o || "";
-            let u = /filename=(.*?)$/g.exec(o);
-            u !== null && (o = u[1]), s.href = c, s.download = decodeURI(o), s.click(), window.URL.revokeObjectURL(c), e();
-          } catch (s) {
-            t(s);
+            let o = document.createElement("a"), c = window.URL.createObjectURL(s), l = i.headers.get("Content-Disposition");
+            l = l || "";
+            let u = /filename=(.*?)$/g.exec(l);
+            u !== null && (l = u[1]), o.href = c, o.download = decodeURI(l), o.click(), window.URL.revokeObjectURL(c), e();
+          } catch (o) {
+            t(o);
           }
-        }) : i.text().then((l) => {
-          t(l);
+        }) : i.text().then((s) => {
+          t(s);
         });
       });
     });
@@ -262,22 +262,22 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", y =
   }
   return e;
 }, p = function(r) {
-  let e = "", t = 0, i, n, l = 0;
+  let e = "", t = 0, i, n, s = 0;
   for (; t < r.length; )
-    i = r.charCodeAt(t), i < 128 ? (e += String.fromCharCode(i), t++) : i > 191 && i < 224 ? (n = r.charCodeAt(t + 1), e += String.fromCharCode((i & 31) << 6 | n & 63), t += 2) : (n = r.charCodeAt(t + 1), l = r.charCodeAt(t + 2), e += String.fromCharCode((i & 15) << 12 | (n & 63) << 6 | l & 63), t += 3);
+    i = r.charCodeAt(t), i < 128 ? (e += String.fromCharCode(i), t++) : i > 191 && i < 224 ? (n = r.charCodeAt(t + 1), e += String.fromCharCode((i & 31) << 6 | n & 63), t += 2) : (n = r.charCodeAt(t + 1), s = r.charCodeAt(t + 2), e += String.fromCharCode((i & 15) << 12 | (n & 63) << 6 | s & 63), t += 3);
   return e;
 };
 const g = {
   encode(r) {
-    let e = "", t, i, n, l, s, c, o, h = 0;
+    let e = "", t, i, n, s, o, c, l, h = 0;
     for (r = y(r); h < r.length; )
-      t = r.charCodeAt(h++), i = r.charCodeAt(h++), n = r.charCodeAt(h++), l = t >> 2, s = (t & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, o = n & 63, isNaN(i) ? c = o = 64 : isNaN(n) && (o = 64), e = e + f.charAt(l) + f.charAt(s) + f.charAt(c) + f.charAt(o);
+      t = r.charCodeAt(h++), i = r.charCodeAt(h++), n = r.charCodeAt(h++), s = t >> 2, o = (t & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, l = n & 63, isNaN(i) ? c = l = 64 : isNaN(n) && (l = 64), e = e + f.charAt(s) + f.charAt(o) + f.charAt(c) + f.charAt(l);
     return e;
   },
   decode(r) {
-    let e = "", t, i, n, l, s, c, o, h = 0;
+    let e = "", t, i, n, s, o, c, l, h = 0;
     for (r = r.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < r.length; )
-      l = f.indexOf(r.charAt(h++)), s = f.indexOf(r.charAt(h++)), c = f.indexOf(r.charAt(h++)), o = f.indexOf(r.charAt(h++)), t = l << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | o, e = e + String.fromCharCode(t), c !== 64 && (e = e + String.fromCharCode(i)), o !== 64 && (e = e + String.fromCharCode(n));
+      s = f.indexOf(r.charAt(h++)), o = f.indexOf(r.charAt(h++)), c = f.indexOf(r.charAt(h++)), l = f.indexOf(r.charAt(h++)), t = s << 2 | o >> 4, i = (o & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(t), c !== 64 && (e = e + String.fromCharCode(i)), l !== 64 && (e = e + String.fromCharCode(n));
     return e = p(e), e;
   }
 }, w = {
@@ -307,38 +307,32 @@ class b {
   }
   $send(e) {
     return new Promise((t, i) => {
-      this._getHttp(e).send().then((n) => {
-        let l;
-        try {
-          l = JSON.parse(n);
-        } catch {
-          l = n;
-        }
-        t(l);
+      this.$getHttp(e).send().then((n) => {
+        t(this.$responseHandler(n));
       }).catch((n) => {
-        i(n);
+        i(this.$responseHandler(n));
       });
     });
   }
   $download(e) {
     return new Promise((t, i) => {
-      this._getHttp(e).download().then(() => {
+      this.$getHttp(e).download().then(() => {
         t();
       }).catch((n) => {
-        i(n);
+        i(this.$responseHandler(n));
       });
     });
   }
   $asyncDownload(e) {
     return new Promise((t, i) => {
-      this._getHttp(e).asyncDownload().then(() => {
+      this.$getHttp(e).asyncDownload().then(() => {
         t();
       }).catch((n) => {
-        i(n);
+        i(this.$responseHandler(n));
       });
     });
   }
-  _getHttp(e) {
+  $getHttp(e) {
     e.url = e.url.startsWith("http") ? e.url : this.url ? `${this.url}${e.url ? e.url.startsWith("/") ? e.url : `/${e.url}` : ""}` : e.url;
     let t = new d(e.url, e.type);
     if (e.header)
@@ -348,6 +342,15 @@ class b {
       for (let i in e.param)
         t.addParam(i, e.param[i]);
     return t.setBody(e.body), t.contentType === null && e.type !== "GET" && a.isObject(e.body) && t.setContentType("APPLICATION_JSON"), t;
+  }
+  $responseHandler(e) {
+    let t;
+    try {
+      t = JSON.parse(e);
+    } catch {
+      t = e;
+    }
+    return t;
   }
 }
 const C = {
