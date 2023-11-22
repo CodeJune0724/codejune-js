@@ -16,6 +16,7 @@ export default class Service {
     $send(request: Request): Promise<any>;
     $download(request: Request): Promise<undefined>;
     $asyncDownload(request: Request): Promise<undefined>;
-    private _getHttp;
+    private $getHttp;
+    private $responseHandler;
 }
 export { Request };

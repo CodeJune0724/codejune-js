@@ -19,41 +19,35 @@ export default class Service {
 
     $send(request: Request): Promise<any> {
         return new Promise<any>((s, e) => {
-            this._getHttp(request).send().then((responseData) => {
-                let responseDataJson;
-                try {
-                    responseDataJson = JSON.parse(responseData);
-                } catch (exception) {
-                    responseDataJson = responseData;
-                }
-                s(responseDataJson);
-            }).catch((responseData) => {
-                e(responseData);
+            this.$getHttp(request).send().then((response) => {
+                s(this.$responseHandler(response));
+            }).catch((response) => {
+                e(this.$responseHandler(response));
             });
         });
     }
 
     $download(request: Request): Promise<undefined> {
         return new Promise<any>((s: Function, e) => {
-            this._getHttp(request).download().then(() => {
+            this.$getHttp(request).download().then(() => {
                 s();
-            }).catch((responseData) => {
-                e(responseData);
+            }).catch((response) => {
+                e(this.$responseHandler(response));
             });
         });
     }
 
     $asyncDownload(request: Request): Promise<undefined> {
         return new Promise<any>((s: Function, e) => {
-            this._getHttp(request).asyncDownload().then(() => {
+            this.$getHttp(request).asyncDownload().then(() => {
                 s();
-            }).catch((responseData) => {
-                e(responseData);
+            }).catch((response) => {
+                e(this.$responseHandler(response));
             });
         });
     }
 
-    private _getHttp(request: Request): Http {
+    private $getHttp(request: Request): Http {
         request.url = request.url.startsWith("http") ? request.url : this.url ? `${this.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
         let result = new Http(request.url, request.type);
         if (request.header) {
@@ -69,6 +63,16 @@ export default class Service {
         result.setBody(request.body);
         if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
             result.setContentType("APPLICATION_JSON");
+        }
+        return result;
+    }
+
+    private $responseHandler(response: string) {
+        let result;
+        try {
+            result = JSON.parse(response);
+        } catch (exception) {
+            result = response;
         }
         return result;
     }
