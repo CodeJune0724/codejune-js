@@ -5,6 +5,7 @@
   "main": "dist/codejune.umd.js",
   "module": "dist/codejune.es.js",
   "types": "dist/codejune.d.ts",
+  "type": "module",
   "scripts": {
     "build": "npm install && vite build && tsc -d"
   },
