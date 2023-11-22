@@ -1,5 +1,34 @@
 import Http from "./Http";
 import variable from "./variable";
+let getHttp = (request, service) => {
+    request.url = request.url.startsWith("http") ? request.url : service.url ? `${service.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
+    let result = new Http(request.url, request.type);
+    if (request.header) {
+        for (let key in request.header) {
+            result.addHeader(key, request.header[key]);
+        }
+    }
+    if (request.param) {
+        for (let key in request.param) {
+            result.addParam(key, request.param[key]);
+        }
+    }
+    result.setBody(request.body);
+    if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
+        result.setContentType("APPLICATION_JSON");
+    }
+    return result;
+};
+let responseHandler = (response) => {
+    let result;
+    try {
+        result = JSON.parse(response);
+    }
+    catch (e) {
+        result = response;
+    }
+    return result;
+};
 export default class Service {
     url;
     constructor(url) {
@@ -7,59 +36,30 @@ export default class Service {
     }
     $send(request) {
         return new Promise((s, e) => {
-            this.$getHttp(request).send().then((response) => {
-                s(this.$responseHandler(response));
+            getHttp(request, this).send().then((response) => {
+                s(responseHandler(response));
             }).catch((response) => {
-                e(this.$responseHandler(response));
+                e(responseHandler(response));
             });
         });
     }
     $download(request) {
         return new Promise((s, e) => {
-            this.$getHttp(request).download().then(() => {
+            getHttp(request, this).download().then(() => {
                 s();
             }).catch((response) => {
-                e(this.$responseHandler(response));
+                e(responseHandler(response));
             });
         });
     }
     $asyncDownload(request) {
         return new Promise((s, e) => {
-            this.$getHttp(request).asyncDownload().then(() => {
+            getHttp(request, this).asyncDownload().then(() => {
                 s();
             }).catch((response) => {
-                e(this.$responseHandler(response));
+                e(responseHandler(response));
             });
         });
-    }
-    $getHttp(request) {
-        request.url = request.url.startsWith("http") ? request.url : this.url ? `${this.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
-        let result = new Http(request.url, request.type);
-        if (request.header) {
-            for (let key in request.header) {
-                result.addHeader(key, request.header[key]);
-            }
-        }
-        if (request.param) {
-            for (let key in request.param) {
-                result.addParam(key, request.param[key]);
-            }
-        }
-        result.setBody(request.body);
-        if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
-            result.setContentType("APPLICATION_JSON");
-        }
-        return result;
-    }
-    $responseHandler(response) {
-        let result;
-        try {
-            result = JSON.parse(response);
-        }
-        catch (exception) {
-            result = response;
-        }
-        return result;
     }
 }
 ;
