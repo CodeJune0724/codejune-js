@@ -17,7 +17,7 @@ export default class Service {
         this.url = url;
     }
 
-    $send(request: Request): Promise<any> {
+    $send(request: Request) {
         return new Promise<any>((s, e) => {
             this.$getHttp(request).send().then((response) => {
                 s(this.$responseHandler(response));
@@ -27,7 +27,7 @@ export default class Service {
         });
     }
 
-    $download(request: Request): Promise<undefined> {
+    $download(request: Request) {
         return new Promise<any>((s: Function, e) => {
             this.$getHttp(request).download().then(() => {
                 s();
@@ -37,7 +37,7 @@ export default class Service {
         });
     }
 
-    $asyncDownload(request: Request): Promise<undefined> {
+    $asyncDownload(request: Request) {
         return new Promise<any>((s: Function, e) => {
             this.$getHttp(request).asyncDownload().then(() => {
                 s();
@@ -47,7 +47,7 @@ export default class Service {
         });
     }
 
-    private $getHttp(request: Request): Http {
+    private $getHttp(request: Request) {
         request.url = request.url.startsWith("http") ? request.url : this.url ? `${this.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
         let result = new Http(request.url, request.type);
         if (request.header) {
