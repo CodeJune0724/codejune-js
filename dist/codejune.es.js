@@ -1,4 +1,4 @@
-class b extends Error {
+class w extends Error {
   constructor(e) {
     super(e);
   }
@@ -121,7 +121,7 @@ const a = {
       }
   }
 };
-class p {
+class m {
   url = "";
   type = "GET";
   param = {};
@@ -252,7 +252,7 @@ class p {
     return e;
   }
 }
-let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m = function(t) {
+let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", p = function(t) {
   let e = "";
   t = t.replace(/\r\n/g, `
 `);
@@ -261,7 +261,7 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
     i < 128 ? e += String.fromCharCode(i) : i > 127 && i < 2048 ? (e += String.fromCharCode(i >> 6 | 192), e += String.fromCharCode(i & 63 | 128)) : (e += String.fromCharCode(i >> 12 | 224), e += String.fromCharCode(i >> 6 & 63 | 128), e += String.fromCharCode(i & 63 | 128));
   }
   return e;
-}, w = function(t) {
+}, b = function(t) {
   let e = "", r = 0, i, n, l = 0;
   for (; r < t.length; )
     i = t.charCodeAt(r), i < 128 ? (e += String.fromCharCode(i), r++) : i > 191 && i < 224 ? (n = t.charCodeAt(r + 1), e += String.fromCharCode((i & 31) << 6 | n & 63), r += 2) : (n = t.charCodeAt(r + 1), l = t.charCodeAt(r + 2), e += String.fromCharCode((i & 15) << 12 | (n & 63) << 6 | l & 63), r += 3);
@@ -270,7 +270,7 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
 const g = {
   encode(t) {
     let e = "", r, i, n, l, o, c, s, h = 0;
-    for (t = m(t); h < t.length; )
+    for (t = p(t); h < t.length; )
       r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), l = r >> 2, o = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, s = n & 63, isNaN(i) ? c = s = 64 : isNaN(n) && (s = 64), e = e + f.charAt(l) + f.charAt(o) + f.charAt(c) + f.charAt(s);
     return e;
   },
@@ -278,7 +278,7 @@ const g = {
     let e = "", r, i, n, l, o, c, s, h = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < t.length; )
       l = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), r = l << 2 | o >> 4, i = (o & 15) << 4 | c >> 2, n = (c & 3) << 6 | s, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), s !== 64 && (e = e + String.fromCharCode(n));
-    return e = w(e), e;
+    return e = b(e), e;
   }
 }, C = {
   select() {
@@ -302,7 +302,7 @@ const g = {
 };
 let d = (t, e) => {
   t.url = t.url.startsWith("http") ? t.url : e.url ? `${e.url}${t.url ? t.url.startsWith("/") ? t.url : `/${t.url}` : ""}` : t.url;
-  let r = new p(t.url, t.type);
+  let r = new m(t.url, t.type);
   if (t.header)
     for (let i in t.header)
       r.addHeader(i, t.header[i]);
@@ -353,21 +353,6 @@ class A {
   }
 }
 const k = {
-  create(t) {
-    let e = {
-      loading: !1,
-      display: !1,
-      ...t,
-      async open(r) {
-        this.display = !0, this.loading = !0, t.openHandler && await t.openHandler(r), this.loading = !1;
-      },
-      close() {
-        this.display = !1;
-      }
-    };
-    return t.close && (e.close = t.close), e;
-  }
-}, O = {
   /**
    * 获取屏幕高度
    *
@@ -385,7 +370,7 @@ const k = {
     return window.screen.width;
   }
 };
-class N {
+class O {
   url = "";
   websocket = null;
   onOpen = () => {
@@ -418,13 +403,12 @@ class N {
   }
 }
 export {
-  p as Http,
-  b as InfoException,
+  m as Http,
+  w as InfoException,
   A as Service,
-  N as Websocket,
+  O as Websocket,
   g as base64,
   C as file,
-  k as popup,
   a as variable,
-  O as window
+  k as window
 };
