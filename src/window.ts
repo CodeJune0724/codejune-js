@@ -5,8 +5,8 @@ export default {
      *
      * @return 屏幕高度
      * */
-    getScreenHeight(): number {
-        return window.screen.height;
+    getHeight(): number {
+        return window.innerHeight;
     },
 
     /**
@@ -14,8 +14,8 @@ export default {
      *
      * @return 屏幕宽度
      * */
-    getScreenWidth(): number {
-        return window.screen.width;
+    getWidth(): number {
+        return window.innerWidth;
     }
 
 };

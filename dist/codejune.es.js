@@ -79,8 +79,8 @@ const a = {
             if (this.isObject(l)) {
               if (Array.isArray(n) && Array.isArray(l)) {
                 n = [];
-                for (let o of l)
-                  n.push(o);
+                for (let s of l)
+                  n.push(s);
                 t[i] = n;
                 continue;
               }
@@ -117,7 +117,7 @@ const a = {
     else
       for (let e in t) {
         let r = t[e];
-        this.isNull(r) || (this.isObject(r) ? this.clean(r) : t[e] = null);
+        this.isNull(r) || typeof r == "function" || (this.isObject(r) && !(r instanceof File) ? this.clean(r) : t[e] = null);
       }
   }
 };
@@ -183,12 +183,12 @@ class m {
         let n = i.headers.get("Content-Type");
         n && n.indexOf("download") !== -1 ? i.blob().then((l) => {
           try {
-            let o = document.createElement("a"), c = window.URL.createObjectURL(l), s = i.headers.get("Content-Disposition");
-            s = s || "";
-            let y = /filename=(.*?)$/g.exec(s);
-            y !== null && (s = y[1]), o.href = c, o.download = decodeURI(s), o.click(), window.URL.revokeObjectURL(c), e();
-          } catch (o) {
-            r(o);
+            let s = document.createElement("a"), c = window.URL.createObjectURL(l), o = i.headers.get("Content-Disposition");
+            o = o || "";
+            let y = /filename=(.*?)$/g.exec(o);
+            y !== null && (o = y[1]), s.href = c, s.download = decodeURI(o), s.click(), window.URL.revokeObjectURL(c), e();
+          } catch (s) {
+            r(s);
           }
         }) : i.text().then((l) => {
           r(l);
@@ -269,15 +269,15 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", p =
 };
 const g = {
   encode(t) {
-    let e = "", r, i, n, l, o, c, s, h = 0;
+    let e = "", r, i, n, l, s, c, o, h = 0;
     for (t = p(t); h < t.length; )
-      r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), l = r >> 2, o = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, s = n & 63, isNaN(i) ? c = s = 64 : isNaN(n) && (s = 64), e = e + f.charAt(l) + f.charAt(o) + f.charAt(c) + f.charAt(s);
+      r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), l = r >> 2, s = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, o = n & 63, isNaN(i) ? c = o = 64 : isNaN(n) && (o = 64), e = e + f.charAt(l) + f.charAt(s) + f.charAt(c) + f.charAt(o);
     return e;
   },
   decode(t) {
-    let e = "", r, i, n, l, o, c, s, h = 0;
+    let e = "", r, i, n, l, s, c, o, h = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < t.length; )
-      l = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), r = l << 2 | o >> 4, i = (o & 15) << 4 | c >> 2, n = (c & 3) << 6 | s, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), s !== 64 && (e = e + String.fromCharCode(n));
+      l = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), r = l << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | o, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), o !== 64 && (e = e + String.fromCharCode(n));
     return e = b(e), e;
   }
 }, C = {
@@ -358,16 +358,16 @@ const k = {
    *
    * @return 屏幕高度
    * */
-  getScreenHeight() {
-    return window.screen.height;
+  getHeight() {
+    return window.innerHeight;
   },
   /**
    * 获取屏幕宽度
    *
    * @return 屏幕宽度
    * */
-  getScreenWidth() {
-    return window.screen.width;
+  getWidth() {
+    return window.innerWidth;
   }
 };
 class O {

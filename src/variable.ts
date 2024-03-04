@@ -162,10 +162,10 @@ export default {
         } else {
             for (let key in data) {
                 let value = data[key];
-                if (this.isNull(value)) {
+                if (this.isNull(value) || typeof value === "function") {
                     continue;
                 }
-                if (this.isObject(value)) {
+                if (this.isObject(value) && !(value instanceof File)) {
                     this.clean(value);
                 } else {
                     data[key] = null;

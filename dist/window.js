@@ -4,15 +4,15 @@ export default {
      *
      * @return 屏幕高度
      * */
-    getScreenHeight() {
-        return window.screen.height;
+    getHeight() {
+        return window.innerHeight;
     },
     /**
      * 获取屏幕宽度
      *
      * @return 屏幕宽度
      * */
-    getScreenWidth() {
-        return window.screen.width;
+    getWidth() {
+        return window.innerWidth;
     }
 };
