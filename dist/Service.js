@@ -14,6 +14,9 @@ let getHttp = (request, service) => {
         }
     }
     result.setBody(request.body);
+    if (request.contentType) {
+        result.setContentType(request.contentType);
+    }
     if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
         result.setContentType("APPLICATION_JSON");
     }

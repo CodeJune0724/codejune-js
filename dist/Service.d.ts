@@ -1,4 +1,4 @@
-import { type } from "./Http";
+import { type, contentType } from "./Http";
 interface Request {
     url: string;
     type: type;
@@ -9,6 +9,7 @@ interface Request {
         [key: string]: string;
     };
     body?: any;
+    contentType?: contentType | null;
 }
 export default class Service {
     readonly url?: string;

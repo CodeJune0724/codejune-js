@@ -121,7 +121,7 @@ const a = {
       }
   }
 };
-class m {
+class p {
   url = "";
   type = "GET";
   param = {};
@@ -252,7 +252,7 @@ class m {
     return e;
   }
 }
-let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", p = function(t) {
+let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m = function(t) {
   let e = "";
   t = t.replace(/\r\n/g, `
 `);
@@ -270,7 +270,7 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", p =
 const g = {
   encode(t) {
     let e = "", r, i, n, l, s, c, o, h = 0;
-    for (t = p(t); h < t.length; )
+    for (t = m(t); h < t.length; )
       r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), l = r >> 2, s = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, o = n & 63, isNaN(i) ? c = o = 64 : isNaN(n) && (o = 64), e = e + f.charAt(l) + f.charAt(s) + f.charAt(c) + f.charAt(o);
     return e;
   },
@@ -302,14 +302,14 @@ const g = {
 };
 let d = (t, e) => {
   t.url = t.url.startsWith("http") ? t.url : e.url ? `${e.url}${t.url ? t.url.startsWith("/") ? t.url : `/${t.url}` : ""}` : t.url;
-  let r = new m(t.url, t.type);
+  let r = new p(t.url, t.type);
   if (t.header)
     for (let i in t.header)
       r.addHeader(i, t.header[i]);
   if (t.param)
     for (let i in t.param)
       r.addParam(i, t.param[i]);
-  return r.setBody(t.body), r.contentType === null && t.type !== "GET" && a.isObject(t.body) && r.setContentType("APPLICATION_JSON"), r;
+  return r.setBody(t.body), t.contentType && r.setContentType(t.contentType), r.contentType === null && t.type !== "GET" && a.isObject(t.body) && r.setContentType("APPLICATION_JSON"), r;
 }, u = (t) => {
   let e;
   try {
@@ -403,7 +403,7 @@ class O {
   }
 }
 export {
-  m as Http,
+  p as Http,
   w as InfoException,
   A as Service,
   O as Websocket,

@@ -192,4 +192,4 @@ export default class Http {
 
 };
 
-export { type };
+export { type, contentType };

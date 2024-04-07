@@ -24,4 +24,4 @@ export default class Http {
     private _getFetch;
     private _getUrl;
 }
-export { type };
+export { type, contentType };

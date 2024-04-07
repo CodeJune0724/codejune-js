@@ -1,4 +1,4 @@
-import Http, { type } from "./Http";
+import Http, { type, contentType } from "./Http";
 import variable from "./variable";
 
 interface Request {
@@ -7,6 +7,7 @@ interface Request {
     header?: { [key: string]: string };
     param?: { [key: string]: string };
     body?: any;
+    contentType?: contentType | null;
 }
 
 let getHttp = (request: Request, service: Service) => {
@@ -23,6 +24,9 @@ let getHttp = (request: Request, service: Service) => {
         }
     }
     result.setBody(request.body);
+    if (request.contentType) {
+        result.setContentType(request.contentType);
+    }
     if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
         result.setContentType("APPLICATION_JSON");
     }
