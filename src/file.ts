@@ -1,4 +1,5 @@
 export default {
+
     select(): Promise<File> {
         return new Promise<File>((s: Function) => {
             let fileE = document.createElement("input");
@@ -26,5 +27,23 @@ export default {
             });
             fileE.click();
         });
+    },
+
+    async slice(file: File, sliceSize: number, action: (data: { pointer: number, file: Blob }) => Promise<void>) {
+        if (sliceSize < 0) {
+            return;
+        }
+        let pointer = 0;
+        let fileSize = file.size;
+        while (pointer < fileSize) {
+            let stepSize = pointer + sliceSize > fileSize ? fileSize - pointer : sliceSize;
+            let sliceFile = file.slice(pointer, pointer + stepSize);
+            pointer = pointer + stepSize;
+            await action({
+                pointer,
+                file: sliceFile
+            });
+        }
     }
+
 };

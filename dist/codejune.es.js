@@ -1,4 +1,4 @@
-class w extends Error {
+class b extends Error {
   constructor(e) {
     super(e);
   }
@@ -79,8 +79,8 @@ const a = {
             if (this.isObject(l)) {
               if (Array.isArray(n) && Array.isArray(l)) {
                 n = [];
-                for (let s of l)
-                  n.push(s);
+                for (let o of l)
+                  n.push(o);
                 t[i] = n;
                 continue;
               }
@@ -183,12 +183,12 @@ class p {
         let n = i.headers.get("Content-Type");
         n && n.indexOf("download") !== -1 ? i.blob().then((l) => {
           try {
-            let s = document.createElement("a"), c = window.URL.createObjectURL(l), o = i.headers.get("Content-Disposition");
-            o = o || "";
-            let y = /filename=(.*?)$/g.exec(o);
-            y !== null && (o = y[1]), s.href = c, s.download = decodeURI(o), s.click(), window.URL.revokeObjectURL(c), e();
-          } catch (s) {
-            r(s);
+            let o = document.createElement("a"), c = window.URL.createObjectURL(l), s = i.headers.get("Content-Disposition");
+            s = s || "";
+            let y = /filename=(.*?)$/g.exec(s);
+            y !== null && (s = y[1]), o.href = c, o.download = decodeURI(s), o.click(), window.URL.revokeObjectURL(c), e();
+          } catch (o) {
+            r(o);
           }
         }) : i.text().then((l) => {
           r(l);
@@ -261,7 +261,7 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
     i < 128 ? e += String.fromCharCode(i) : i > 127 && i < 2048 ? (e += String.fromCharCode(i >> 6 | 192), e += String.fromCharCode(i & 63 | 128)) : (e += String.fromCharCode(i >> 12 | 224), e += String.fromCharCode(i >> 6 & 63 | 128), e += String.fromCharCode(i & 63 | 128));
   }
   return e;
-}, b = function(t) {
+}, w = function(t) {
   let e = "", r = 0, i, n, l = 0;
   for (; r < t.length; )
     i = t.charCodeAt(r), i < 128 ? (e += String.fromCharCode(i), r++) : i > 191 && i < 224 ? (n = t.charCodeAt(r + 1), e += String.fromCharCode((i & 31) << 6 | n & 63), r += 2) : (n = t.charCodeAt(r + 1), l = t.charCodeAt(r + 2), e += String.fromCharCode((i & 15) << 12 | (n & 63) << 6 | l & 63), r += 3);
@@ -269,16 +269,16 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
 };
 const g = {
   encode(t) {
-    let e = "", r, i, n, l, s, c, o, h = 0;
+    let e = "", r, i, n, l, o, c, s, h = 0;
     for (t = m(t); h < t.length; )
-      r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), l = r >> 2, s = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, o = n & 63, isNaN(i) ? c = o = 64 : isNaN(n) && (o = 64), e = e + f.charAt(l) + f.charAt(s) + f.charAt(c) + f.charAt(o);
+      r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), l = r >> 2, o = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, s = n & 63, isNaN(i) ? c = s = 64 : isNaN(n) && (s = 64), e = e + f.charAt(l) + f.charAt(o) + f.charAt(c) + f.charAt(s);
     return e;
   },
   decode(t) {
-    let e = "", r, i, n, l, s, c, o, h = 0;
+    let e = "", r, i, n, l, o, c, s, h = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < t.length; )
-      l = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), r = l << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | o, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), o !== 64 && (e = e + String.fromCharCode(n));
-    return e = b(e), e;
+      l = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), r = l << 2 | o >> 4, i = (o & 15) << 4 | c >> 2, n = (c & 3) << 6 | s, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), s !== 64 && (e = e + String.fromCharCode(n));
+    return e = w(e), e;
   }
 }, C = {
   select() {
@@ -298,6 +298,18 @@ const g = {
         t(r);
       }), e.click();
     });
+  },
+  async slice(t, e, r) {
+    if (e < 0)
+      return;
+    let i = 0, n = t.size;
+    for (; i < n; ) {
+      let l = i + e > n ? n - i : e, o = t.slice(i, i + l);
+      i = i + l, await r({
+        pointer: i,
+        file: o
+      });
+    }
   }
 };
 let d = (t, e) => {
@@ -404,7 +416,7 @@ class O {
 }
 export {
   p as Http,
-  w as InfoException,
+  b as InfoException,
   A as Service,
   O as Websocket,
   g as base64,
