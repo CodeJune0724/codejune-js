@@ -6,7 +6,7 @@ export default class ServerSentEvent {
     private closeAction;
     constructor(url: string);
     onOpen(action: () => void): void;
-    onMessage(type: string, action: (data: string) => void): void;
+    onMessage<DATA_TYPE>(type: string, action: (data: DATA_TYPE) => void): void;
     onClose(action: () => void): void;
     open(): void;
     close(): void;
