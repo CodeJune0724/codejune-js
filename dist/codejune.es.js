@@ -64,25 +64,25 @@ const a = {
   assignment(t, e, i) {
     if (this.isNull(i) || i === !0)
       for (let r in t) {
-        let n = t[r], l = e[r];
-        if (!(n === void 0 || l === void 0)) {
+        let n = t[r], o = e[r];
+        if (!(n === void 0 || o === void 0)) {
           if (n === null) {
-            t[r] = l;
+            t[r] = o;
             continue;
           }
           if (this.isObject(n)) {
-            if (this.isObject(l)) {
-              if (Array.isArray(n) && Array.isArray(l)) {
+            if (this.isObject(o)) {
+              if (Array.isArray(n) && Array.isArray(o)) {
                 n = [];
-                for (let o of l)
-                  n.push(o);
+                for (let s of o)
+                  n.push(s);
                 t[r] = n;
                 continue;
               }
-              !Array.isArray(n) && !Array.isArray(l) && this.assignment(n, l, !0);
+              !Array.isArray(n) && !Array.isArray(o) && this.assignment(n, o, !0);
             }
           } else
-            (l === null || typeof n == typeof l) && (t[r] = l);
+            (o === null || typeof n == typeof o) && (t[r] = o);
         }
       }
     else
@@ -176,17 +176,17 @@ class p {
     return new Promise((e, i) => {
       this._getFetch().then((r) => {
         let n = r.headers.get("Content-Type");
-        n && n.indexOf("download") !== -1 ? r.blob().then((l) => {
+        n && n.indexOf("download") !== -1 ? r.blob().then((o) => {
           try {
-            let o = document.createElement("a"), c = window.URL.createObjectURL(l), s = r.headers.get("Content-Disposition");
-            s = s || "";
-            let y = /filename=(.*?)$/g.exec(s);
-            y !== null && (s = y[1]), o.href = c, o.download = decodeURI(s), o.click(), window.URL.revokeObjectURL(c), e();
-          } catch (o) {
-            i(o);
+            let s = document.createElement("a"), c = window.URL.createObjectURL(o), l = r.headers.get("Content-Disposition");
+            l = l || "";
+            let y = /filename=(.*?)$/g.exec(l);
+            y !== null && (l = y[1]), s.href = c, s.download = decodeURI(l), s.click(), window.URL.revokeObjectURL(c), e();
+          } catch (s) {
+            i(s);
           }
-        }) : r.text().then((l) => {
-          i(l);
+        }) : r.text().then((o) => {
+          i(o);
         });
       });
     });
@@ -256,26 +256,26 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
     r < 128 ? e += String.fromCharCode(r) : r > 127 && r < 2048 ? (e += String.fromCharCode(r >> 6 | 192), e += String.fromCharCode(r & 63 | 128)) : (e += String.fromCharCode(r >> 12 | 224), e += String.fromCharCode(r >> 6 & 63 | 128), e += String.fromCharCode(r & 63 | 128));
   }
   return e;
-}, w = function(t) {
-  let e = "", i = 0, r, n, l = 0;
+}, g = function(t) {
+  let e = "", i = 0, r, n, o = 0;
   for (; i < t.length; )
-    r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (n = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | n & 63), i += 2) : (n = t.charCodeAt(i + 1), l = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (n & 63) << 6 | l & 63), i += 3);
+    r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (n = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | n & 63), i += 2) : (n = t.charCodeAt(i + 1), o = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (n & 63) << 6 | o & 63), i += 3);
   return e;
 };
-const b = {
+const w = {
   encode(t) {
-    let e = "", i, r, n, l, o, c, s, h = 0;
+    let e = "", i, r, n, o, s, c, l, h = 0;
     for (t = m(t); h < t.length; )
-      i = t.charCodeAt(h++), r = t.charCodeAt(h++), n = t.charCodeAt(h++), l = i >> 2, o = (i & 3) << 4 | r >> 4, c = (r & 15) << 2 | n >> 6, s = n & 63, isNaN(r) ? c = s = 64 : isNaN(n) && (s = 64), e = e + f.charAt(l) + f.charAt(o) + f.charAt(c) + f.charAt(s);
+      i = t.charCodeAt(h++), r = t.charCodeAt(h++), n = t.charCodeAt(h++), o = i >> 2, s = (i & 3) << 4 | r >> 4, c = (r & 15) << 2 | n >> 6, l = n & 63, isNaN(r) ? c = l = 64 : isNaN(n) && (l = 64), e = e + f.charAt(o) + f.charAt(s) + f.charAt(c) + f.charAt(l);
     return e;
   },
   decode(t) {
-    let e = "", i, r, n, l, o, c, s, h = 0;
+    let e = "", i, r, n, o, s, c, l, h = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < t.length; )
-      l = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), i = l << 2 | o >> 4, r = (o & 15) << 4 | c >> 2, n = (c & 3) << 6 | s, e = e + String.fromCharCode(i), c !== 64 && (e = e + String.fromCharCode(r)), s !== 64 && (e = e + String.fromCharCode(n));
-    return e = w(e), e;
+      o = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), l = f.indexOf(t.charAt(h++)), i = o << 2 | s >> 4, r = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(i), c !== 64 && (e = e + String.fromCharCode(r)), l !== 64 && (e = e + String.fromCharCode(n));
+    return e = g(e), e;
   }
-}, g = {
+}, A = {
   select() {
     return new Promise((t) => {
       let e = document.createElement("input");
@@ -299,10 +299,10 @@ const b = {
       return;
     let r = 0, n = t.size;
     for (; r < n; ) {
-      let l = r + e > n ? n - r : e, o = t.slice(r, r + l);
-      r = r + l, await i({
+      let o = r + e > n ? n - r : e, s = t.slice(r, r + o);
+      r = r + o, await i({
         pointer: r,
-        file: o
+        file: s
       });
     }
   }
@@ -326,7 +326,7 @@ let d = (t, e) => {
   }
   return e;
 };
-class C {
+class b {
   url;
   constructor(e) {
     this.url = e;
@@ -359,7 +359,7 @@ class C {
     });
   }
 }
-const A = {
+const C = {
   /**
    * 获取屏幕高度
    *
@@ -409,12 +409,49 @@ class k {
     this.websocket && (this.websocket.close(), this.websocket = null);
   }
 }
+class O {
+  url = "";
+  eventSource = null;
+  openAction = () => {
+  };
+  messageAction = {};
+  closeAction = () => {
+  };
+  constructor(e) {
+    this.url = e;
+  }
+  onOpen(e) {
+    this.openAction = e;
+  }
+  onMessage(e, i) {
+    this.messageAction[e] = i;
+  }
+  onClose(e) {
+    this.closeAction = e;
+  }
+  open() {
+    this.eventSource = new EventSource(this.url), this.eventSource.onopen = () => {
+      this.openAction();
+    };
+    for (let e in this.messageAction)
+      this.eventSource.addEventListener(e, (i) => {
+        this.messageAction[e](i.data);
+      });
+    this.eventSource.onerror = () => {
+      this.closeAction(), this.close();
+    };
+  }
+  close() {
+    this.eventSource && this.eventSource.close();
+  }
+}
 export {
   p as Http,
-  C as Service,
+  O as ServerSentEvent,
+  b as Service,
   k as Websocket,
-  b as base64,
-  g as file,
+  w as base64,
+  A as file,
   a as variable,
-  A as window
+  C as window
 };
