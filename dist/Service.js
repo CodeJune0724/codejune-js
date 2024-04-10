@@ -1,5 +1,6 @@
 import Http from "./Http";
 import variable from "./variable";
+import ServerSentEvent from "./ServerSentEvent";
 let getHttp = (request, service) => {
     request.url = request.url.startsWith("http") ? request.url : service.url ? `${service.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
     let result = new Http(request.url, request.type);
@@ -45,6 +46,9 @@ export default class Service {
                 e(responseHandler(response));
             });
         });
+    }
+    $eventSource(url) {
+        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url);
     }
     $download(request) {
         return new Promise((s, e) => {
