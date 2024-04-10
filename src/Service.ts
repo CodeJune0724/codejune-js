@@ -1,5 +1,6 @@
 import Http, { type, contentType } from "./Http";
 import variable from "./variable";
+import ServerSentEvent from "./ServerSentEvent";
 
 interface Request {
     url: string;
@@ -59,6 +60,10 @@ export default class Service {
                 e(responseHandler(response));
             });
         });
+    }
+
+    $eventSource(url: string): ServerSentEvent {
+        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url);
     }
 
     $download(request: Request) {

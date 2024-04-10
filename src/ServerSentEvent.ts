@@ -6,7 +6,7 @@ export default class ServerSentEvent {
 
     private openAction: () => void = () => {};
 
-    private messageAction: { [key in string]: (data: string) => void } = {};
+    private messageAction: { [key in string]: (data: any) => void } = {};
 
     private closeAction: () => void = () => {};
 
@@ -18,7 +18,7 @@ export default class ServerSentEvent {
         this.openAction = action;
     }
 
-    onMessage(type: string, action: (data: string) => void) {
+    onMessage<DATA_TYPE>(type: string, action: (data: DATA_TYPE) => void) {
         this.messageAction[type] = action;
     }
 
