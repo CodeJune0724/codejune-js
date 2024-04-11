@@ -62,8 +62,8 @@ export default class Http {
                 } else {
                     error(responseText);
                 }
-            }).catch((m) => {
-                error(m);
+            }).catch((e) => {
+                error(e);
             });
         });
     }
@@ -109,6 +109,20 @@ export default class Http {
                         error(text);
                     });
                 }
+            }).catch((e) => {
+                error(e);
+            });
+        });
+    }
+
+    sendOfBlob(): Promise<Blob> {
+        return new Promise((success: any, error) => {
+            this._getFetch().then((response) => {
+                response.blob().then((blob) => {
+                    success(blob);
+                });
+            }).catch((e) => {
+                error(e);
             });
         });
     }
