@@ -188,6 +188,19 @@ class p {
         }) : r.text().then((s) => {
           i(s);
         });
+      }).catch((r) => {
+        i(r);
+      });
+    });
+  }
+  sendOfBlob() {
+    return new Promise((e, i) => {
+      this._getFetch().then((r) => {
+        r.blob().then((n) => {
+          e(n);
+        });
+      }).catch((r) => {
+        i(r);
       });
     });
   }
@@ -262,7 +275,7 @@ let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
     r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (n = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | n & 63), i += 2) : (n = t.charCodeAt(i + 1), s = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (n & 63) << 6 | s & 63), i += 3);
   return e;
 };
-const A = {
+const g = {
   encode(t) {
     let e = "", i, r, n, s, o, c, l, h = 0;
     for (t = m(t); h < t.length; )
@@ -275,7 +288,7 @@ const A = {
       s = f.indexOf(t.charAt(h++)), o = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), l = f.indexOf(t.charAt(h++)), i = s << 2 | o >> 4, r = (o & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(i), c !== 64 && (e = e + String.fromCharCode(r)), l !== 64 && (e = e + String.fromCharCode(n));
     return e = w(e), e;
   }
-}, b = {
+}, A = {
   select() {
     return new Promise((t) => {
       let e = document.createElement("input");
@@ -307,7 +320,7 @@ const A = {
     }
   }
 };
-class g {
+class b {
   url = "";
   eventSource = null;
   openAction = () => {
@@ -377,7 +390,7 @@ class C {
     });
   }
   $eventSource(e) {
-    return new g(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e);
+    return new b(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e);
   }
   $download(e) {
     return new Promise((i, r) => {
@@ -450,11 +463,11 @@ class O {
 }
 export {
   p as Http,
-  g as ServerSentEvent,
+  b as ServerSentEvent,
   C as Service,
   O as Websocket,
-  A as base64,
-  b as file,
+  g as base64,
+  A as file,
   a as variable,
   k as window
 };
