@@ -21,6 +21,7 @@ export default class Http {
     send(): Promise<string>;
     download(): Promise<undefined>;
     asyncDownload(): Promise<undefined>;
+    sendOfBlob(): Promise<Blob>;
     private _getFetch;
     private _getUrl;
 }
