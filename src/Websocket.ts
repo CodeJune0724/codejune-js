@@ -4,31 +4,47 @@ export default class Websocket {
 
     private websocket: WebSocket | null = null;
 
-    onOpen: (ev: Event) => any = () => {};
+    private onOpenAction: (ev: Event) => void = () => {};
 
-    onMessage: (ev: MessageEvent<any>) => any = () => {};
+    private onMessageAction: (ev: MessageEvent<any>) => void = () => {};
 
-    onClose: (ev: CloseEvent) => any = () => {};
+    private onCloseAction: (ev: CloseEvent) => void = () => {};
 
-    onError: (ev: Event) => any = () => {};
+    private onErrorAction: (ev: Event) => void = () => {};
 
     constructor(url: string) {
         this.url = url;
     }
 
+    onOpen(action: (ev: Event) => void) {
+        this.onOpenAction = action;
+    }
+
+    onMessage(action: (ev: MessageEvent<any>) => void) {
+        this.onMessageAction = action;
+    }
+
+    onClose(action: (ev: CloseEvent) => void) {
+        this.onCloseAction = action;
+    }
+
+    onError(action: (ev: Event) => void) {
+        this.onErrorAction = action;
+    }
+
     open() {
         this.websocket = new WebSocket(this.url);
-        this.websocket.onopen = (ev) => {
-            this.onOpen(ev);
+        this.websocket.onopen = (event) => {
+            this.onOpenAction(event);
         };
-        this.websocket.onmessage = (ev) => {
-            this.onMessage(ev);
+        this.websocket.onmessage = (messageEvent) => {
+            this.onMessageAction(messageEvent);
         };
-        this.websocket.onclose = (ev) => {
-            this.onClose(ev);
+        this.websocket.onclose = (closeEvent) => {
+            this.onCloseAction(closeEvent);
         };
-        this.websocket.onerror = (ev) => {
-            this.onError(ev);
+        this.websocket.onerror = (event) => {
+            this.onErrorAction(event);
         };
     }
 
@@ -45,7 +61,6 @@ export default class Websocket {
     close() {
         if (this.websocket) {
             this.websocket.close();
-            this.websocket = null;
         }
     }
 

@@ -1,26 +1,38 @@
 export default class Websocket {
     url = "";
     websocket = null;
-    onOpen = () => { };
-    onMessage = () => { };
-    onClose = () => { };
-    onError = () => { };
+    onOpenAction = () => { };
+    onMessageAction = () => { };
+    onCloseAction = () => { };
+    onErrorAction = () => { };
     constructor(url) {
         this.url = url;
     }
+    onOpen(action) {
+        this.onOpenAction = action;
+    }
+    onMessage(action) {
+        this.onMessageAction = action;
+    }
+    onClose(action) {
+        this.onCloseAction = action;
+    }
+    onError(action) {
+        this.onErrorAction = action;
+    }
     open() {
         this.websocket = new WebSocket(this.url);
-        this.websocket.onopen = (ev) => {
-            this.onOpen(ev);
+        this.websocket.onopen = (event) => {
+            this.onOpenAction(event);
         };
-        this.websocket.onmessage = (ev) => {
-            this.onMessage(ev);
+        this.websocket.onmessage = (messageEvent) => {
+            this.onMessageAction(messageEvent);
         };
-        this.websocket.onclose = (ev) => {
-            this.onClose(ev);
+        this.websocket.onclose = (closeEvent) => {
+            this.onCloseAction(closeEvent);
         };
-        this.websocket.onerror = (ev) => {
-            this.onError(ev);
+        this.websocket.onerror = (event) => {
+            this.onErrorAction(event);
         };
     }
     send(data) {
@@ -36,7 +48,6 @@ export default class Websocket {
     close() {
         if (this.websocket) {
             this.websocket.close();
-            this.websocket = null;
         }
     }
 }
