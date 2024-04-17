@@ -128,26 +128,6 @@ export default class Http {
     }
 
     private _getFetch(): Promise<Response> {
-        if (variable.isObject(this.body)) {
-            let checkFile = (data: object): boolean => {
-                if (variable.isNull(data)) {
-                    return false;
-                }
-                if (data.constructor === File || data.constructor === FileList) {
-                    return true;
-                }
-                for (let key in data) {
-                    let value = this.body[key];
-                    if (checkFile(value)) {
-                        return true;
-                    }
-                }
-                return false;
-            };
-            if (checkFile(this.body)) {
-                this.contentType = "FORM_DATA";
-            }
-        }
         if (this.contentType === "FORM_DATA") {
             delete this.header["Content-type"];
             let formData = new FormData();

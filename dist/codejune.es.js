@@ -1,4 +1,4 @@
-const a = {
+const f = {
   /**
    * 是否为空
    *
@@ -205,29 +205,14 @@ class A {
     });
   }
   _getFetch() {
-    if (a.isObject(this.body)) {
-      let e = (i) => {
-        if (a.isNull(i))
-          return !1;
-        if (i.constructor === File || i.constructor === FileList)
-          return !0;
-        for (let r in i) {
-          let n = this.body[r];
-          if (e(n))
-            return !0;
-        }
-        return !1;
-      };
-      e(this.body) && (this.contentType = "FORM_DATA");
-    }
     if (this.contentType === "FORM_DATA") {
       delete this.header["Content-type"];
       let e = new FormData();
-      if (a.isObject(this.body))
+      if (f.isObject(this.body))
         for (let i in this.body) {
           let r = this.body[i];
           if (r !== void 0)
-            if (!a.isNull(r) && (r.constructor === FileList || Array.isArray(r)))
+            if (!f.isNull(r) && (r.constructor === FileList || Array.isArray(r)))
               for (let n of r)
                 e.append(i, n);
             else
@@ -235,7 +220,7 @@ class A {
         }
       this.body = e;
     } else
-      a.isObject(this.body) && (this.body = JSON.stringify(this.body));
+      f.isObject(this.body) && (this.body = JSON.stringify(this.body));
     return fetch(this._getUrl(), {
       cache: "no-cache",
       credentials: "same-origin",
@@ -249,7 +234,7 @@ class A {
   }
   _getUrl() {
     let e = this.url;
-    if (!a.isEmpty(this.param)) {
+    if (!f.isEmpty(this.param)) {
       let i = "?";
       for (let r in this.param) {
         let n = this.param[r];
@@ -260,7 +245,7 @@ class A {
     return e;
   }
 }
-let f = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m = function(t) {
+let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m = function(t) {
   let e = "";
   t = t.replace(/\r\n/g, `
 `);
@@ -279,13 +264,13 @@ const b = {
   encode(t) {
     let e = "", i, r, n, o, s, c, l, h = 0;
     for (t = m(t); h < t.length; )
-      i = t.charCodeAt(h++), r = t.charCodeAt(h++), n = t.charCodeAt(h++), o = i >> 2, s = (i & 3) << 4 | r >> 4, c = (r & 15) << 2 | n >> 6, l = n & 63, isNaN(r) ? c = l = 64 : isNaN(n) && (l = 64), e = e + f.charAt(o) + f.charAt(s) + f.charAt(c) + f.charAt(l);
+      i = t.charCodeAt(h++), r = t.charCodeAt(h++), n = t.charCodeAt(h++), o = i >> 2, s = (i & 3) << 4 | r >> 4, c = (r & 15) << 2 | n >> 6, l = n & 63, isNaN(r) ? c = l = 64 : isNaN(n) && (l = 64), e = e + a.charAt(o) + a.charAt(s) + a.charAt(c) + a.charAt(l);
     return e;
   },
   decode(t) {
     let e = "", i, r, n, o, s, c, l, h = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < t.length; )
-      o = f.indexOf(t.charAt(h++)), s = f.indexOf(t.charAt(h++)), c = f.indexOf(t.charAt(h++)), l = f.indexOf(t.charAt(h++)), i = o << 2 | s >> 4, r = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(i), c !== 64 && (e = e + String.fromCharCode(r)), l !== 64 && (e = e + String.fromCharCode(n));
+      o = a.indexOf(t.charAt(h++)), s = a.indexOf(t.charAt(h++)), c = a.indexOf(t.charAt(h++)), l = a.indexOf(t.charAt(h++)), i = o << 2 | s >> 4, r = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(i), c !== 64 && (e = e + String.fromCharCode(r)), l !== 64 && (e = e + String.fromCharCode(n));
     return e = g(e), e;
   }
 }, C = {
@@ -382,7 +367,7 @@ let d = (t, e) => {
   if (t.param)
     for (let r in t.param)
       i.addParam(r, t.param[r]);
-  return i.setBody(t.body), t.contentType && i.setContentType(t.contentType), i.contentType === null && t.type !== "GET" && a.isObject(t.body) && i.setContentType("APPLICATION_JSON"), i;
+  return i.setBody(t.body), t.contentType && i.setContentType(t.contentType), i.contentType === null && t.type !== "GET" && f.isObject(t.body) && i.setContentType("APPLICATION_JSON"), i;
 }, u = (t) => {
   let e;
   try {
@@ -428,7 +413,7 @@ class O {
     });
   }
 }
-const k = {
+const S = {
   /**
    * 获取屏幕高度
    *
@@ -446,7 +431,7 @@ const k = {
     return window.innerWidth;
   }
 };
-class S {
+class k {
   url = "";
   websocket = null;
   onOpenAction = () => {
@@ -494,9 +479,9 @@ export {
   A as Http,
   w as ServerSentEvent,
   O as Service,
-  S as Websocket,
+  k as Websocket,
   b as base64,
   C as file,
-  a as variable,
-  k as window
+  f as variable,
+  S as window
 };
