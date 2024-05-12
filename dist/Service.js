@@ -47,7 +47,7 @@ export default class Service {
             });
         });
     }
-    $eventSource(url) {
+    $serverSentEvent(url) {
         return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url);
     }
     $download(request) {

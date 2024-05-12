@@ -62,7 +62,7 @@ export default class Service {
         });
     }
 
-    $eventSource(url: string): ServerSentEvent {
+    $serverSentEvent(url: string): ServerSentEvent {
         return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url);
     }
 
