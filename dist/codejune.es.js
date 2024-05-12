@@ -391,7 +391,7 @@ class O {
       });
     });
   }
-  $eventSource(e) {
+  $serverSentEvent(e) {
     return new w(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e);
   }
   $download(e) {
