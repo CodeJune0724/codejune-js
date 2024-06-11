@@ -211,7 +211,7 @@ class A {
       if (f.isObject(this.body))
         for (let i in this.body) {
           let r = this.body[i];
-          if (r !== void 0)
+          if (r != null)
             if (!f.isNull(r) && (r.constructor === FileList || Array.isArray(r)))
               for (let n of r)
                 e.append(i, n);

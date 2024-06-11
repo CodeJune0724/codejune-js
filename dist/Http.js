@@ -118,7 +118,7 @@ export default class Http {
             if (variable.isObject(this.body)) {
                 for (let key in this.body) {
                     let value = this.body[key];
-                    if (value === undefined) {
+                    if (value === undefined || value === null) {
                         continue;
                     }
                     if (!variable.isNull(value) && (value.constructor === FileList || Array.isArray(value))) {
