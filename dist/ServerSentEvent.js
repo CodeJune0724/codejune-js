@@ -1,3 +1,4 @@
+import variable from "./variable";
 let getData = (data) => {
     if (typeof data === "string") {
         try {
@@ -11,15 +12,36 @@ let getData = (data) => {
         return data;
     }
 };
+let getUrl = (url, param) => {
+    if (!variable.isEmpty(param)) {
+        let paramString = "?";
+        for (let key in param) {
+            let value = param[key];
+            if (value) {
+                paramString = paramString + key + "=" + value + "&";
+            }
+        }
+        if (paramString !== "?") {
+            paramString = paramString.substring(0, paramString.length - 1);
+        }
+        else {
+            paramString = "";
+        }
+        url = url + paramString;
+    }
+    return url;
+};
 export default class ServerSentEvent {
     url = "";
+    param;
     eventSource = null;
     openAction = () => { };
     messageAction = {};
     errorAction = () => { };
     closeAction = () => { };
-    constructor(url) {
+    constructor(url, param) {
         this.url = url;
+        this.param = param;
     }
     onOpen(action) {
         this.openAction = action;
@@ -34,7 +56,7 @@ export default class ServerSentEvent {
         this.closeAction = action;
     }
     open() {
-        this.eventSource = new EventSource(this.url);
+        this.eventSource = new EventSource(getUrl(this.url, this.param));
         this.eventSource.onopen = () => {
             this.openAction();
         };

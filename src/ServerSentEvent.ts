@@ -1,3 +1,5 @@
+import variable from "./variable";
+
 let getData = (data: any) => {
     if (typeof data === "string") {
         try {
@@ -10,9 +12,30 @@ let getData = (data: any) => {
     }
 };
 
+let getUrl = (url: string, param?: { [key in string]: string }) => {
+    if (!variable.isEmpty(param)) {
+        let paramString = "?";
+        for (let key in param) {
+            let value = param[key];
+            if (value) {
+                paramString = paramString + key + "=" + value + "&";
+            }
+        }
+        if (paramString !== "?") {
+            paramString = paramString.substring(0, paramString.length - 1);
+        } else {
+            paramString = "";
+        }
+        url = url + paramString;
+    }
+    return url;
+};
+
 export default class ServerSentEvent {
 
     private readonly url: string = "";
+
+    private readonly param?: { [key in string]: string };
 
     private eventSource: EventSource | null = null;
 
@@ -24,8 +47,9 @@ export default class ServerSentEvent {
 
     private closeAction: () => void = () => {};
 
-    constructor(url: string) {
+    constructor(url: string, param?: { [key in string]: string }) {
         this.url = url;
+        this.param = param;
     }
 
     onOpen(action: () => void) {
@@ -45,7 +69,7 @@ export default class ServerSentEvent {
     }
 
     open() {
-        this.eventSource = new EventSource(this.url);
+        this.eventSource = new EventSource(getUrl(this.url, this.param));
         this.eventSource.onopen = () => {
             this.openAction();
         };
