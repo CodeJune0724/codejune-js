@@ -116,7 +116,7 @@ const f = {
       }
   }
 };
-class A {
+class m {
   url = "";
   type = "GET";
   param = {};
@@ -245,7 +245,7 @@ class A {
     return e;
   }
 }
-let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m = function(t) {
+let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", A = function(t) {
   let e = "";
   t = t.replace(/\r\n/g, `
 `);
@@ -260,10 +260,10 @@ let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", m =
     r = t.charCodeAt(i), r < 128 ? (e += String.fromCharCode(r), i++) : r > 191 && r < 224 ? (n = t.charCodeAt(i + 1), e += String.fromCharCode((r & 31) << 6 | n & 63), i += 2) : (n = t.charCodeAt(i + 1), o = t.charCodeAt(i + 2), e += String.fromCharCode((r & 15) << 12 | (n & 63) << 6 | o & 63), i += 3);
   return e;
 };
-const b = {
+const C = {
   encode(t) {
     let e = "", i, r, n, o, s, c, l, h = 0;
-    for (t = m(t); h < t.length; )
+    for (t = A(t); h < t.length; )
       i = t.charCodeAt(h++), r = t.charCodeAt(h++), n = t.charCodeAt(h++), o = i >> 2, s = (i & 3) << 4 | r >> 4, c = (r & 15) << 2 | n >> 6, l = n & 63, isNaN(r) ? c = l = 64 : isNaN(n) && (l = 64), e = e + a.charAt(o) + a.charAt(s) + a.charAt(c) + a.charAt(l);
     return e;
   },
@@ -273,7 +273,7 @@ const b = {
       o = a.indexOf(t.charAt(h++)), s = a.indexOf(t.charAt(h++)), c = a.indexOf(t.charAt(h++)), l = a.indexOf(t.charAt(h++)), i = o << 2 | s >> 4, r = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(i), c !== 64 && (e = e + String.fromCharCode(r)), l !== 64 && (e = e + String.fromCharCode(n));
     return e = g(e), e;
   }
-}, C = {
+}, O = {
   select() {
     return new Promise((t) => {
       let e = document.createElement("input");
@@ -314,9 +314,20 @@ let p = (t) => {
     }
   else
     return t;
+}, w = (t, e) => {
+  if (!f.isEmpty(e)) {
+    let i = "?";
+    for (let r in e) {
+      let n = e[r];
+      n && (i = i + r + "=" + n + "&");
+    }
+    i !== "?" ? i = i.substring(0, i.length - 1) : i = "", t = t + i;
+  }
+  return t;
 };
-class w {
+class b {
   url = "";
+  param;
   eventSource = null;
   openAction = () => {
   };
@@ -325,8 +336,8 @@ class w {
   };
   closeAction = () => {
   };
-  constructor(e) {
-    this.url = e;
+  constructor(e, i) {
+    this.url = e, this.param = i;
   }
   onOpen(e) {
     this.openAction = e;
@@ -341,7 +352,7 @@ class w {
     this.closeAction = e;
   }
   open() {
-    this.eventSource = new EventSource(this.url), this.eventSource.onopen = () => {
+    this.eventSource = new EventSource(w(this.url, this.param)), this.eventSource.onopen = () => {
       this.openAction();
     };
     for (let e in this.messageAction)
@@ -360,7 +371,7 @@ class w {
 }
 let d = (t, e) => {
   t.url = t.url.startsWith("http") ? t.url : e.url ? `${e.url}${t.url ? t.url.startsWith("/") ? t.url : `/${t.url}` : ""}` : t.url;
-  let i = new A(t.url, t.type);
+  let i = new m(t.url, t.type);
   if (t.header)
     for (let r in t.header)
       i.addHeader(r, t.header[r]);
@@ -377,7 +388,7 @@ let d = (t, e) => {
   }
   return e;
 };
-class O {
+class S {
   url;
   constructor(e) {
     this.url = e;
@@ -392,7 +403,7 @@ class O {
     });
   }
   $serverSentEvent(e) {
-    return new w(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e);
+    return new b(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e);
   }
   $download(e) {
     return new Promise((i, r) => {
@@ -413,7 +424,7 @@ class O {
     });
   }
 }
-const S = {
+const k = {
   /**
    * 获取屏幕高度
    *
@@ -431,7 +442,7 @@ const S = {
     return window.innerWidth;
   }
 };
-class k {
+class v {
   url = "";
   websocket = null;
   onOpenAction = () => {
@@ -476,12 +487,12 @@ class k {
   }
 }
 export {
-  A as Http,
-  w as ServerSentEvent,
-  O as Service,
-  k as Websocket,
-  b as base64,
-  C as file,
+  m as Http,
+  b as ServerSentEvent,
+  S as Service,
+  v as Websocket,
+  C as base64,
+  O as file,
   f as variable,
-  S as window
+  k as window
 };
