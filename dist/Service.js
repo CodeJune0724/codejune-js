@@ -47,8 +47,8 @@ export default class Service {
             });
         });
     }
-    $serverSentEvent(url) {
-        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url);
+    $serverSentEvent(url, param) {
+        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url, param);
     }
     $download(request) {
         return new Promise((s, e) => {

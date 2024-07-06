@@ -402,8 +402,8 @@ class S {
       });
     });
   }
-  $serverSentEvent(e) {
-    return new b(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e);
+  $serverSentEvent(e, i) {
+    return new b(e.startsWith("http") ? e : this.url ? `${this.url}${e ? e.startsWith("/") ? e : `/${e}` : ""}` : e, i);
   }
   $download(e) {
     return new Promise((i, r) => {

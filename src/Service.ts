@@ -62,8 +62,8 @@ export default class Service {
         });
     }
 
-    $serverSentEvent(url: string): ServerSentEvent {
-        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url);
+    $serverSentEvent(url: string, param?: { [key in string]: string }): ServerSentEvent {
+        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url, param);
     }
 
     $download(request: Request) {

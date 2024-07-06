@@ -16,7 +16,9 @@ export default class Service {
     readonly url?: string;
     constructor(url?: string);
     $send(request: Request): Promise<any>;
-    $serverSentEvent(url: string): ServerSentEvent;
+    $serverSentEvent(url: string, param?: {
+        [key in string]: string;
+    }): ServerSentEvent;
     $download(request: Request): Promise<any>;
     $asyncDownload(request: Request): Promise<any>;
 }
