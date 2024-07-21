@@ -11,8 +11,7 @@ interface Request {
 }
 
 let getUrl = (url: string, param?: { [key: string]: string | null }, uri?: string): string => {
-    let result = uri && uri.startsWith("http") ? uri : `${url}/${uri}`;
-    result = result.replace(/\/\//g, "/");
+    let result = uri && uri.startsWith("http") ? uri : `${url}${uri ? `/${uri}` : ""}`;
     if (!param) {
         return result;
     }

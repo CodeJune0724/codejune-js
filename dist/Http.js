@@ -1,6 +1,5 @@
 let getUrl = (url, param, uri) => {
-    let result = uri && uri.startsWith("http") ? uri : `${url}/${uri}`;
-    result = result.replace(/\/\//g, "/");
+    let result = uri && uri.startsWith("http") ? uri : `${url}${uri ? `/${uri}` : ""}`;
     if (!param) {
         return result;
     }

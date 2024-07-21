@@ -117,8 +117,8 @@ const C = {
   }
 };
 let f = (t, e, r) => {
-  let n = r && r.startsWith("http") ? r : `${t}/${r}`;
-  if (n = n.replace(/\/\//g, "/"), !e)
+  let n = r && r.startsWith("http") ? r : `${t}${r ? `/${r}` : ""}`;
+  if (!e)
     return n;
   let i = "?";
   for (let o in e) {
