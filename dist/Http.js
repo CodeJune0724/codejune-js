@@ -1,45 +1,125 @@
-import variable from "./variable";
+let getUrl = (url, param, uri) => {
+    let result = uri && uri.startsWith("http") ? uri : `${url}/${uri}`;
+    result = result.replace(/\/\//g, "/");
+    if (!param) {
+        return result;
+    }
+    let paramString = "?";
+    for (let key in param) {
+        let value = param[key];
+        if (value) {
+            paramString = paramString + key + "=" + value + "&";
+        }
+    }
+    if (paramString !== "?") {
+        paramString = paramString.substring(0, paramString.length - 1);
+    }
+    else {
+        paramString = "";
+    }
+    result = result + paramString;
+    return result;
+};
+let getFetch = (request) => {
+    if (request.contentType === "FORM_DATA") {
+        if (request.header) {
+            delete request.header["Content-type"];
+        }
+        let formData = new FormData();
+        if (request.body && typeof request.body === "object") {
+            for (let key in request.body) {
+                let value = request.body[key];
+                if (!value) {
+                    continue;
+                }
+                if (value.constructor === FileList || Array.isArray(value)) {
+                    for (let item of value) {
+                        formData.append(key, item);
+                    }
+                }
+                else {
+                    formData.append(key, value);
+                }
+            }
+        }
+        request.body = formData;
+    }
+    else {
+        if (request.body) {
+            request.body = JSON.stringify(request.body);
+        }
+    }
+    return fetch(getUrl(request.url, request.param), {
+        cache: "no-cache",
+        credentials: "same-origin",
+        mode: "cors",
+        redirect: "follow",
+        referrer: "no-referrer",
+        method: request.type,
+        headers: (() => {
+            let result = {};
+            if (request.header) {
+                for (let key in request.header) {
+                    let value = request.header[key];
+                    if (!value) {
+                        continue;
+                    }
+                    result[key] = value;
+                }
+            }
+            return result;
+        })(),
+        body: request.type !== "GET" ? request.body : undefined
+    });
+};
 export default class Http {
-    url = "";
-    type = "GET";
-    param = {};
-    header = {};
-    contentType = null;
-    body = null;
+    request = {
+        url: "",
+        type: "GET"
+    };
     constructor(url, type) {
-        this.url = url;
-        this.type = type;
+        this.request.url = url;
+        this.request.type = type;
     }
     addHeader(key, value) {
-        this.header[key] = value;
+        if (!this.request.header) {
+            this.request.header = {};
+        }
+        this.request.header[key] = value;
     }
     addParam(key, value) {
-        this.param[key] = value;
+        if (!this.request.param) {
+            this.request.param = {};
+        }
+        this.request.param[key] = value;
     }
     setContentType(contentType) {
-        this.contentType = contentType;
+        this.request.contentType = contentType;
         let key = "Content-type";
+        if (!this.request.header) {
+            this.request.header = {};
+        }
         switch (contentType) {
             case "APPLICATION_JSON":
-                this.header[key] = "application/json";
+                this.request.header[key] = "application/json";
                 break;
             case "APPLICATION_XML":
-                this.header[key] = "application/xml";
+                this.request.header[key] = "application/xml";
                 break;
             case "ROW":
-                this.header[key] = "text/plain";
+                this.request.header[key] = "text/plain";
                 break;
             case null:
-                delete this.header[key];
+                delete this.request.header[key];
                 break;
         }
     }
     setBody(body) {
-        this.body = body;
+        this.request.body = body;
     }
     send() {
         return new Promise((success, error) => {
-            this._getFetch().then((response) => {
+            getFetch(this.request).then((response) => {
                 let responseText = response.text();
                 if (response.ok) {
                     success(responseText);
@@ -55,7 +135,7 @@ export default class Http {
     download() {
         return new Promise((success, error) => {
             try {
-                window.open(this._getUrl());
+                window.open(getUrl(this.request.url, this.request.param));
                 success();
             }
             catch (e) {
@@ -65,7 +145,7 @@ export default class Http {
     }
     asyncDownload() {
         return new Promise((success, error) => {
-            this._getFetch().then((response) => {
+            getFetch(this.request).then((response) => {
                 let contentType = response.headers.get("Content-Type");
                 if (contentType && contentType.indexOf("download") !== -1) {
                     response.blob().then((blob) => {
@@ -102,7 +182,7 @@ export default class Http {
     }
     sendOfBlob() {
         return new Promise((success, error) => {
-            this._getFetch().then((response) => {
+            getFetch(this.request).then((response) => {
                 response.blob().then((blob) => {
                     success(blob);
                 });
@@ -111,63 +191,6 @@ export default class Http {
             });
         });
     }
-    _getFetch() {
-        if (this.contentType === "FORM_DATA") {
-            delete this.header["Content-type"];
-            let formData = new FormData();
-            if (variable.isObject(this.body)) {
-                for (let key in this.body) {
-                    let value = this.body[key];
-                    if (value === undefined || value === null) {
-                        continue;
-                    }
-                    if (!variable.isNull(value) && (value.constructor === FileList || Array.isArray(value))) {
-                        for (let item of value) {
-                            formData.append(key, item);
-                        }
-                    }
-                    else {
-                        formData.append(key, value);
-                    }
-                }
-            }
-            this.body = formData;
-        }
-        else {
-            if (variable.isObject(this.body)) {
-                this.body = JSON.stringify(this.body);
-            }
-        }
-        return fetch(this._getUrl(), {
-            cache: "no-cache",
-            credentials: "same-origin",
-            mode: "cors",
-            redirect: "follow",
-            referrer: "no-referrer",
-            method: this.type,
-            headers: this.header,
-            body: this.type !== "GET" ? this.body : undefined
-        });
-    }
-    _getUrl() {
-        let result = this.url;
-        if (!variable.isEmpty(this.param)) {
-            let param = "?";
-            for (let key in this.param) {
-                let value = this.param[key];
-                if (value) {
-                    param = param + key + "=" + value + "&";
-                }
-            }
-            if (param !== "?") {
-                param = param.substring(0, param.length - 1);
-            }
-            else {
-                param = "";
-            }
-            result = result + param;
-        }
-        return result;
-    }
 }
 ;
+export { getUrl };

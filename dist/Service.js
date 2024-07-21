@@ -1,24 +1,22 @@
-import Http from "./Http";
-import variable from "./variable";
+import Http, { getUrl } from "./Http";
 import ServerSentEvent from "./ServerSentEvent";
-let getHttp = (request, service) => {
-    request.url = request.url.startsWith("http") ? request.url : service.url ? `${service.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
-    let result = new Http(request.url, request.type);
-    if (request.header) {
-        for (let key in request.header) {
-            result.addHeader(key, request.header[key]);
-        }
-    }
+let getHttp = (service, request) => {
+    let result = new Http(getUrl(service.url ? service.url : "", {}, request.url), request.type);
     if (request.param) {
         for (let key in request.param) {
             result.addParam(key, request.param[key]);
         }
     }
-    result.setBody(request.body);
+    if (request.header) {
+        for (let key in request.header) {
+            result.addHeader(key, request.header[key]);
+        }
+    }
     if (request.contentType) {
         result.setContentType(request.contentType);
     }
-    if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
+    result.setBody(request.body);
+    if (result.request.contentType === null && result.request.type !== "GET" && typeof result.request.body === "object") {
         result.setContentType("APPLICATION_JSON");
     }
     return result;
@@ -40,7 +38,7 @@ export default class Service {
     }
     $send(request) {
         return new Promise((s, e) => {
-            getHttp(request, this).send().then((response) => {
+            getHttp(this, request).send().then((response) => {
                 s(responseHandler(response));
             }).catch((response) => {
                 e(responseHandler(response));
@@ -48,11 +46,11 @@ export default class Service {
         });
     }
     $serverSentEvent(url, param) {
-        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url, param);
+        return new ServerSentEvent(getUrl(this.url ? this.url : "", {}, url), param);
     }
     $download(request) {
         return new Promise((s, e) => {
-            getHttp(request, this).download().then(() => {
+            getHttp(this, request).download().then(() => {
                 s();
             }).catch((response) => {
                 e(responseHandler(response));
@@ -61,7 +59,7 @@ export default class Service {
     }
     $asyncDownload(request) {
         return new Promise((s, e) => {
-            getHttp(request, this).asyncDownload().then(() => {
+            getHttp(this, request).asyncDownload().then(() => {
                 s();
             }).catch((response) => {
                 e(responseHandler(response));
