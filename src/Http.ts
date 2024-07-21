@@ -1,5 +1,6 @@
 type type = "GET" | "POST" | "PUT" | "DELETE";
-type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "ROW";
+
+type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "TEXT_PLAIN" | "TEXT_HTML" | "FORM_URLENCODED";
 
 interface Request {
     url: string;
@@ -121,8 +122,17 @@ export default class Http {
             case "APPLICATION_XML":
                 this.request.header[key] = "application/xml";
                 break;
-            case "ROW":
+            case "FORM_DATA":
+                this.request.header[key] = "multipart/form-data";
+                break;
+            case "TEXT_PLAIN":
                 this.request.header[key] = "text/plain";
+                break;
+            case "TEXT_HTML":
+                this.request.header[key] = "text/html";
+                break;
+            case "FORM_URLENCODED":
+                this.request.header[key] = "application/x-www-form-urlencoded";
                 break;
             case null:
                 delete this.request.header[key];
