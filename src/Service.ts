@@ -1,34 +1,23 @@
-import Http, { type, contentType } from "./Http";
-import variable from "./variable";
+import Http, { Request, getUrl } from "./Http";
 import ServerSentEvent from "./ServerSentEvent";
 
-interface Request {
-    url: string;
-    type: type;
-    header?: { [key: string]: string };
-    param?: { [key: string]: string };
-    body?: any;
-    contentType?: contentType | null;
-}
-
-let getHttp = (request: Request, service: Service) => {
-    request.url = request.url.startsWith("http") ? request.url : service.url ? `${service.url}${request.url ? request.url.startsWith("/") ? request.url : `/${request.url}` : ""}` : request.url;
-    let result = new Http(request.url, request.type);
-    if (request.header) {
-        for (let key in request.header) {
-            result.addHeader(key, request.header[key]);
-        }
-    }
+let getHttp = (service: Service, request: Request) => {
+    let result = new Http(getUrl(service.url ? service.url : "", {}, request.url), request.type);
     if (request.param) {
         for (let key in request.param) {
             result.addParam(key, request.param[key]);
         }
     }
-    result.setBody(request.body);
+    if (request.header) {
+        for (let key in request.header) {
+            result.addHeader(key, request.header[key]);
+        }
+    }
     if (request.contentType) {
         result.setContentType(request.contentType);
     }
-    if (result.contentType === null && request.type !== "GET" && variable.isObject(request.body)) {
+    result.setBody(request.body);
+    if (result.request.contentType === null && result.request.type !== "GET" && typeof result.request.body === "object") {
         result.setContentType("APPLICATION_JSON");
     }
     return result;
@@ -54,7 +43,7 @@ export default class Service {
 
     $send(request: Request) {
         return new Promise<any>((s, e) => {
-            getHttp(request, this).send().then((response) => {
+            getHttp(this, request).send().then((response) => {
                 s(responseHandler(response));
             }).catch((response) => {
                 e(responseHandler(response));
@@ -62,13 +51,13 @@ export default class Service {
         });
     }
 
-    $serverSentEvent(url: string, param?: { [key in string]: string }): ServerSentEvent {
-        return new ServerSentEvent(url.startsWith("http") ? url : this.url ? `${this.url}${url ? url.startsWith("/") ? url : `/${url}` : ""}` : url, param);
+    $serverSentEvent(url: string, param?: { [key in string]: string | null }): ServerSentEvent {
+        return new ServerSentEvent(getUrl(this.url ? this.url : "", {}, url), param);
     }
 
     $download(request: Request) {
         return new Promise<any>((s: Function, e) => {
-            getHttp(request, this).download().then(() => {
+            getHttp(this, request).download().then(() => {
                 s();
             }).catch((response) => {
                 e(responseHandler(response));
@@ -78,7 +67,7 @@ export default class Service {
 
     $asyncDownload(request: Request) {
         return new Promise<any>((s: Function, e) => {
-            getHttp(request, this).asyncDownload().then(() => {
+            getHttp(this, request).asyncDownload().then(() => {
                 s();
             }).catch((response) => {
                 e(responseHandler(response));
@@ -86,8 +75,4 @@ export default class Service {
         });
     }
 
-};
-
-export {
-    Request
 };
