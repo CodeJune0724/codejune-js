@@ -38,11 +38,7 @@ declare const _default: {
      * @param object2 取值的对象
      * @param isStrict 是否是严谨模式
      * */
-    assignment(object1: {
-        [x: string]: any;
-    }, object2: {
-        [x: string]: any;
-    }, isStrict?: boolean): void;
+    assignment(object1: { [key in string]: any; }, object2: { [key in string]: any; }, isStrict?: boolean): void;
     /**
      * toString
      *
@@ -56,8 +52,6 @@ declare const _default: {
      *
      * @param data 数据
      * */
-    clean(data: any[] | {
-        [x: string]: any;
-    }): void;
+    clean(data: { [key in string]: any; } | any[]): void;
 };
 export default _default;

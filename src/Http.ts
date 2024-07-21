@@ -1,61 +1,143 @@
-import variable from "./variable";
-
 type type = "GET" | "POST" | "PUT" | "DELETE";
 type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "ROW";
 
+interface Request {
+    url: string;
+    type: type;
+    param?: { [key: string]: string | null };
+    header?: { [key: string]: string | null };
+    contentType?: contentType | null;
+    body?: any;
+}
+
+let getUrl = (url: string, param?: { [key: string]: string | null }, uri?: string): string => {
+    let result = uri && uri.startsWith("http") ? uri : `${url}/${uri}`;
+    result = result.replace(/\/\//g, "/");
+    if (!param) {
+        return result;
+    }
+    let paramString = "?";
+    for (let key in param) {
+        let value = param[key];
+        if (value) {
+            paramString = paramString + key + "=" + value + "&";
+        }
+    }
+    if (paramString !== "?") {
+        paramString = paramString.substring(0, paramString.length - 1);
+    } else {
+        paramString = "";
+    }
+    result = result + paramString;
+    return result;
+};
+
+let getFetch = (request: Request): Promise<Response> => {
+    if (request.contentType === "FORM_DATA") {
+        if (request.header) {
+            delete request.header["Content-type"];
+        }
+        let formData = new FormData();
+        if (request.body && typeof request.body === "object") {
+            for (let key in request.body) {
+                let value = request.body[key];
+                if (!value) {
+                    continue;
+                }
+                if (value.constructor === FileList || Array.isArray(value)) {
+                    for (let item of value) {
+                        formData.append(key, item);
+                    }
+                } else {
+                    formData.append(key, value);
+                }
+            }
+        }
+        request.body = formData;
+    } else {
+        if (request.body) {
+            request.body = JSON.stringify(request.body);
+        }
+    }
+    return fetch(getUrl(request.url, request.param), {
+        cache: "no-cache",
+        credentials: "same-origin",
+        mode: "cors",
+        redirect: "follow",
+        referrer: "no-referrer",
+        method: request.type,
+        headers: (() => {
+            let result: { [key: string]: string } = {};
+            if (request.header) {
+                for (let key in request.header) {
+                    let value = request.header[key];
+                    if (!value) {
+                        continue;
+                    }
+                    result[key] = value;
+                }
+            }
+            return result;
+        })(),
+        body: request.type !== "GET" ? request.body : undefined
+    });
+}
+
 export default class Http {
 
-    readonly url: string = "";
-
-    readonly type: type = "GET";
-
-    readonly param: { [key in string]: string } = {};
-
-    readonly header: { [key in string]: string } & { "Content-type"?: type } = {};
-
-    contentType: contentType | null = null;
-
-    body: any = null;
+    readonly request: Request = {
+        url: "",
+        type: "GET"
+    };
 
     constructor(url: string, type: type) {
-        this.url = url;
-        this.type = type;
+        this.request.url = url;
+        this.request.type = type;
     }
 
-    addHeader(key: string, value: string) {
-        this.header[key] = value;
+    addHeader(key: string, value: string | null) {
+        if (!this.request.header) {
+            this.request.header = {};
+        }
+        this.request.header[key] = value;
     }
 
-    addParam(key: string, value: string) {
-        this.param[key] = value;
+    addParam(key: string, value: string | null) {
+        if (!this.request.param) {
+            this.request.param = {};
+        }
+        this.request.param[key] = value;
     }
 
     setContentType(contentType: contentType | null) {
-        this.contentType = contentType;
+        this.request.contentType = contentType;
         let key = "Content-type";
+        if (!this.request.header) {
+            this.request.header = {};
+        }
         switch (contentType) {
             case "APPLICATION_JSON":
-                this.header[key] = "application/json";
+                this.request.header[key] = "application/json";
                 break;
             case "APPLICATION_XML":
-                this.header[key] = "application/xml";
+                this.request.header[key] = "application/xml";
                 break;
             case "ROW":
-                this.header[key] = "text/plain";
+                this.request.header[key] = "text/plain";
                 break;
             case null:
-                delete this.header[key];
+                delete this.request.header[key];
                 break;
         }
     }
 
     setBody(body: any) {
-        this.body = body;
+        this.request.body = body;
     }
 
     send(): Promise<string> {
         return new Promise((success, error) => {
-            this._getFetch().then((response) => {
+            getFetch(this.request).then((response) => {
                 let responseText = response.text();
                 if (response.ok) {
                     success(responseText);
@@ -71,7 +153,7 @@ export default class Http {
     download(): Promise<undefined> {
         return new Promise((success: Function, error) => {
             try {
-                window.open(this._getUrl());
+                window.open(getUrl(this.request.url, this.request.param));
                 success();
             } catch (e) {
                 error(e);
@@ -81,7 +163,7 @@ export default class Http {
 
     asyncDownload(): Promise<undefined> {
         return new Promise((success: any, error) => {
-            this._getFetch().then((response) => {
+            getFetch(this.request).then((response) => {
                 let contentType = response.headers.get("Content-Type");
                 if (contentType && contentType.indexOf("download") !== -1) {
                     response.blob().then((blob) => {
@@ -117,7 +199,7 @@ export default class Http {
 
     sendOfBlob(): Promise<Blob> {
         return new Promise((success: any, error) => {
-            this._getFetch().then((response) => {
+            getFetch(this.request).then((response) => {
                 response.blob().then((blob) => {
                     success(blob);
                 });
@@ -127,63 +209,6 @@ export default class Http {
         });
     }
 
-    private _getFetch(): Promise<Response> {
-        if (this.contentType === "FORM_DATA") {
-            delete this.header["Content-type"];
-            let formData = new FormData();
-            if (variable.isObject(this.body)) {
-                for (let key in this.body) {
-                    let value = this.body[key];
-                    if (value === undefined || value === null) {
-                        continue;
-                    }
-                    if (!variable.isNull(value) && (value.constructor === FileList || Array.isArray(value))) {
-                        for (let item of value) {
-                            formData.append(key, item);
-                        }
-                    } else {
-                        formData.append(key, value);
-                    }
-                }
-            }
-            this.body = formData;
-        } else {
-            if (variable.isObject(this.body)) {
-                this.body = JSON.stringify(this.body);
-            }
-        }
-        return fetch(this._getUrl(), {
-            cache: "no-cache",
-            credentials: "same-origin",
-            mode: "cors",
-            redirect: "follow",
-            referrer: "no-referrer",
-            method: this.type,
-            headers: this.header,
-            body: this.type !== "GET" ? this.body : undefined
-        });
-    }
-
-    private _getUrl(): string {
-        let result = this.url;
-        if (!variable.isEmpty(this.param)) {
-            let param = "?";
-            for (let key in this.param) {
-                let value = this.param[key];
-                if (value) {
-                    param = param + key + "=" + value + "&";
-                }
-            }
-            if (param !== "?") {
-                param = param.substring(0, param.length - 1);
-            } else {
-                param = "";
-            }
-            result = result + param;
-        }
-        return result;
-    }
-
 };
 
-export { type, contentType };
+export { type, contentType, Request, getUrl };

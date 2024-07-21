@@ -1,4 +1,4 @@
-import variable from "./variable";
+import { getUrl } from "./Http";
 let getData = (data) => {
     if (typeof data === "string") {
         try {
@@ -11,25 +11,6 @@ let getData = (data) => {
     else {
         return data;
     }
-};
-let getUrl = (url, param) => {
-    if (!variable.isEmpty(param)) {
-        let paramString = "?";
-        for (let key in param) {
-            let value = param[key];
-            if (value) {
-                paramString = paramString + key + "=" + value + "&";
-            }
-        }
-        if (paramString !== "?") {
-            paramString = paramString.substring(0, paramString.length - 1);
-        }
-        else {
-            paramString = "";
-        }
-        url = url + paramString;
-    }
-    return url;
 };
 export default class ServerSentEvent {
     url = "";
