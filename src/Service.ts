@@ -1,4 +1,4 @@
-import Http, { Request, getUrl } from "./Http";
+import Http, {Request, getUrl, HttpResponseResult} from "./Http";
 import ServerSentEvent from "./ServerSentEvent";
 
 let getHttp = (service: Service, request: Request) => {
@@ -41,8 +41,8 @@ export default class Service {
         this.url = url;
     }
 
-    $send(request: Request) {
-        return new Promise<any>((success, error) => {
+    $send(request: Request): Promise<HttpResponseResult<any>> {
+        return new Promise((success, error) => {
             getHttp(this, request).send().then((response) => {
                 response.body = responseHandler(response.body);
                 if (response.code === 200) {
@@ -60,8 +60,8 @@ export default class Service {
         return new ServerSentEvent(getUrl(this.url ? this.url : "", {}, url), param);
     }
 
-    $download(request: Request) {
-        return new Promise<any>((s: Function, e) => {
+    $download(request: Request): Promise<undefined> {
+        return new Promise((s: Function, e) => {
             getHttp(this, request).download().then(() => {
                 s();
             }).catch((response) => {
@@ -70,8 +70,8 @@ export default class Service {
         });
     }
 
-    $asyncDownload(request: Request) {
-        return new Promise<any>((s: Function, e) => {
+    $asyncDownload(request: Request): Promise<undefined> {
+        return new Promise((s: Function, e) => {
             getHttp(this, request).asyncDownload().then(() => {
                 s();
             }).catch((response) => {
