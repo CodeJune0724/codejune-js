@@ -172,10 +172,10 @@ export default class Http {
     }
 
     download(): Promise<undefined> {
-        return new Promise((success: Function, error) => {
+        return new Promise((success, error) => {
             try {
                 window.open(getUrl(this.request.url, this.request.param));
-                success();
+                success(undefined);
             } catch (e) {
                 error(e);
             }
