@@ -16,7 +16,7 @@ let getHttp = (service, request) => {
         result.setContentType(request.contentType);
     }
     result.setBody(request.body);
-    if (result.request.contentType === null && result.request.type !== "GET" && typeof result.request.body === "object") {
+    if (!result.request.contentType && result.request.type !== "GET" && typeof result.request.body === "object") {
         result.setContentType("APPLICATION_JSON");
     }
     return result;
@@ -37,11 +37,17 @@ export default class Service {
         this.url = url;
     }
     $send(request) {
-        return new Promise((s, e) => {
+        return new Promise((success, error) => {
             getHttp(this, request).send().then((response) => {
-                s(responseHandler(response));
+                response.body = responseHandler(response.body);
+                if (response.code === 200) {
+                    success(response);
+                }
+                else {
+                    error(response);
+                }
             }).catch((response) => {
-                e(responseHandler(response));
+                error(responseHandler(response));
             });
         });
     }

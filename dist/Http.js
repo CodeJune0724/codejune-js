@@ -105,8 +105,17 @@ export default class Http {
             case "APPLICATION_XML":
                 this.request.header[key] = "application/xml";
                 break;
-            case "ROW":
+            case "FORM_DATA":
+                this.request.header[key] = "multipart/form-data";
+                break;
+            case "TEXT_PLAIN":
                 this.request.header[key] = "text/plain";
+                break;
+            case "TEXT_HTML":
+                this.request.header[key] = "text/html";
+                break;
+            case "FORM_URLENCODED":
+                this.request.header[key] = "application/x-www-form-urlencoded";
                 break;
             case null:
                 delete this.request.header[key];
@@ -118,14 +127,19 @@ export default class Http {
     }
     send() {
         return new Promise((success, error) => {
-            getFetch(this.request).then((response) => {
-                let responseText = response.text();
-                if (response.ok) {
-                    success(responseText);
-                }
-                else {
-                    error(responseText);
-                }
+            getFetch(this.request).then(async (response) => {
+                let result = {
+                    code: response.status,
+                    header: (() => {
+                        let header = {};
+                        response.headers.forEach((key, value) => {
+                            header[key] = value;
+                        });
+                        return header;
+                    })(),
+                    body: await response.text()
+                };
+                success(result);
             }).catch((e) => {
                 error(e);
             });
@@ -183,7 +197,18 @@ export default class Http {
         return new Promise((success, error) => {
             getFetch(this.request).then((response) => {
                 response.blob().then((blob) => {
-                    success(blob);
+                    let result = {
+                        code: response.status,
+                        header: (() => {
+                            let header = {};
+                            response.headers.forEach((key, value) => {
+                                header[key] = value;
+                            });
+                            return header;
+                        })(),
+                        body: blob
+                    };
+                    success(result);
                 });
             }).catch((e) => {
                 error(e);

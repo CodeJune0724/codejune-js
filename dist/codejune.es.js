@@ -47,8 +47,8 @@ const C = {
     } else if (this.isObject(t)) {
       let e = {};
       for (let r in t) {
-        let n = t[r];
-        n !== void 0 && (this.isObject(n) ? e[r] = this.clone(n) : e[r] = n);
+        let i = t[r];
+        i !== void 0 && (this.isObject(i) ? e[r] = this.clone(i) : e[r] = i);
       }
       return e;
     } else
@@ -63,32 +63,32 @@ const C = {
    * */
   assignment(t, e, r) {
     if (this.isNull(r) || r === !0)
-      for (let n in t) {
-        let i = t[n], o = e[n];
-        if (!(i === void 0 || o === void 0)) {
-          if (i === null) {
-            t[n] = o;
+      for (let i in t) {
+        let n = t[i], o = e[i];
+        if (!(n === void 0 || o === void 0)) {
+          if (n === null) {
+            t[i] = o;
             continue;
           }
-          if (this.isObject(i)) {
+          if (this.isObject(n)) {
             if (this.isObject(o)) {
-              if (Array.isArray(i) && Array.isArray(o)) {
-                i = [];
+              if (Array.isArray(n) && Array.isArray(o)) {
+                n = [];
                 for (let s of o)
-                  i.push(s);
-                t[n] = i;
+                  n.push(s);
+                t[i] = n;
                 continue;
               }
-              !Array.isArray(i) && !Array.isArray(o) && this.assignment(i, o, !0);
+              !Array.isArray(n) && !Array.isArray(o) && this.assignment(n, o, !0);
             }
           } else
-            (o === null || typeof i == typeof o) && (t[n] = o);
+            (o === null || typeof n == typeof o) && (t[i] = o);
         }
       }
     else
-      for (let n in e) {
-        let i = e[n];
-        i !== void 0 && (t[n] = i);
+      for (let i in e) {
+        let n = e[i];
+        n !== void 0 && (t[i] = n);
       }
   },
   /**
@@ -117,28 +117,28 @@ const C = {
   }
 };
 let f = (t, e, r) => {
-  let n = r && r.startsWith("http") ? r : `${t}${r ? `/${r}` : ""}`;
+  let i = r && r.startsWith("http") ? r : `${t}${r ? `/${r}` : ""}`;
   if (!e)
-    return n;
-  let i = "?";
+    return i;
+  let n = "?";
   for (let o in e) {
     let s = e[o];
-    s && (i = i + o + "=" + s + "&");
+    s && (n = n + o + "=" + s + "&");
   }
-  return i !== "?" ? i = i.substring(0, i.length - 1) : i = "", n = n + i, n;
+  return n !== "?" ? n = n.substring(0, n.length - 1) : n = "", i = i + n, i;
 }, d = (t) => {
   if (t.contentType === "FORM_DATA") {
     t.header && delete t.header["Content-type"];
     let e = new FormData();
     if (t.body && typeof t.body == "object")
       for (let r in t.body) {
-        let n = t.body[r];
-        if (n)
-          if (n.constructor === FileList || Array.isArray(n))
-            for (let i of n)
-              e.append(r, i);
+        let i = t.body[r];
+        if (i)
+          if (i.constructor === FileList || Array.isArray(i))
+            for (let n of i)
+              e.append(r, n);
           else
-            e.append(r, n);
+            e.append(r, i);
       }
     t.body = e;
   } else
@@ -154,15 +154,15 @@ let f = (t, e, r) => {
       let e = {};
       if (t.header)
         for (let r in t.header) {
-          let n = t.header[r];
-          n && (e[r] = n);
+          let i = t.header[r];
+          i && (e[r] = i);
         }
       return e;
     })(),
     body: t.type !== "GET" ? t.body : void 0
   });
 };
-class m {
+class p {
   request = {
     url: "",
     type: "GET"
@@ -186,8 +186,17 @@ class m {
       case "APPLICATION_XML":
         this.request.header[r] = "application/xml";
         break;
-      case "ROW":
+      case "FORM_DATA":
+        this.request.header[r] = "multipart/form-data";
+        break;
+      case "TEXT_PLAIN":
         this.request.header[r] = "text/plain";
+        break;
+      case "TEXT_HTML":
+        this.request.header[r] = "text/html";
+        break;
+      case "FORM_URLENCODED":
+        this.request.header[r] = "application/x-www-form-urlencoded";
         break;
       case null:
         delete this.request.header[r];
@@ -199,11 +208,20 @@ class m {
   }
   send() {
     return new Promise((e, r) => {
-      d(this.request).then((n) => {
-        let i = n.text();
-        n.ok ? e(i) : r(i);
-      }).catch((n) => {
-        r(n);
+      d(this.request).then(async (i) => {
+        let n = {
+          code: i.status,
+          header: (() => {
+            let o = {};
+            return i.headers.forEach((s, c) => {
+              o[s] = c;
+            }), o;
+          })(),
+          body: await i.text()
+        };
+        e(n);
+      }).catch((i) => {
+        r(i);
       });
     });
   }
@@ -211,73 +229,83 @@ class m {
     return new Promise((e, r) => {
       try {
         window.open(f(this.request.url, this.request.param)), e();
-      } catch (n) {
-        r(n);
+      } catch (i) {
+        r(i);
       }
     });
   }
   asyncDownload() {
     return new Promise((e, r) => {
-      d(this.request).then((n) => {
-        let i = n.headers.get("Content-Type");
-        i && i.indexOf("download") !== -1 ? n.blob().then((o) => {
+      d(this.request).then((i) => {
+        let n = i.headers.get("Content-Type");
+        n && n.indexOf("download") !== -1 ? i.blob().then((o) => {
           try {
-            let s = document.createElement("a"), c = window.URL.createObjectURL(o), l = n.headers.get("Content-Disposition");
+            let s = document.createElement("a"), c = window.URL.createObjectURL(o), l = i.headers.get("Content-Disposition");
             l = l || "";
-            let p = /filename=(.*?)$/g.exec(l);
-            p !== null && (l = p[1]), s.href = c, s.download = decodeURI(l), s.click(), window.URL.revokeObjectURL(c), e();
+            let A = /filename=(.*?)$/g.exec(l);
+            A !== null && (l = A[1]), s.href = c, s.download = decodeURI(l), s.click(), window.URL.revokeObjectURL(c), e();
           } catch (s) {
             r(s);
           }
-        }) : n.text().then((o) => {
+        }) : i.text().then((o) => {
           r(o);
         });
-      }).catch((n) => {
-        r(n);
+      }).catch((i) => {
+        r(i);
       });
     });
   }
   sendOfBlob() {
     return new Promise((e, r) => {
-      d(this.request).then((n) => {
-        n.blob().then((i) => {
-          e(i);
+      d(this.request).then((i) => {
+        i.blob().then((n) => {
+          let o = {
+            code: i.status,
+            header: (() => {
+              let s = {};
+              return i.headers.forEach((c, l) => {
+                s[c] = l;
+              }), s;
+            })(),
+            body: n
+          };
+          e(o);
         });
-      }).catch((n) => {
-        r(n);
+      }).catch((i) => {
+        r(i);
       });
     });
   }
 }
-let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", g = function(t) {
+let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", w = function(t) {
   let e = "";
   t = t.replace(/\r\n/g, `
 `);
   for (let r = 0; r < t.length; r++) {
-    let n = t.charCodeAt(r);
-    n < 128 ? e += String.fromCharCode(n) : n > 127 && n < 2048 ? (e += String.fromCharCode(n >> 6 | 192), e += String.fromCharCode(n & 63 | 128)) : (e += String.fromCharCode(n >> 12 | 224), e += String.fromCharCode(n >> 6 & 63 | 128), e += String.fromCharCode(n & 63 | 128));
+    let i = t.charCodeAt(r);
+    i < 128 ? e += String.fromCharCode(i) : i > 127 && i < 2048 ? (e += String.fromCharCode(i >> 6 | 192), e += String.fromCharCode(i & 63 | 128)) : (e += String.fromCharCode(i >> 12 | 224), e += String.fromCharCode(i >> 6 & 63 | 128), e += String.fromCharCode(i & 63 | 128));
   }
   return e;
-}, w = function(t) {
-  let e = "", r = 0, n, i, o = 0;
+}, b = function(t) {
+  let e = "", r = 0, i, n, o = 0;
   for (; r < t.length; )
-    n = t.charCodeAt(r), n < 128 ? (e += String.fromCharCode(n), r++) : n > 191 && n < 224 ? (i = t.charCodeAt(r + 1), e += String.fromCharCode((n & 31) << 6 | i & 63), r += 2) : (i = t.charCodeAt(r + 1), o = t.charCodeAt(r + 2), e += String.fromCharCode((n & 15) << 12 | (i & 63) << 6 | o & 63), r += 3);
+    i = t.charCodeAt(r), i < 128 ? (e += String.fromCharCode(i), r++) : i > 191 && i < 224 ? (n = t.charCodeAt(r + 1), e += String.fromCharCode((i & 31) << 6 | n & 63), r += 2) : (n = t.charCodeAt(r + 1), o = t.charCodeAt(r + 2), e += String.fromCharCode((i & 15) << 12 | (n & 63) << 6 | o & 63), r += 3);
   return e;
 };
-const S = {
+const k = {
   encode(t) {
-    let e = "", r, n, i, o, s, c, l, h = 0;
-    for (t = g(t); h < t.length; )
-      r = t.charCodeAt(h++), n = t.charCodeAt(h++), i = t.charCodeAt(h++), o = r >> 2, s = (r & 3) << 4 | n >> 4, c = (n & 15) << 2 | i >> 6, l = i & 63, isNaN(n) ? c = l = 64 : isNaN(i) && (l = 64), e = e + a.charAt(o) + a.charAt(s) + a.charAt(c) + a.charAt(l);
+    let e = "", r, i, n, o, s, c, l, h = 0;
+    for (t = w(t); h < t.length; )
+      r = t.charCodeAt(h++), i = t.charCodeAt(h++), n = t.charCodeAt(h++), o = r >> 2, s = (r & 3) << 4 | i >> 4, c = (i & 15) << 2 | n >> 6, l = n & 63, isNaN(i) ? c = l = 64 : isNaN(n) && (l = 64), e = e + a.charAt(o) + a.charAt(s) + a.charAt(c) + a.charAt(l);
     return e;
   },
   decode(t) {
-    let e = "", r, n, i, o, s, c, l, h = 0;
+    let e = "", r, i, n, o, s, c, l, h = 0;
     for (t = t.replace(/[^A-Za-z0-9\+\/\=]/g, ""); h < t.length; )
-      o = a.indexOf(t.charAt(h++)), s = a.indexOf(t.charAt(h++)), c = a.indexOf(t.charAt(h++)), l = a.indexOf(t.charAt(h++)), r = o << 2 | s >> 4, n = (s & 15) << 4 | c >> 2, i = (c & 3) << 6 | l, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(n)), l !== 64 && (e = e + String.fromCharCode(i));
-    return e = w(e), e;
+      o = a.indexOf(t.charAt(h++)), s = a.indexOf(t.charAt(h++)), c = a.indexOf(t.charAt(h++)), l = a.indexOf(t.charAt(h++)), r = o << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), l !== 64 && (e = e + String.fromCharCode(n));
+    return e = b(e), e;
   }
-}, k = {
+}, O = {
   select() {
     return new Promise((t) => {
       let e = document.createElement("input");
@@ -299,17 +327,17 @@ const S = {
   async slice(t, e, r) {
     if (e < 0)
       return;
-    let n = 0, i = t.size;
-    for (; n < i; ) {
-      let o = n + e > i ? i - n : e, s = t.slice(n, n + o);
-      n = n + o, await r({
-        pointer: n,
+    let i = 0, n = t.size;
+    for (; i < n; ) {
+      let o = i + e > n ? n - i : e, s = t.slice(i, i + o);
+      i = i + o, await r({
+        pointer: i,
         file: s
       });
     }
   }
 };
-let A = (t) => {
+let m = (t) => {
   if (typeof t == "string")
     try {
       return JSON.parse(t);
@@ -319,7 +347,7 @@ let A = (t) => {
   else
     return t;
 };
-class b {
+class g {
   url = "";
   param;
   eventSource = null;
@@ -351,10 +379,10 @@ class b {
     };
     for (let e in this.messageAction)
       this.eventSource.addEventListener(e, (r) => {
-        this.messageAction[e](A(r.data));
+        this.messageAction[e](m(r.data));
       });
     this.eventSource.addEventListener("$error", (e) => {
-      this.errorAction(A(e.data));
+      this.errorAction(m(e.data));
     }), this.eventSource.onerror = () => {
       this.closeAction(), this.close();
     };
@@ -364,14 +392,14 @@ class b {
   }
 }
 let y = (t, e) => {
-  let r = new m(f(t.url ? t.url : "", {}, e.url), e.type);
+  let r = new p(f(t.url ? t.url : "", {}, e.url), e.type);
   if (e.param)
-    for (let n in e.param)
-      r.addParam(n, e.param[n]);
+    for (let i in e.param)
+      r.addParam(i, e.param[i]);
   if (e.header)
-    for (let n in e.header)
-      r.addHeader(n, e.header[n]);
-  return e.contentType && r.setContentType(e.contentType), r.setBody(e.body), r.request.contentType === null && r.request.type !== "GET" && typeof r.request.body == "object" && r.setContentType("APPLICATION_JSON"), r;
+    for (let i in e.header)
+      r.addHeader(i, e.header[i]);
+  return e.contentType && r.setContentType(e.contentType), r.setBody(e.body), !r.request.contentType && r.request.type !== "GET" && typeof r.request.body == "object" && r.setContentType("APPLICATION_JSON"), r;
 }, u = (t) => {
   let e;
   try {
@@ -381,38 +409,38 @@ let y = (t, e) => {
   }
   return e;
 };
-class O {
+class S {
   url;
   constructor(e) {
     this.url = e;
   }
   $send(e) {
-    return new Promise((r, n) => {
-      y(this, e).send().then((i) => {
-        r(u(i));
-      }).catch((i) => {
-        n(u(i));
+    return new Promise((r, i) => {
+      y(this, e).send().then((n) => {
+        n.body = u(n.body), n.code === 200 ? r(n) : i(n);
+      }).catch((n) => {
+        i(u(n));
       });
     });
   }
   $serverSentEvent(e, r) {
-    return new b(f(this.url ? this.url : "", {}, e), r);
+    return new g(f(this.url ? this.url : "", {}, e), r);
   }
   $download(e) {
-    return new Promise((r, n) => {
+    return new Promise((r, i) => {
       y(this, e).download().then(() => {
         r();
-      }).catch((i) => {
-        n(u(i));
+      }).catch((n) => {
+        i(u(n));
       });
     });
   }
   $asyncDownload(e) {
-    return new Promise((r, n) => {
+    return new Promise((r, i) => {
       y(this, e).asyncDownload().then(() => {
         r();
-      }).catch((i) => {
-        n(u(i));
+      }).catch((n) => {
+        i(u(n));
       });
     });
   }
@@ -435,7 +463,7 @@ const v = {
     return window.innerWidth;
   }
 };
-class N {
+class E {
   url = "";
   websocket = null;
   onOpenAction = () => {
@@ -480,12 +508,12 @@ class N {
   }
 }
 export {
-  m as Http,
-  b as ServerSentEvent,
-  O as Service,
-  N as Websocket,
-  S as base64,
-  k as file,
+  p as Http,
+  g as ServerSentEvent,
+  S as Service,
+  E as Websocket,
+  k as base64,
+  O as file,
   C as variable,
   v as window
 };

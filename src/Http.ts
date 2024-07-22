@@ -1,7 +1,8 @@
 type type = "GET" | "POST" | "PUT" | "DELETE";
-type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "ROW";
 
-interface Request {
+type contentType = "APPLICATION_JSON" | "APPLICATION_XML" | "FORM_DATA" | "TEXT_PLAIN" | "TEXT_HTML" | "FORM_URLENCODED";
+
+type Request = {
     url: string;
     type: type;
     param?: { [key: string]: string | null };
@@ -9,6 +10,12 @@ interface Request {
     contentType?: contentType | null;
     body?: any;
 }
+
+type HttpResponseResult<BODY> = {
+    code: number,
+    header: { [key in string]: string },
+    body: BODY
+};
 
 let getUrl = (url: string, param?: { [key: string]: string | null }, uri?: string): string => {
     let result = uri && uri.startsWith("http") ? uri : `${url}${uri ? `/${uri}` : ""}`;
@@ -121,8 +128,17 @@ export default class Http {
             case "APPLICATION_XML":
                 this.request.header[key] = "application/xml";
                 break;
-            case "ROW":
+            case "FORM_DATA":
+                this.request.header[key] = "multipart/form-data";
+                break;
+            case "TEXT_PLAIN":
                 this.request.header[key] = "text/plain";
+                break;
+            case "TEXT_HTML":
+                this.request.header[key] = "text/html";
+                break;
+            case "FORM_URLENCODED":
+                this.request.header[key] = "application/x-www-form-urlencoded";
                 break;
             case null:
                 delete this.request.header[key];
@@ -134,15 +150,21 @@ export default class Http {
         this.request.body = body;
     }
 
-    send(): Promise<string> {
+    send(): Promise<HttpResponseResult<string>> {
         return new Promise((success, error) => {
-            getFetch(this.request).then((response) => {
-                let responseText = response.text();
-                if (response.ok) {
-                    success(responseText);
-                } else {
-                    error(responseText);
-                }
+            getFetch(this.request).then(async (response) => {
+                let result: HttpResponseResult<string> = {
+                    code: response.status,
+                    header: (() => {
+                        let header: { [key in string]: string } = {};
+                        response.headers.forEach((key ,value) => {
+                            header[key] = value;
+                        });
+                        return header;
+                    })(),
+                    body: await response.text()
+                };
+                success(result);
             }).catch((e) => {
                 error(e);
             });
@@ -196,11 +218,22 @@ export default class Http {
         });
     }
 
-    sendOfBlob(): Promise<Blob> {
-        return new Promise((success: any, error) => {
+    sendOfBlob(): Promise<HttpResponseResult<Blob>> {
+        return new Promise((success, error) => {
             getFetch(this.request).then((response) => {
                 response.blob().then((blob) => {
-                    success(blob);
+                    let result: HttpResponseResult<Blob> = {
+                        code: response.status,
+                        header: (() => {
+                            let header: { [key in string]: string } = {};
+                            response.headers.forEach((key ,value) => {
+                                header[key] = value;
+                            });
+                            return header;
+                        })(),
+                        body: blob
+                    };
+                    success(result);
                 });
             }).catch((e) => {
                 error(e);
@@ -210,4 +243,4 @@ export default class Http {
 
 };
 
-export { type, contentType, Request, getUrl };
+export { type, contentType, Request, getUrl, HttpResponseResult };
