@@ -1,4 +1,4 @@
-import Http, {Request, getUrl, HttpResponseResult} from "./Http";
+import Http, { Request, getUrl, HttpResponseResult } from "./Http";
 import ServerSentEvent from "./ServerSentEvent";
 
 let getHttp = (service: Service, request: Request) => {
@@ -61,11 +61,11 @@ export default class Service {
     }
 
     $download(request: Request): Promise<undefined> {
-        return new Promise((s: Function, e) => {
+        return new Promise((success, error) => {
             getHttp(this, request).download().then(() => {
-                s();
+                success(undefined);
             }).catch((response) => {
-                e(responseHandler(response));
+                error(responseHandler(response));
             });
         });
     }

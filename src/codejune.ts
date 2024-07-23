@@ -8,6 +8,7 @@ import Service from "./Service";
 import window from "./window";
 import Websocket from "./Websocket";
 import ServerSentEvent from "./ServerSentEvent";
+import func from "./func";
 
 export {
     variable,
@@ -17,5 +18,6 @@ export {
     Service,
     window,
     Websocket,
-    ServerSentEvent
+    ServerSentEvent,
+    func
 };

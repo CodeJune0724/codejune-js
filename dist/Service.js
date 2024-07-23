@@ -55,11 +55,11 @@ export default class Service {
         return new ServerSentEvent(getUrl(this.url ? this.url : "", {}, url), param);
     }
     $download(request) {
-        return new Promise((s, e) => {
+        return new Promise((success, error) => {
             getHttp(this, request).download().then(() => {
-                s();
+                success(undefined);
             }).catch((response) => {
-                e(responseHandler(response));
+                error(responseHandler(response));
             });
         });
     }
