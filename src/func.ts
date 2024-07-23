@@ -1,6 +1,6 @@
 export default {
 
-    debounce(action: Function, delay: number): Function {
+    debounce(action: Function, delay: number) {
         let timeoutIndex: number | undefined = undefined;
         return function(this: any) {
             let param = arguments;
