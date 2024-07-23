@@ -7,4 +7,5 @@ import Service from "./Service";
 import window from "./window";
 import Websocket from "./Websocket";
 import ServerSentEvent from "./ServerSentEvent";
-export { variable, Http, base64, file, Service, window, Websocket, ServerSentEvent };
+import func from "./func";
+export { variable, Http, base64, file, Service, window, Websocket, ServerSentEvent, func };

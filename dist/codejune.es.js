@@ -228,7 +228,7 @@ class p {
   download() {
     return new Promise((e, r) => {
       try {
-        window.open(f(this.request.url, this.request.param)), e();
+        window.open(f(this.request.url, this.request.param)), e(void 0);
       } catch (i) {
         r(i);
       }
@@ -242,8 +242,8 @@ class p {
           try {
             let s = document.createElement("a"), c = window.URL.createObjectURL(o), l = i.headers.get("Content-Disposition");
             l = l || "";
-            let A = /filename=(.*?)$/g.exec(l);
-            A !== null && (l = A[1]), s.href = c, s.download = decodeURI(l), s.click(), window.URL.revokeObjectURL(c), e();
+            let m = /filename=(.*?)$/g.exec(l);
+            m !== null && (l = m[1]), s.href = c, s.download = decodeURI(l), s.click(), window.URL.revokeObjectURL(c), e();
           } catch (s) {
             r(s);
           }
@@ -305,7 +305,7 @@ const k = {
       o = a.indexOf(t.charAt(h++)), s = a.indexOf(t.charAt(h++)), c = a.indexOf(t.charAt(h++)), l = a.indexOf(t.charAt(h++)), r = o << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), l !== 64 && (e = e + String.fromCharCode(n));
     return e = b(e), e;
   }
-}, O = {
+}, v = {
   select() {
     return new Promise((t) => {
       let e = document.createElement("input");
@@ -337,7 +337,7 @@ const k = {
     }
   }
 };
-let m = (t) => {
+let A = (t) => {
   if (typeof t == "string")
     try {
       return JSON.parse(t);
@@ -379,10 +379,10 @@ class g {
     };
     for (let e in this.messageAction)
       this.eventSource.addEventListener(e, (r) => {
-        this.messageAction[e](m(r.data));
+        this.messageAction[e](A(r.data));
       });
     this.eventSource.addEventListener("$error", (e) => {
-      this.errorAction(m(e.data));
+      this.errorAction(A(e.data));
     }), this.eventSource.onerror = () => {
       this.closeAction(), this.close();
     };
@@ -409,7 +409,7 @@ let y = (t, e) => {
   }
   return e;
 };
-class S {
+class O {
   url;
   constructor(e) {
     this.url = e;
@@ -429,7 +429,7 @@ class S {
   $download(e) {
     return new Promise((r, i) => {
       y(this, e).download().then(() => {
-        r();
+        r(void 0);
       }).catch((n) => {
         i(u(n));
       });
@@ -445,7 +445,7 @@ class S {
     });
   }
 }
-const v = {
+const S = {
   /**
    * 获取屏幕高度
    *
@@ -507,13 +507,25 @@ class E {
     this.websocket && this.websocket.close();
   }
 }
+const N = {
+  debounce(t, e) {
+    let r;
+    return function() {
+      let i = arguments;
+      clearTimeout(r), r = setTimeout(() => {
+        t.apply(this, i);
+      }, e);
+    };
+  }
+};
 export {
   p as Http,
   g as ServerSentEvent,
-  S as Service,
+  O as Service,
   E as Websocket,
   k as base64,
-  O as file,
+  v as file,
+  N as func,
   C as variable,
-  v as window
+  S as window
 };
