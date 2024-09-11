@@ -10,8 +10,6 @@ export default class Websocket {
 
     private onCloseAction: (ev: CloseEvent) => void = () => {};
 
-    private onErrorAction: (ev: Event) => void = () => {};
-
     constructor(url: string) {
         this.url = url;
     }
@@ -28,10 +26,6 @@ export default class Websocket {
         this.onCloseAction = action;
     }
 
-    onError(action: (ev: Event) => void) {
-        this.onErrorAction = action;
-    }
-
     connect() {
         this.websocket = new WebSocket(this.url);
         this.websocket.onopen = (event) => {
@@ -44,7 +38,8 @@ export default class Websocket {
             this.onCloseAction(closeEvent);
         };
         this.websocket.onerror = (event) => {
-            this.onErrorAction(event);
+            this.close();
+            throw new Error(event);
         };
     }
 
