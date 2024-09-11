@@ -10,7 +10,7 @@ export default class Websocket {
     onMessage(action: (ev: MessageEvent<any>) => void): void;
     onClose(action: (ev: CloseEvent) => void): void;
     onError(action: (ev: Event) => void): void;
-    open(): void;
+    connect(): void;
     send(data: any): void;
     close(): void;
 }
