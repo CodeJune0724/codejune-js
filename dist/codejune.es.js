@@ -489,7 +489,7 @@ class E {
   onError(e) {
     this.onErrorAction = e;
   }
-  open() {
+  connect() {
     this.websocket = new WebSocket(this.url), this.websocket.onopen = (e) => {
       this.onOpenAction(e);
     }, this.websocket.onmessage = (e) => {

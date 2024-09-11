@@ -1,6 +1,6 @@
 {
   "name": "codejune",
-  "version": "1.2.53",
+  "version": "1.2.54",
   "description": "codejune",
   "main": "dist/codejune.umd.js",
   "module": "dist/codejune.es.js",

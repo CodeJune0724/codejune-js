@@ -20,7 +20,7 @@ export default class Websocket {
     onError(action) {
         this.onErrorAction = action;
     }
-    open() {
+    connect() {
         this.websocket = new WebSocket(this.url);
         this.websocket.onopen = (event) => {
             this.onOpenAction(event);
