@@ -67,10 +67,6 @@ let getFetch = (request: Request): Promise<Response> => {
     }
     return fetch(getUrl(request.url, request.param), {
         cache: "no-cache",
-        credentials: "same-origin",
-        mode: "cors",
-        redirect: "follow",
-        referrer: "no-referrer",
         method: request.type,
         headers: (() => {
             let result: { [key: string]: string } = {};
