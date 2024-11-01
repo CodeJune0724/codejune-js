@@ -39,7 +39,7 @@ export default class Websocket {
         };
         this.websocket.onerror = (event) => {
             this.close();
-            throw new Error(event);
+            throw new Error(JSON.stringify(event));
         };
     }
 

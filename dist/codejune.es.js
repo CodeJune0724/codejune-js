@@ -145,10 +145,6 @@ let f = (t, e, r) => {
     t.body && (t.body = JSON.stringify(t.body));
   return fetch(f(t.url, t.param), {
     cache: "no-cache",
-    credentials: "same-origin",
-    mode: "cors",
-    redirect: "follow",
-    referrer: "no-referrer",
     method: t.type,
     headers: (() => {
       let e = {};
@@ -162,7 +158,7 @@ let f = (t, e, r) => {
     body: t.type !== "GET" ? t.body : void 0
   });
 };
-class p {
+class A {
   request = {
     url: "",
     type: "GET"
@@ -292,7 +288,7 @@ let a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", w =
     i = t.charCodeAt(r), i < 128 ? (e += String.fromCharCode(i), r++) : i > 191 && i < 224 ? (n = t.charCodeAt(r + 1), e += String.fromCharCode((i & 31) << 6 | n & 63), r += 2) : (n = t.charCodeAt(r + 1), o = t.charCodeAt(r + 2), e += String.fromCharCode((i & 15) << 12 | (n & 63) << 6 | o & 63), r += 3);
   return e;
 };
-const k = {
+const O = {
   encode(t) {
     let e = "", r, i, n, o, s, c, l, h = 0;
     for (t = w(t); h < t.length; )
@@ -305,7 +301,7 @@ const k = {
       o = a.indexOf(t.charAt(h++)), s = a.indexOf(t.charAt(h++)), c = a.indexOf(t.charAt(h++)), l = a.indexOf(t.charAt(h++)), r = o << 2 | s >> 4, i = (s & 15) << 4 | c >> 2, n = (c & 3) << 6 | l, e = e + String.fromCharCode(r), c !== 64 && (e = e + String.fromCharCode(i)), l !== 64 && (e = e + String.fromCharCode(n));
     return e = b(e), e;
   }
-}, v = {
+}, S = {
   select() {
     return new Promise((t) => {
       let e = document.createElement("input");
@@ -337,7 +333,7 @@ const k = {
     }
   }
 };
-let A = (t) => {
+let p = (t) => {
   if (typeof t == "string")
     try {
       return JSON.parse(t);
@@ -379,10 +375,10 @@ class g {
     };
     for (let e in this.messageAction)
       this.eventSource.addEventListener(e, (r) => {
-        this.messageAction[e](A(r.data));
+        this.messageAction[e](p(r.data));
       });
     this.eventSource.addEventListener("$error", (e) => {
-      this.errorAction(A(e.data));
+      this.errorAction(p(e.data));
     }), this.eventSource.onerror = () => {
       this.closeAction(), this.close();
     };
@@ -392,7 +388,7 @@ class g {
   }
 }
 let y = (t, e) => {
-  let r = new p(f(t.url ? t.url : "", {}, e.url), e.type);
+  let r = new A(f(t.url ? t.url : "", {}, e.url), e.type);
   if (e.param)
     for (let i in e.param)
       r.addParam(i, e.param[i]);
@@ -409,7 +405,7 @@ let y = (t, e) => {
   }
   return e;
 };
-class O {
+class k {
   url;
   constructor(e) {
     this.url = e;
@@ -445,7 +441,7 @@ class O {
     });
   }
 }
-const S = {
+const v = {
   /**
    * 获取屏幕高度
    *
@@ -463,7 +459,7 @@ const S = {
     return window.innerWidth;
   }
 };
-class E {
+class N {
   url = "";
   websocket = null;
   onOpenAction = () => {
@@ -471,8 +467,6 @@ class E {
   onMessageAction = () => {
   };
   onCloseAction = () => {
-  };
-  onErrorAction = () => {
   };
   constructor(e) {
     this.url = e;
@@ -486,9 +480,6 @@ class E {
   onClose(e) {
     this.onCloseAction = e;
   }
-  onError(e) {
-    this.onErrorAction = e;
-  }
   connect() {
     this.websocket = new WebSocket(this.url), this.websocket.onopen = (e) => {
       this.onOpenAction(e);
@@ -497,7 +488,7 @@ class E {
     }, this.websocket.onclose = (e) => {
       this.onCloseAction(e);
     }, this.websocket.onerror = (e) => {
-      this.onErrorAction(e);
+      throw this.close(), new Error(JSON.stringify(e));
     };
   }
   send(e) {
@@ -507,7 +498,7 @@ class E {
     this.websocket && this.websocket.close();
   }
 }
-const N = {
+const E = {
   debounce(t, e) {
     let r;
     return function() {
@@ -519,13 +510,13 @@ const N = {
   }
 };
 export {
-  p as Http,
+  A as Http,
   g as ServerSentEvent,
-  O as Service,
-  E as Websocket,
-  k as base64,
-  v as file,
-  N as func,
+  k as Service,
+  N as Websocket,
+  O as base64,
+  S as file,
+  E as func,
   C as variable,
-  S as window
+  v as window
 };

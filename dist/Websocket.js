@@ -4,7 +4,6 @@ export default class Websocket {
     onOpenAction = () => { };
     onMessageAction = () => { };
     onCloseAction = () => { };
-    onErrorAction = () => { };
     constructor(url) {
         this.url = url;
     }
@@ -16,9 +15,6 @@ export default class Websocket {
     }
     onClose(action) {
         this.onCloseAction = action;
-    }
-    onError(action) {
-        this.onErrorAction = action;
     }
     connect() {
         this.websocket = new WebSocket(this.url);
@@ -32,7 +28,8 @@ export default class Websocket {
             this.onCloseAction(closeEvent);
         };
         this.websocket.onerror = (event) => {
-            this.onErrorAction(event);
+            this.close();
+            throw new Error(JSON.stringify(event));
         };
     }
     send(data) {
